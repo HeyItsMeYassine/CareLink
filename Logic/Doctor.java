@@ -5,57 +5,58 @@ import java.time.LocalTime;
 public class Doctor {
 
     private String id;
-    private String nom;
-    private String prenom;
-    private String specialite;
-    private String ville; 
+    private String lastName; 
+    private String firstName; 
+    private String specialty; 
+    private String city; 
     
-    private List<LocalTime> disponibilites; 
+    private List<LocalTime> availabilities; 
 
     private List<Observer> observers; 
 
-    public Doctor(String id, String nom, String prenom, String specialite, String ville) {
+    public Doctor(String id, String lastName, String firstName, String specialty, String city) {
         this.id = id;
-        this.nom = nom;
-        this.prenom = prenom;
-        this.specialite = specialite;
-        this.ville = ville;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.specialty = specialty;
+        this.city = city;
         
-        this.disponibilites = new ArrayList<>();
+        this.availabilities = new ArrayList<>();
         this.observers = new ArrayList<>();
         
         initDefaultSlots();
     }
 
     private void initDefaultSlots() {
-        disponibilites.add(LocalTime.of(9, 0));
-        disponibilites.add(LocalTime.of(10, 0));
-        disponibilites.add(LocalTime.of(11, 0));
-        disponibilites.add(LocalTime.of(14, 0));
-        disponibilites.add(LocalTime.of(15, 0));
+        availabilities.add(LocalTime.of(9, 0));
+        availabilities.add(LocalTime.of(10, 0));
+        availabilities.add(LocalTime.of(11, 0));
+        availabilities.add(LocalTime.of(14, 0));
+        availabilities.add(LocalTime.of(15, 0));
     }
 
     public String getId() { return id; }
-    public String getNom() { return nom; }
-    public String getPrenom() { return prenom; }
-    public String getSpecialite() { return specialite; }
-    public String getVille() { return ville; }
-    public List<LocalTime> getDisponibilites() { return disponibilites; }
+    public String getLastName() { return lastName; }
+    public String getFirstName() { return firstName; }
+    public String getSpecialty() { return specialty; }
+    public String getCity() { return city; }
+    public List<LocalTime> getAvailabilities() { return availabilities; }
 
 
-    public boolean reserverCreneau(LocalTime heure) {
-        if (disponibilites.contains(heure)) {
-            disponibilites.remove(heure);
-            System.out.println(">>> Succès : Créneau de " + heure + " réservé pour Dr. " + nom);
+    public boolean bookSlot(LocalTime time) { 
+        if (availabilities.contains(time)) {
+            availabilities.remove(time);
+            System.out.println(">>> Success: Slot at " + time + " booked for Dr. " + lastName);
             
-            notifyObservers("ALERTE : Le créneau de " + heure + " chez Dr " + nom + " vient d'être réservé !");
+            notifyObservers("ALERT: The slot at " + time + " with Dr " + lastName + " has just been booked!");
             
             return true;
         } else {
-            System.out.println(">>> Erreur : Le créneau " + heure + " n'est pas disponible.");
+            System.out.println(">>> Error: Slot at " + time + " is not available.");
             return false;
         }
     }
+
 
     public void addObserver(Observer o) {
         observers.add(o);
@@ -73,7 +74,7 @@ public class Doctor {
     
     @Override
     public String toString() {
-        return String.format("Dr. %-10s %-10s | Spécialité: %-15s | Ville: %-10s | Créneaux libres: %d", 
-                nom, prenom, specialite, ville, disponibilites.size());
+        return String.format("Dr. %-10s %-10s | Specialty: %-15s | City: %-10s | Free Slots: %d", 
+                lastName, firstName, specialty, city, availabilities.size());
     }
 }
