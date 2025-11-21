@@ -18,18 +18,16 @@ public class ClinicManager {
         return instance;
     }
 
-    // --- Chargement des 5 médecins (Données de test) ---
     public void initFakeData() {
         doctors.clear(); 
         
-        // 5 Médecins fictifs variés pour tester l'application
-        doctors.add(new Doctor("D01", "Benali", "Amine", "Cardiologue", "Alger"));
-        doctors.add(new Doctor("D02", "Saidi", "Yasmine", "Généraliste", "Oran"));
-        doctors.add(new Doctor("D03", "Slimani", "Karim", "Dentiste", "Oran"));
-        doctors.add(new Doctor("D04", "Mansouri", "Nadia", "Pédiatre", "Alger"));
-        doctors.add(new Doctor("D05", "Toumi", "Khaled", "Ophtalmologue", "Alger"));
+        doctors.add(new Doctor("D01", "Benali", "Amine", "Cardiology", "Algiers"));
+        doctors.add(new Doctor("D02", "Saidi", "Yasmine", "General Practitioner", "Oran"));
+        doctors.add(new Doctor("D03", "Slimani", "Karim", "Dentist", "Oran"));
+        doctors.add(new Doctor("D04", "Mansouri", "Nadia", "Pediatrician", "Algiers"));
+        doctors.add(new Doctor("D05", "Toumi", "Khaled", "Ophthalmologist", "Algiers"));
         
-        System.out.println(">> Base de données chargée : 5 médecins disponibles.");
+        System.out.println(">> Database loaded: 5 doctors available.");
     }
 
     public List<Doctor> getAllDoctors() {
@@ -40,9 +38,10 @@ public class ClinicManager {
         doctors.add(doc);
     }
     
-    public Doctor findDoctorByName(String name) {
+    
+    public Doctor findDoctorByLastName(String name) { 
         for (Doctor doc : doctors) {
-            if (doc.getNom().equalsIgnoreCase(name)) {
+            if (doc.getLastName().equalsIgnoreCase(name)) {
                 return doc;
             }
         }
