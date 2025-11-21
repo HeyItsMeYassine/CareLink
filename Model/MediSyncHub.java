@@ -1,17 +1,17 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClinicManager {
+public class MediSyncHub {
     
     private static ClinicManager instance;
     
     private List<Doctor> doctors;
 
-    private ClinicManager() {
+    private MediSyncHub() {
         doctors = new ArrayList<>();
     }
 
-    public static ClinicManager getInstance() {
+    public static MediSyncHub getInstance() {
         if (instance == null) {
             instance = new ClinicManager();
         }
