@@ -25,9 +25,9 @@ public class ClinicManager {
         // 5 Médecins fictifs variés pour tester l'application
         doctors.add(new Doctor("D01", "Benali", "Amine", "Cardiologue", "Alger"));
         doctors.add(new Doctor("D02", "Saidi", "Yasmine", "Généraliste", "Oran"));
-        doctors.add(new Doctor("D03", "Slimani", "Karim", "Dentiste", "Blida"));
-        doctors.add(new Doctor("D04", "Mansouri", "Nadia", "Pédiatre", "Constantine"));
-        doctors.add(new Doctor("D05", "Toumi", "Khaled", "Ophtalmologue", "Setif"));
+        doctors.add(new Doctor("D03", "Slimani", "Karim", "Dentiste", "Oran"));
+        doctors.add(new Doctor("D04", "Mansouri", "Nadia", "Pédiatre", "Alger"));
+        doctors.add(new Doctor("D05", "Toumi", "Khaled", "Ophtalmologue", "Alger"));
         
         System.out.println(">> Base de données chargée : 5 médecins disponibles.");
     }
