@@ -1,35 +1,52 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MediSyncHub {
     
-    private static ClinicManager instance;
+    private static final MediSyncHub INSTANCE = new MediSyncHub();
     
-    private List<Doctor> doctors;
+    private final List<Doctor> doctors = new ArrayList<>();
 
     private MediSyncHub() {
-        doctors = new ArrayList<>();
+        loadFromCSV();
     }
 
     public static MediSyncHub getInstance() {
-        if (instance == null) {
-            instance = new ClinicManager();
+        return INSTANCE;
+    }
+
+    private void loadFromCSV() {
+        try (var stream = getClass().getResourceAsStream("/doctors.csv");
+             var reader = new BufferedReader(new InputStreamReader(
+                 Objects.requireNonNull(stream, "doctors.csv introuvable !"), 
+                 StandardCharsets.UTF_8))) {
+
+            reader.lines()
+                    .skip(1) 
+                    .map(line -> line.split(";", -1)) 
+                    .filter(parts -> parts.length >= 5)
+                    .forEach(parts -> {
+                        Doctor doc = new Doctor(
+                            parts[0].trim(),
+                            parts[1].trim(),
+                            parts[2].trim(),
+                            parts[3].trim(),
+                            parts[4].trim()
+                        );
+                        doctors.add(doc);
+                    });
+
+            System.out.println(">> Base de données chargée : " + doctors.size() + " médecins trouvés dans le CSV.");
+
+        } catch (Exception e) {
+            System.err.println("ERREUR : Impossible de charger les médecins depuis doctors.csv.");
         }
-        return instance;
     }
-
-    public void initFakeData() {
-        doctors.clear(); 
-        
-        doctors.add(new Doctor("D01", "Benali", "Amine", "Cardiology", "Algiers"));
-        doctors.add(new Doctor("D02", "Saidi", "Yasmine", "General Practitioner", "Oran"));
-        doctors.add(new Doctor("D03", "Slimani", "Karim", "Dentist", "Oran"));
-        doctors.add(new Doctor("D04", "Mansouri", "Nadia", "Pediatrician", "Algiers"));
-        doctors.add(new Doctor("D05", "Toumi", "Khaled", "Ophthalmologist", "Algiers"));
-        
-        System.out.println(">> Database loaded: 5 doctors available.");
-    }
-
+    
     public List<Doctor> getAllDoctors() {
         return doctors;
     }
@@ -37,7 +54,6 @@ public class MediSyncHub {
     public void addDoctor(Doctor doc) {
         doctors.add(doc);
     }
-    
     
     public Doctor findDoctorByLastName(String name) { 
         for (Doctor doc : doctors) {
