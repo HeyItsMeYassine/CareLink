@@ -1,4 +1,4 @@
-import javafx.fxml.FXML;
+import javafx.fxml.FXML; 
 import javafx.fxml.Initializable; // Nécessaire pour la méthode initialize
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
