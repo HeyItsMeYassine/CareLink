@@ -1,13 +1,14 @@
-Nom,Prénom,Spécialité,Wilaya,City,Email,Password
-Benali,Amine,Cardiologie,Alger,Alger Centre,benaliamine@gmail.com,ZkStr524
-Saidi,Yasmine,Généraliste,Oran,Sidi Chami,saidiyasmine@gmail.com,QkMlk894
-Slimani,Karim,Dentiste,Oran,Arzew,slimanikarim@gmail.com,TkBrn938
-Mansouri,Nadia,Pédiatre,Alger,Casbah,mansourinadia@gmail.com,MkStr807
-Toumi,Khaled,Ophtalmologiste,Alger,Birtouta,toumikhaled@gmail.com,PkKlr629
-Cherif,Malika,Gastro-entérologie,Alger,Saoula,cherifmalika@gmail.com,VkDrm482
-Tlemçani,Hassan,Orthopédiste,Boumerdès,Boumerdès,tlemçanihassan@gmail.com,JkPlm847
-Gherbi,Sara,Neurologiste,Boumerdès,Thenia,gherbisara@gmail.com,GkBrx781
-Khelifa,Youssef,Gynécologue,Oran,Oran,khelifayoussef@gmail.com,FkBlm672
-Zekri,Lila,Dermatologue,Boumerdès,Taourga,zekrilila@gmail.com,YkStn458
+Nom,Prénom,Spécialité,Wilaya,City,Email,Password,Phone Number
+Benali,Amine,Cardiologie,Alger,Alger Centre,benaliamine@gmail.com,ZkStr524,06 12 34 56 70
+Saidi,Yasmine,Généraliste,Oran,Sidi Chami,saidiyasmine@gmail.com,QkMlk894,07 98 22 11 44
+Slimani,Karim,Dentiste,Oran,Arzew,slimanikarim@gmail.com,TkBrn938,05 63 47 88 29
+Mansouri,Nadia,Pédiatre,Alger,Casbah,mansourinadia@gmail.com,MkStr807,06 55 90 73 18
+Toumi,Khaled,Ophtalmologiste,Alger,Birtouta,toumikhaled@gmail.com,PkKlr629,07 41 26 95 02
+Cherif,Malika,Gastro-entérologie,Alger,Saoula,cherifmalika@gmail.com,VkDrm482,06 39 20 48 55
+Tlemçani,Hassan,Orthopédiste,Boumerdès,Boumerdès,tlemçanihassan@gmail.com,JkPlm847,05 72 83 14 67
+Gherbi,Sara,Neurologiste,Boumerdès,Thenia,gherbisara@gmail.com,GkBrx781,05 10 57 39 28
+Khelifa,Youssef,Gynécologue,Oran,Oran,khelifayoussef@gmail.com,FkBlm672,06 77 44 21 86
+Zekri,Lila,Dermatologue,Boumerdès,Taourga,zekrilila@gmail.com,YkStn458,07 84 11 62 93
+
 
 
