@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareLink - Register</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9f0f5 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #0066cc;
+        }
+
+        .logo-text {
+            margin-left: 10px;
+            color: #0066cc;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            display: flex;
+            gap: 0;
+            margin-bottom: 30px;
+        }
+
+        .tab {
+            padding: 15px 40px;
+            background-color: #e0e7f1;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s ease;
+            border-bottom: 4px solid transparent;
+            position: relative;
+        }
+
+        .tab:hover {
+            background-color: #d0dce8;
+        }
+
+        .tab.active {
+            background-color: #ffffff;
+            color: #0066cc;
+            border-bottom-color: #0066cc;
+        }
+
+        /* Main Content */
+        .content-wrapper {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .form-section {
+            flex: 1;
+            background: linear-gradient(135deg, #d4f1f9 0%, #e8f4f8 100%);
+            padding: 40px;
+            border-radius: 15px;
+            min-height: 500px;
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .form-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #b8d4e8;
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="tel"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #0066cc;
+            background-color: #ffffff;
+            box-shadow: 0 0 8px rgba(0, 102, 204, 0.2);
+        }
+
+        /* Illustration */
+        .illustration-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 500px;
+        }
+
+        .illustration {
+            width: 100%;
+            max-width: 350px;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 102, 204, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content-wrapper {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .form-section {
+                min-height: auto;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .tab {
+                padding: 12px 25px;
+                font-size: 14px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">❤️<span class="logo-text">CareLink</span></div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs-container">
+            <button class="tab active" onclick="switchTab('doctor')">Doctor Register</button>
+            <button class="tab" onclick="switchTab('patient')">Patient Register</button>
+        </div>
+
+        <!-- Content -->
+        <div class="content-wrapper">
+            <!-- Doctor Form -->
+            <form id="doctor-form" class="form-section active">
+                <h2 class="form-title">Welcome, Doctor!</h2>
+                
+                <div class="form-group form-row full">
+                    <div>
+                        <label for="doctor-email">Email</label>
+                        <input type="email" id="doctor-email" placeholder="Enter your email" required>
+                    </div>
+                </div>
+
+                <div class="form-group form-row full">
+                    <div>
+                        <label for="doctor-password">Password</label>
+                        <input type="password" id="doctor-password" placeholder="Enter your password" required>
+                    </div>
+                </div>
+
+                <div class="form-group form-row">
+                    <div>
+                        <label for="doctor-fname">First Name</label>
+                        <input type="text" id="doctor-fname" placeholder="First Name" required>
+                    </div>
+                    <div>
+                        <label for="doctor-lname">Last Name</label>
+                        <input type="text" id="doctor-lname" placeholder="Last Name" required>
+                    </div>
+                </div>
+
+                <div class="form-group form-row full">
+                    <div>
+                        <label for="doctor-phone">Phone Number</label>
+                        <input type="tel" id="doctor-phone" placeholder="Enter your phone number" required>
+                    </div>
+                </div>
+
+                <div class="form-group form-row">
+                    <div>
+                        <label for="doctor-wilaya">Wilaya</label>
+                        <select id="doctor-wilaya" required>
+                            <option value="">Select Wilaya</option>
+                            <option value="alger">Alger</option>
+                            <option value="oran">Oran</option>
+                            <option value="constantine">Constantine</option>
+                            <option value="annaba">Annaba</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="doctor-city">City</label>
+                        <input type="text" id="doctor-city" placeholder="Enter your city" required>
+                    </div>
+                </div>
+
+                <div class="form-group form-row full">
+                    <div>
+                        <label for="doctor-specialty">Specialty</label>
+                        <select id="doctor-specialty" required>
+                            <option value="">Select Specialty</option>
+                            <option value="cardiology">Cardiology</option>
+                            <option value="neurology">Neurology</option>
+                            <option value="dermatology">Dermatology</option>
+                            <option value="orthopedics">Orthopedics</option>
+                            <option value="pediatrics">Pediatrics</option>
+                            <option value="general">General Practice</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Register as Doctor</button>
+            </form>
+
+            <!-- Patient Form -->
+            <form id="patient-form" class="form-section">
+                <h2 class="form-title">Welcome, Patient!</h2>
+                
+                <div class="form-group form-row full">
+                    <div>
+                        <label for="patient-email">Email</label>
+                        <input type="email" id="patient-email" placeholder="Enter your email" required>
+                    </div>
+                </div>
+
+                <div class="form-group form-row full">
+                    <div>
+                        <label for="patient-password">Password</label>
+                        <input type="password" id="patient-password" placeholder="Enter your password" required>
+                    </div>
+                </div>
+
+                <div class="form-group form-row">
+                    <div>
+                        <label for="patient-fname">First Name</label>
+                        <input type="text" id="patient-fname" placeholder="First Name" required>
+                    </div>
+                    <div>
+                        <label for="patient-lname">Last Name</label>
+                        <input type="text" id="patient-lname" placeholder="Last Name" required>
+                    </div>
+                </div>
+
+                <div class="form-group form-row full">
+                    <div>
+                        <label for="patient-phone">Phone Number</label>
+                        <input type="tel" id="patient-phone" placeholder="Enter your phone number" required>
+                    </div>
+                </div>
+
+                <div class="form-group form-row">
+                    <div>
+                        <label for="patient-wilaya">Wilaya</label>
+                        <select id="patient-wilaya" required>
+                            <option value="">Select Wilaya</option>
+                            <option value="Alger">Alger</option>
+                            <option value="Oran">Oran</option>
+                            <option value="Boumerdès">Constantine</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="patient-city">City</label>
+                        <input type="text" id="patient-city" placeholder="Enter your city" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Register as Patient</button>
+            </form>
+
+
+        <!-- Illustration -->
+        <div class="illustration-section">
+            <!-- Doctor image (shown by default) -->
+            <img id="doctor-illustration" src="DoctorPic.png" alt="Doctor illustration" class="illustration" style="display:block;">
+            <!-- Patient image (hidden by default) -->
+            <img id="patient-illustration" src="PatientPic.png" alt="Patient illustration" class="illustration" style="display:none;">
+        </div>
+
+    <script>
+        function switchTab(type) {
+            // Update tab buttons
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update forms
+            const forms = document.querySelectorAll('.form-section');
+            forms.forEach(form => form.classList.remove('active'));
+
+            if (type === 'doctor') {
+                document.getElementById('doctor-form').classList.add('active');
+                document.getElementById('doctor-illustration').style.display = 'block';
+                document.getElementById('patient-illustration').style.display = 'none';
+            } else if (type === 'patient') {
+                document.getElementById('patient-form').classList.add('active');
+                document.getElementById('doctor-illustration').style.display = 'none';
+                document.getElementById('patient-illustration').style.display = 'block';
+            }
+        }
+
+
+        // Form submission handlers
+        document.getElementById('doctor-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Doctor registration submitted! (Demo)');
+        });
+
+        document.getElementById('patient-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Patient registration submitted! (Demo)');
+        });
+    </script>
+</body>
+</html>
