@@ -354,64 +354,14 @@
                 <button type="submit" class="submit-btn">Register as Patient</button>
             </form>
 
-            <!-- Illustration -->
-            <div class="illustration-section">
-                <svg class="illustration" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Doctor Illustration (shown by default) -->
-                    <g id="doctor-illustration">
-                        <!-- Background circle -->
-                        <circle cx="150" cy="120" r="90" fill="#87CEEB" opacity="0.6"/>
-                        <!-- Head -->
-                        <circle cx="150" cy="80" r="35" fill="#d4a574"/>
-                        <!-- Hair -->
-                        <path d="M 115 70 Q 115 50 150 45 Q 185 50 185 70" fill="#8b6f47"/>
-                        <!-- Smile -->
-                        <path d="M 135 90 Q 150 98 165 90" stroke="#333" stroke-width="2" fill="none" stroke-linecap="round"/>
-                        <!-- Eyes -->
-                        <circle cx="140" cy="85" r="3" fill="#333"/>
-                        <circle cx="160" cy="85" r="3" fill="#333"/>
-                        <!-- Lab coat -->
-                        <rect x="120" y="110" width="60" height="70" fill="white" rx="5"/>
-                        <!-- Shirt under coat -->
-                        <rect x="125" y="115" width="50" height="40" fill="#0066cc"/>
-                        <!-- Stethoscope -->
-                        <path d="M 140 140 Q 140 160 135 170" stroke="#333" stroke-width="3" fill="none"/>
-                        <path d="M 160 140 Q 160 160 165 170" stroke="#333" stroke-width="3" fill="none"/>
-                        <!-- Arms -->
-                        <ellipse cx="115" cy="130" rx="12" ry="35" fill="#d4a574" transform="rotate(-30 115 130)"/>
-                        <ellipse cx="185" cy="130" rx="12" ry="35" fill="#d4a574" transform="rotate(30 185 130)"/>
-                    </g>
 
-                    <!-- Patient Illustration (hidden by default) -->
-                    <g id="patient-illustration" style="display:none">
-                        <!-- Background circle -->
-                        <circle cx="150" cy="120" r="90" fill="#87CEEB" opacity="0.6"/>
-                        <!-- Head -->
-                        <circle cx="150" cy="80" r="35" fill="#d4a574"/>
-                        <!-- Hair -->
-                        <path d="M 115 65 Q 115 45 150 40 Q 185 45 185 65 Q 185 75 150 80 Q 115 75 115 65" fill="#8b6f47"/>
-                        <!-- Smile -->
-                        <path d="M 135 90 Q 150 98 165 90" stroke="#333" stroke-width="2" fill="none" stroke-linecap="round"/>
-                        <!-- Eyes -->
-                        <circle cx="140" cy="85" r="3" fill="#333"/>
-                        <circle cx="160" cy="85" r="3" fill="#333"/>
-                        <!-- Medical scrubs (blue) -->
-                        <rect x="120" y="110" width="60" height="70" fill="#0066cc" rx="5"/>
-                        <!-- Scrubs detail -->
-                        <line x1="150" y1="110" x2="150" y2="180" stroke="#005399" stroke-width="1"/>
-                        <!-- Collar -->
-                        <polygon points="120,110 130,100 170,100 180,110" fill="#0066cc"/>
-                        <!-- Arms -->
-                        <ellipse cx="110" cy="140" rx="12" ry="38" fill="#d4a574"/>
-                        <ellipse cx="190" cy="140" rx="12" ry="38" fill="#d4a574"/>
-                        <!-- Hands -->
-                        <circle cx="105" cy="180" r="8" fill="#d4a574"/>
-                        <circle cx="195" cy="180" r="8" fill="#d4a574"/>
-                    </g>
-                </svg>
-            </div>
+        <!-- Illustration -->
+        <div class="illustration-section">
+            <!-- Doctor image (shown by default) -->
+            <img id="doctor-illustration" src="DoctorPic.png" alt="Doctor illustration" class="illustration" style="display:block;">
+            <!-- Patient image (hidden by default) -->
+            <img id="patient-illustration" src="PatientPic.png" alt="Patient illustration" class="illustration" style="display:none;">
         </div>
-    </div>
 
     <script>
         function switchTab(type) {
@@ -434,6 +384,7 @@
                 document.getElementById('patient-illustration').style.display = 'block';
             }
         }
+
 
         // Form submission handlers
         document.getElementById('doctor-form').addEventListener('submit', function(e) {
