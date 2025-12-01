@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CareLink - Register</title>
     <style>
+        /* Styles CSS  */
         * {
             margin: 0;
             padding: 0;
@@ -226,9 +227,7 @@
             <button class="tab" onclick="switchTab('patient')">Patient Register</button>
         </div>
 
-        <!-- Content -->
         <div class="content-wrapper">
-            <!-- Doctor Form -->
             <form id="doctor-form" class="form-section active">
                 <h2 class="form-title">Welcome, Doctor!</h2>
                 
@@ -267,17 +266,18 @@
                 <div class="form-group form-row">
                     <div>
                         <label for="doctor-wilaya">Wilaya</label>
-                        <select id="doctor-wilaya" required>
+                        <select id="doctor-wilaya" onchange="populateCities('doctor')" required>
                             <option value="">Select Wilaya</option>
-                            <option value="alger">Alger</option>
-                            <option value="oran">Oran</option>
-                            <option value="constantine">Constantine</option>
-                            <option value="annaba">Annaba</option>
+                            <option value="Alger">Alger</option>
+                            <option value="Oran">Oran</option>
+                            <option value="Boumerdès">Boumerdès</option>
                         </select>
                     </div>
                     <div>
                         <label for="doctor-city">City</label>
-                        <input type="text" id="doctor-city" placeholder="Enter your city" required>
+                        <select id="doctor-city" required>
+                            <option value="">Select a Wilaya first</option>
+                        </select>
                     </div>
                 </div>
 
@@ -286,12 +286,26 @@
                         <label for="doctor-specialty">Specialty</label>
                         <select id="doctor-specialty" required>
                             <option value="">Select Specialty</option>
-                            <option value="cardiology">Cardiology</option>
-                            <option value="neurology">Neurology</option>
-                            <option value="dermatology">Dermatology</option>
-                            <option value="orthopedics">Orthopedics</option>
-                            <option value="pediatrics">Pediatrics</option>
-                            <option value="general">General Practice</option>
+                            <option value="General Practice">General Practice</option>
+                            <option value="Pediatrics">Pediatrics</option>
+                            <option value="Cardiology">Cardiology</option>
+                            <option value="Dermatology">Dermatology</option>
+                            <option value="Neurology">Neurology</option>
+                            <option value="Orthopedics">Orthopedics</option>
+                            <option value="Gastroenterology">Gastroenterology</option>
+                            <option value="Ophthalmology">Ophthalmology</option>
+                            <option value="Otolaryngology (ENT)">Otolaryngology (ENT)</option>
+                            <option value="Nephrology">Nephrology</option>
+                            <option value="Pulmonology">Pulmonology</option>
+                            <option value="Endocrinology">Endocrinology</option>
+                            <option value="Psychiatry">Psychiatry</option>
+                            <option value="Urology">Urology</option>
+                            <option value="Gynecology/Obstetrics">Gynecology/Obstetrics</option>
+                            <option value="Rheumatology">Rheumatology</option>
+                            <option value="Hematology">Hematology</option>
+                            <option value="Oncology">Oncology</option>
+                            <option value="Anesthesiology">Anesthesiology</option>
+                            <option value="Radiology">Radiology</option>
                         </select>
                     </div>
                 </div>
@@ -299,7 +313,6 @@
                 <button type="submit" class="submit-btn">Register as Doctor</button>
             </form>
 
-            <!-- Patient Form -->
             <form id="patient-form" class="form-section">
                 <h2 class="form-title">Welcome, Patient!</h2>
                 
@@ -338,16 +351,18 @@
                 <div class="form-group form-row">
                     <div>
                         <label for="patient-wilaya">Wilaya</label>
-                        <select id="patient-wilaya" required>
+                        <select id="patient-wilaya" onchange="populateCities('patient')" required>
                             <option value="">Select Wilaya</option>
                             <option value="Alger">Alger</option>
                             <option value="Oran">Oran</option>
-                            <option value="Boumerdès">Constantine</option>
+                            <option value="Boumerdès">Boumerdès</option>
                         </select>
                     </div>
                     <div>
                         <label for="patient-city">City</label>
-                        <input type="text" id="patient-city" placeholder="Enter your city" required>
+                        <select id="patient-city" required>
+                            <option value="">Select a Wilaya first</option>
+                        </select>
                     </div>
                 </div>
 
@@ -355,22 +370,139 @@
             </form>
 
 
-        <!-- Illustration -->
         <div class="illustration-section">
-            <!-- Doctor image (shown by default) -->
             <img id="doctor-illustration" src="DoctorPic.png" alt="Doctor illustration" class="illustration" style="display:block;">
-            <!-- Patient image (hidden by default) -->
             <img id="patient-illustration" src="PatientPic.png" alt="Patient illustration" class="illustration" style="display:none;">
         </div>
 
     <script>
+
+        const WILAYA_CITY_MAP = {
+            "Alger": [
+                "Alger Centre",
+                "Bab El Oued",
+                "Hussein Dey",
+                "Bir Mourad Raïs",
+                "El Harrach",
+                "Baraki",
+                "Oued Smar",
+                "Birkhadem",
+                "Dar El Beïda",
+                "Rouiba",
+                "Reghaïa",
+                "Aïn Taya",
+                "Kouba",
+                "Mohammadia",
+                "Bordj El Kiffan",
+                "Draria",
+                "Bologhine",
+                "Hydra",
+                "Bab Azzouar",
+                "Sidi Moussa",
+                "Zéralda",
+                "Baba Hassen",
+                "Staouéli",
+                "Mahelma",
+                "Tessala El Merdja",
+                "Ouled Chebel",
+                "Rahmania",
+                "Souidania",
+                "Chéraga",
+                "Dely Ibrahim",
+                "El Biar",
+                "Ben Aknoun",
+                "Bouzareah",
+                "Dély Brahim",
+                "Aïn Benian",
+                "Ouled Fayet",
+                "Douéra",
+                "Khraicia",
+                "Saoula",
+                "Birtouta",
+                "Tixeraïne",
+                "Sidi Abdellah",
+                "Ouled Fayet",
+                "Hammamet",
+                "Raïs Hamidou",
+                "Oued Koriche",
+                "Bologhine",
+                "Casbah"
+            ],
+            "Boumerdès": [
+                "Boumerdès",
+                "Thenia",
+                "Dellys",
+                "Boudouaou",
+                "Baghlia",
+                "Sidi Daoud",
+                "Naciria",
+                "Issers",
+                "Chabet el Ameur",
+                "Khemis El Khechna",
+                "Larbatache",
+                "Tidjelabine",
+                "Si Mustapha",
+                "Zemmouri",
+                "Taourga",
+                "Ouled Hedadj",
+                "Corso",
+                "Bordj Menaïel"
+            ],
+            "Oran": [
+                "Oran",
+                "Es Sénia",
+                "Bir El Djir",
+                "Arzew",
+                "Gdyel",
+                "Aïn El Turk",
+                "Boutlélis",
+                "Oued Tlélat",
+                "Bethioua",
+                "Hassi Bounif",
+                "Sidi Chami",
+                "Hassi Mefsoukh"
+            ]
+        };
+
+        function populateCities(type) {
+            const wilayaSelect = document.getElementById(`${type}-wilaya`);
+            const citySelect = document.getElementById(`${type}-city`);
+            const selectedWilaya = wilayaSelect.value;
+
+            citySelect.innerHTML = ''; 
+
+            if (!selectedWilaya) {
+                citySelect.innerHTML = '<option value="">Select a Wilaya first</option>';
+                return;
+            }
+
+            citySelect.innerHTML = '<option value="">Select City</option>';
+
+            const cities = WILAYA_CITY_MAP[selectedWilaya] || [];
+
+            cities.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                citySelect.appendChild(option);
+            });
+        }
+        
         function switchTab(type) {
-            // Update tab buttons
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
+            
+            let targetTab = null;
+            if (event && event.target) {
+                targetTab = event.target;
+            } else {
+                 targetTab = document.querySelector(`.tab[onclick="switchTab('${type}')"]`);
+            }
+            
+            if (targetTab) {
+                targetTab.classList.add('active');
+            }
 
-            // Update forms
             const forms = document.querySelectorAll('.form-section');
             forms.forEach(form => form.classList.remove('active'));
 
@@ -386,7 +518,6 @@
         }
 
 
-        // Form submission handlers
         document.getElementById('doctor-form').addEventListener('submit', function(e) {
             e.preventDefault();
             alert('Doctor registration submitted! (Demo)');
@@ -395,6 +526,16 @@
         document.getElementById('patient-form').addEventListener('submit', function(e) {
             e.preventDefault();
             alert('Patient registration submitted! (Demo)');
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const doctorTab = document.querySelector('.tab[onclick="switchTab(\'doctor\')"]');
+            if (doctorTab) {
+                doctorTab.classList.add('active');
+            }
+            document.getElementById('doctor-form').classList.add('active');
+            document.getElementById('doctor-illustration').style.display = 'block';
+            document.getElementById('patient-illustration').style.display = 'none';
         });
     </script>
 </body>
