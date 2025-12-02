@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DoctorRendezVous</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">D</div>
+            <span>DoctorRendezVous</span>
+        </div>
+        <div class="header-right">
+            <a href="#" class="header-link">Vous êtes praticien ?</a>
+            <button class="btn-connect">Se connecter</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="filter-title">
+                <span>🔽</span>
+                <span>Filtres</span>
+            </div>
+
+            <div class="filter-section">
+                <h3>Spécialité</h3>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="cardio" checked>
+                    <label for="cardio">Cardiologie</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="general">
+                    <label for="general">Généraliste</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="dentist">
+                    <label for="dentist">Dentiste</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="pediatre">
+                    <label for="pediatre">Pédiatre</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="ophtalmologue">
+                    <label for="ophtalmologue">Ophtalmologue</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="gastro">
+                    <label for="gastro">Gastro-entérologie</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="orthopediste">
+                    <label for="orthopediste">Orthopédiste</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="neurologue">
+                    <label for="neurologue">Neurologue</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="gynecologue">
+                    <label for="gynecologue">Gynécologue</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="dermatologue">
+                    <label for="dermatologue">Dermatologue</label>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <h3>Ville</h3>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="alger" checked>
+                    <label for="alger">Alger</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="oran">
+                    <label for="oran">Oran</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="constantine">
+                    <label for="constantine">Constantine</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="tlemcen">
+                    <label for="tlemcen">Tlemcen</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="bejaia">
+                    <label for="bejaia">Béjaïa</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="setif">
+                    <label for="setif">Sétif</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="annaba">
+                    <label for="annaba">Annaba</label>
+                </div>
+            </div>
+
+            <a href="#" class="reset-filters">Réinitialiser les filtres</a>
+        </aside>
+
+        <main class="main-content">
+            <h1 class="result-header">1 praticien(s) trouvé(s)</h1>
+            <p class="result-subtitle">Prenez rendez-vous en ligne avec un professionnel de santé disponible.</p>
+
+            <div class="doctor-card">
+                <div class="doctor-info-section">
+                    <div class="doctor-header">
+                        <div class="doctor-avatar"></div>
+                        <div class="doctor-details">
+                            <h2 class="doctor-name">Dr. Amine Benali</h2>
+                            <p class="doctor-specialty">Cardiologie</p>
+                            <div class="doctor-rating">
+                                <span class="star">⭐</span>
+                                <span><strong>4.9</strong> (85 avis)</span>
+                            </div>
+                            <div class="doctor-address">
+                                <span>📍</span>
+                                <span>12 Rue Didouche Mourad, Alger</span>
+                            </div>
+                            <div class="doctor-badges">
+                                <span class="badge">Conventionné secteur 1</span>
+                                <span class="badge">Carte Vitale acceptée</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="appointments">
+                    <div class="day-column">
+                        <h4>Aujourd'hui</h4>
+                        <div class="time-slots">
+                            <button class="time-slot">14:30</button>
+                            <button class="time-slot">15:00</button>
+                            <button class="time-slot">15:30</button>
+                        </div>
+                        <div class="view-more">Voir plus</div>
+                    </div>
+                    <div class="day-column">
+                        <h4>Demain</h4>
+                        <div class="time-slots">
+                            <button class="time-slot">9:00</button>
+                            <button class="time-slot">9:30</button>
+                            <button class="time-slot">10:00</button>
+                        </div>
+                        <div class="view-more">Voir plus</div>
+                    </div>
+                    <div class="day-column">
+                        <h4>Ven. 24</h4>
+                        <div class="time-slots">
+                            <button class="time-slot">10:00</button>
+                            <button class="time-slot">10:30</button>
+                            <button class="time-slot">11:30</button>
+                        </div>
+                        <div class="view-more">Voir plus</div>
+                    </div>
+                </div>
+
+                <button class="btn-appointment">Prendre rendez-vous en ligne</button>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
