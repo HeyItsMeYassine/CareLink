@@ -1,4 +1,3 @@
-package com.carelink.controller;
 
 import com.carelink.dto.DoctorDTO;
 import com.carelink.dto.DoctorFilterDTO;
