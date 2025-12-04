@@ -1,3 +1,4 @@
+package com.medisync.controller;
 
 import com.medisync.model.*;
 import com.medisync.utils.*;
@@ -16,7 +17,9 @@ public class MediSyncController {
     private Patient connectedPatient;
     private boolean loggedIn = false;
 
-    
+    // -------------------------------
+    // AUTHENTIFICATION
+    // -------------------------------
     public boolean login(String patientId, String name, String phone) {
         this.connectedPatient = new Patient(
                 patientId,
@@ -29,7 +32,6 @@ public class MediSyncController {
         loggedIn = true;
         return true;
     }
-  
 
     public void logout() {
         loggedIn = false;
@@ -44,11 +46,13 @@ public class MediSyncController {
         return connectedPatient;
     }
 
+    // -------------------------------
+    // DOCTEURS
+    // -------------------------------
     public List<Doctor> getAllDoctors() {
         return hub.getAllDoctors();
     }
 
-  
     public List<Doctor> searchDoctors(String keyword) {
         if (keyword == null || keyword.isEmpty()) return getAllDoctors();
 
@@ -61,38 +65,40 @@ public class MediSyncController {
                 .collect(Collectors.toList());
     }
 
-
-  
+    // 🔧 Correction wilaya / ville
     public List<Doctor> filterDoctors(String specialty, String wilaya, String city) {
-
         return hub.getAllDoctors().stream()
                 .filter(d -> specialty == null || specialty.isEmpty() || d.getSpecialty().equalsIgnoreCase(specialty))
-                .filter(d -> wilaya == null || wilaya.isEmpty() || d.getCity().equalsIgnoreCase(wilaya))
+                .filter(d -> wilaya == null || wilaya.isEmpty() || d.getWilaya().equalsIgnoreCase(wilaya))
                 .filter(d -> city == null || city.isEmpty() || d.getCity().equalsIgnoreCase(city))
                 .collect(Collectors.toList());
     }
 
-   
-  
+    // -------------------------------
+    // WILAYA & VILLES
+    // -------------------------------
     public List<String> getAllWilayas() {
         return cityManager.getAllWilayas();
     }
 
-    
     public List<String> getCitiesOfWilaya(String wilaya) {
         return cityManager.getCitiesByWilaya(wilaya)
-                .stream().map(City::name)
+                .stream()
+                .map(City::name)
                 .collect(Collectors.toList());
     }
 
-
-  
+    // -------------------------------
+    // DISPONIBILITÉS
+    // -------------------------------
     public List<LocalTime> getDoctorAvailabilities(Doctor doctor) {
         if (doctor == null) return List.of();
         return doctor.getAvailabilities();
     }
 
-    
+    // -------------------------------
+    // RÉSERVATION RDV
+    // -------------------------------
     public Appointment bookAppointment(Doctor doctor, LocalDate date, LocalTime time) {
 
         if (connectedPatient == null) {
@@ -115,9 +121,47 @@ public class MediSyncController {
                 LocalDateTime.of(date, time)
         );
 
-        // Ajouter dans la liste du patient
+        // Ajouter au patient
         connectedPatient.addAppointment(app);
 
+        // Ajouter au médecin (nécessaire)
+        doctor.addAppointment(app);
+
         return app;
+    }
+
+    // -------------------------------
+    // LISTE DES RENDEZ-VOUS PATIENT
+    // -------------------------------
+    public List<Appointment> getMyAppointments() {
+        if (connectedPatient == null) return List.of();
+        return connectedPatient.getAppointments();
+    }
+
+    // -------------------------------
+    // LISTE DES RENDEZ-VOUS MÉDECIN
+    // -------------------------------
+    public List<Appointment> getDoctorAppointments(Doctor doctor) {
+        if (doctor == null) return List.of();
+        return doctor.getAppointments();
+    }
+
+    // -------------------------------
+    // ANNULATION (OPTIONNEL)
+    // -------------------------------
+    public boolean cancelAppointment(Appointment app) {
+        if (app == null || connectedPatient == null) return false;
+
+        // Libérer le créneau côté médecin
+        LocalTime time = app.getDateTime().toLocalTime();
+        app.getDoctor().freeSlot(time);
+
+        // Retirer côté patient
+        connectedPatient.getAppointments().remove(app);
+
+        // Retirer côté médecin
+        app.getDoctor().getAppointments().remove(app);
+
+        return true;
     }
 }
