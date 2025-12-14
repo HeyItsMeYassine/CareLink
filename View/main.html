@@ -119,14 +119,12 @@
             font-size: 14px;
         }
 
-        /* Style pour rendre la liste des villes défilable si elle est trop longue */
         #city-container {
             max-height: 300px;
             overflow-y: auto;
             padding-right: 5px;
         }
         
-        /* Scrollbar fine pour la liste des villes */
         #city-container::-webkit-scrollbar {
             width: 5px;
         }
@@ -189,6 +187,7 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             display: flex;
             gap: 30px;
+            margin-bottom: 20px;
         }
 
         .doctor-info {
@@ -242,28 +241,28 @@
             margin-bottom: 15px;
         }
 
-        .badges {
-            display: flex;
-            gap: 10px;
-        }
-
         .appointments {
             min-width: 400px;
         }
 
-        .time-slots {
+        .appointments-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 15px;
         }
 
-        .day-label {
+        .day-column h4 {
             text-align: center;
-            font-weight: 600;
             font-size: 14px;
-            color: #374151;
+            font-weight: 600;
             margin-bottom: 10px;
+            color: #374151;
+        }
+
+        .day-slots {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .time-slot {
@@ -289,7 +288,7 @@
             color: #2563eb;
             font-size: 14px;
             cursor: pointer;
-            margin-bottom: 15px;
+            margin-top: 15px;
         }
 
         .book-btn {
@@ -303,30 +302,11 @@
             font-weight: 600;
             cursor: pointer;
             transition: background 0.2s;
+            margin-top: 15px;
         }
 
         .book-btn:hover {
             background: #334155;
-        }
-
-        .appointments-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-        }
-
-        .day-column h4 {
-            text-align: center;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #374151;
-        }
-
-        .day-slots {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
         }
     </style>
 </head>
@@ -336,7 +316,7 @@
             <div class="logo-icon">❤️</div>
             <span>CareLink</span>
         </div>
-        <button class="logout-btn" onclick="alert('Logout...')">Déconnexion</button>
+        <button class="logout-btn" onclick="alert('Logout...')">Logout</button>
     </header>
 
     <div class="container">
@@ -344,7 +324,7 @@
             <h3>🔍 Filters</h3>
             
             <div class="filter-section">
-                <h4>State (Wilaya)</h4>
+                <h4>Wilaya</h4>
                 <div class="checkbox-item">
                     <input type="checkbox" id="alger" value="Alger" class="state-checkbox" checked>
                     <label for="alger">Alger</label>
@@ -362,49 +342,49 @@
             <div class="filter-section">
                 <h4>Specialty</h4>
                 <div class="checkbox-item">
-                    <input type="checkbox" id="cardiology" checked>
+                    <input type="checkbox" id="cardiology" value="Cardiology" class="specialty-checkbox" checked>
                     <label for="cardiology">Cardiology</label>
                 </div>
                 <div class="checkbox-item">
-                    <input type="checkbox" id="gp">
+                    <input type="checkbox" id="gp" value="General Practitioner" class="specialty-checkbox">
                     <label for="gp">General Practitioner</label>
                 </div>
                 <div class="checkbox-item">
-                    <input type="checkbox" id="dentist">
+                    <input type="checkbox" id="dentist" value="Dentist" class="specialty-checkbox">
                     <label for="dentist">Dentist</label>
                 </div>
                 <div class="checkbox-item">
-                    <input type="checkbox" id="pediatrician">
+                    <input type="checkbox" id="pediatrician" value="Pediatrician" class="specialty-checkbox">
                     <label for="pediatrician">Pediatrician</label>
                 </div>
                 <div class="checkbox-item">
-                    <input type="checkbox" id="ophthalmologist">
+                    <input type="checkbox" id="ophthalmologist" value="Ophthalmologist" class="specialty-checkbox">
                     <label for="ophthalmologist">Ophthalmologist</label>
                 </div>
                 <div class="checkbox-item">
-                    <input type="checkbox" id="gastroenterology">
+                    <input type="checkbox" id="gastroenterology" value="Gastroenterology" class="specialty-checkbox">
                     <label for="gastroenterology">Gastroenterology</label>
                 </div>
                 <div class="checkbox-item">
-                    <input type="checkbox" id="orthopedist">
+                    <input type="checkbox" id="orthopedist" value="Orthopedist" class="specialty-checkbox">
                     <label for="orthopedist">Orthopedist</label>
                 </div>
                 <div class="checkbox-item">
-                    <input type="checkbox" id="neurologist">
+                    <input type="checkbox" id="neurologist" value="Neurologist" class="specialty-checkbox">
                     <label for="neurologist">Neurologist</label>
                 </div>
                 <div class="checkbox-item">
-                    <input type="checkbox" id="gynecologist">
+                    <input type="checkbox" id="gynecologist" value="Gynecologist" class="specialty-checkbox">
                     <label for="gynecologist">Gynecologist</label>
                 </div>
                 <div class="checkbox-item">
-                    <input type="checkbox" id="dermatologist">
+                    <input type="checkbox" id="dermatologist" value="Dermatologist" class="specialty-checkbox">
                     <label for="dermatologist">Dermatologist</label>
                 </div>
             </div>
 
             <div class="filter-section">
-                <h4>City (Commune)</h4>
+                <h4>City</h4>
                 <div id="city-container">
                     </div>
             </div>
@@ -412,66 +392,21 @@
 
         <main class="main-content">
             <div class="search-bar">
-                <input type="text" placeholder="Search by name, specialty or city...">
+                <input type="text" id="global-search" placeholder="Search by name, specialty or city...">
             </div>
 
             <div class="results-header">
-                <h2>1 doctor(s) found</h2>
+                <h2 id="results-count">4 doctor(s) found</h2>
                 <p>Book an appointment online with an available healthcare professional.</p>
             </div>
 
-            <div class="doctor-card">
-                <div class="doctor-info">
-                    <div class="doctor-avatar">👨‍⚕️</div>
-                    <div class="doctor-details">
-                        <h3>Dr. Amine Benali</h3>
-                        <div class="specialty">Cardiology</div>
-                        <div class="rating">
-                            <span class="star">⭐</span>
-                            <strong>4.9</strong>
-                            <span>(85 reviews)</span>
-                        </div>
-                        <div class="address">
-                            📍 12 Rue Didouche Mourad, Alger
-                        </div>
-                    </div>
+            <div id="doctors-results">
                 </div>
-
-                <div class="appointments">
-                    <div class="appointments-grid">
-                        <div class="day-column">
-                            <h4>Today</h4>
-                            <div class="day-slots">
-                                <button class="time-slot">15:00</button>
-                                <button class="time-slot">16:30</button>
-                            </div>
-                        </div>
-                        <div class="day-column">
-                            <h4>Tomorrow</h4>
-                            <div class="day-slots">
-                                <button class="time-slot">9:00</button>
-                                <button class="time-slot">9:30</button>
-                                <button class="time-slot">10:00</button>
-                            </div>
-                        </div>
-                        <div class="day-column">
-                            <h4>Fri 24</h4>
-                            <div class="day-slots">
-                                <button class="time-slot">10:00</button>
-                                <button class="time-slot">11:30</button>
-                                <button class="time-slot">12:30</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="see-more">See more</div>
-                    <button class="book-btn">Book an online appointment</button>
-                </div>
-            </div>
         </main>
     </div>
 
     <script>
-        // Données complètes des villes extraites du fichier CSV
+        // Données des Wilayas et Communes (inchangées)
         const citiesByState = {
             "Alger": [
                 "Alger Centre", "Bab El Oued", "Hussein Dey", "Bir Mourad Raïs", "El Harrach", 
@@ -497,25 +432,206 @@
             ]
         };
 
+        // Données de simulation des docteurs (avec spécialités et villes)
+        const doctorsData = [
+            {
+                id: 1,
+                name: "Dr. Amine Benali",
+                specialty: "Cardiology",
+                rating: 4.9,
+                reviews: 85,
+                address: "12 Rue Didouche Mourad, Alger Centre",
+                wilaya: "Alger",
+                city: "Alger Centre",
+                availability: {
+                    "Today": ["15:00", "16:30"],
+                    "Tomorrow": ["9:00", "9:30", "10:00"],
+                    "Fri 24": ["10:00", "11:30", "12:30"]
+                }
+            },
+            {
+                id: 2,
+                name: "Dr. Lyes Kamel",
+                specialty: "General Practitioner",
+                rating: 4.5,
+                reviews: 120,
+                address: "7 Avenue de la Liberté, Boumerdès",
+                wilaya: "Boumerdès",
+                city: "Boumerdès",
+                availability: {
+                    "Today": ["10:00", "11:00"],
+                    "Tomorrow": ["14:00", "15:00"],
+                    "Sat 25": ["9:00"]
+                }
+            },
+            {
+                id: 3,
+                name: "Dr. Farah Merabet",
+                specialty: "Cardiology",
+                rating: 4.7,
+                reviews: 50,
+                address: "Centre Ville, Es Sénia, Oran",
+                wilaya: "Oran",
+                city: "Es Sénia",
+                availability: {
+                    "Tomorrow": ["11:00", "11:30"],
+                    "Fri 24": ["14:00", "15:00"]
+                }
+            },
+            {
+                id: 4,
+                name: "Dr. Zineddine Tahar",
+                specialty: "Pediatrician",
+                rating: 4.8,
+                reviews: 90,
+                address: "Quartier Nouveau, El Harrach, Alger",
+                wilaya: "Alger",
+                city: "El Harrach",
+                availability: {
+                    "Today": ["8:00", "9:00", "10:00"],
+                    "Tomorrow": ["14:00", "15:00"]
+                }
+            }
+        ];
+
         // Sélection des éléments du DOM
         const stateCheckboxes = document.querySelectorAll('.state-checkbox');
+        const specialtyCheckboxes = document.querySelectorAll('.specialty-checkbox');
         const cityContainer = document.getElementById('city-container');
+        const globalSearchInput = document.getElementById('global-search');
 
-        // Fonction pour mettre à jour la liste des villes
+        
+        /**
+         * LOGIQUE DE FILTRAGE PRINCIPALE
+         * Lit tous les filtres (Wilaya, Ville, Spécialité, Texte) et met à jour l'affichage.
+         */
+        function filterDoctors() {
+            // 1. Récupérer les valeurs des filtres
+            const selectedStates = Array.from(document.querySelectorAll('.state-checkbox:checked')).map(cb => cb.value);
+            // On récupère ici les villes avec la nouvelle classe 'city-checkbox'
+            const selectedCities = Array.from(document.querySelectorAll('.city-checkbox:checked')).map(cb => cb.value);
+            const selectedSpecialties = Array.from(document.querySelectorAll('.specialty-checkbox:checked')).map(cb => cb.value);
+            const searchText = globalSearchInput.value.toLowerCase().trim();
+
+            // 2. Appliquer les filtres aux données des docteurs
+            const filteredDoctors = doctorsData.filter(doctor => {
+                
+                // Filtre par Wilaya
+                const matchesState = selectedStates.length === 0 || selectedStates.includes(doctor.wilaya);
+                if (!matchesState) return false;
+
+                // Filtre par Ville
+                const matchesCity = selectedCities.length === 0 || selectedCities.includes(doctor.city);
+                if (!matchesCity) return false;
+
+                // Filtre par Spécialité
+                const matchesSpecialty = selectedSpecialties.length === 0 || selectedSpecialties.includes(doctor.specialty);
+                if (!matchesSpecialty) return false;
+
+                // Filtre par Recherche Texte (Nom, Spécialité, Ville, Adresse)
+                if (searchText.length > 0) {
+                    const searchTerms = [
+                        doctor.name.toLowerCase(),
+                        doctor.specialty.toLowerCase(),
+                        doctor.city.toLowerCase(),
+                        doctor.address.toLowerCase()
+                    ];
+                    // Vérifie si le texte de recherche correspond à au moins un terme
+                    const matchesSearch = searchTerms.some(term => term.includes(searchText));
+                    if (!matchesSearch) return false;
+                }
+
+                return true;
+            });
+
+            // 3. Rendre les résultats
+            renderDoctors(filteredDoctors);
+        }
+
+        /**
+         * Fonction pour générer le code HTML d'une carte de docteur.
+         */
+        function renderDoctorCard(doctor) {
+            // Génère les créneaux de disponibilité
+            const availabilityHtml = Object.keys(doctor.availability).map(day => {
+                const slotsHtml = doctor.availability[day].map(time => 
+                    `<button class="time-slot" onclick="bookAppointment(${doctor.id}, '${day}', '${time}')">${time}</button>`
+                ).join('');
+                
+                return `
+                    <div class="day-column">
+                        <h4>${day}</h4>
+                        <div class="day-slots">${slotsHtml}</div>
+                    </div>
+                `;
+            }).join('');
+
+            return `
+                <div class="doctor-card" data-doctor-id="${doctor.id}">
+                    <div class="doctor-info">
+                        <div class="doctor-avatar">👨‍⚕️</div>
+                        <div class="doctor-details">
+                            <h3>${doctor.name}</h3>
+                            <div class="specialty">${doctor.specialty}</div>
+                            <div class="rating">
+                                <span class="star">⭐</span>
+                                <strong>${doctor.rating}</strong>
+                                <span>(${doctor.reviews} reviews)</span>
+                            </div>
+                            <div class="address">
+                                📍 ${doctor.address}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="appointments">
+                        <div class="appointments-grid">
+                            ${availabilityHtml}
+                        </div>
+                        <div class="see-more" onclick="showMoreSlots(${doctor.id})">See more</div>
+                        <button class="book-btn" onclick="bookAppointmentOnline(${doctor.id})">Book an online appointment</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        /**
+         * Fonction principale pour afficher les docteurs filtrés.
+         */
+        function renderDoctors(doctors) {
+            const resultsContainer = document.getElementById('doctors-results');
+            const resultsCount = document.getElementById('results-count');
+            
+            resultsContainer.innerHTML = ''; // Effacer les résultats précédents
+            
+            if (doctors.length === 0) {
+                resultsContainer.innerHTML = '<p style="padding: 20px; text-align: center; color: #6b7280;">No doctors found matching your criteria.</p>';
+                resultsCount.textContent = '0 doctor(s) found';
+                return;
+            }
+            
+            doctors.forEach(doctor => {
+                resultsContainer.innerHTML += renderDoctorCard(doctor);
+            });
+            
+            resultsCount.textContent = `${doctors.length} doctor(s) found`;
+        }
+        
+        /**
+         * Met à jour la liste des villes selon les Wilayas sélectionnées.
+         * Appelle filterDoctors() à la fin.
+         */
         function updateCities() {
-            // Vider le conteneur actuel
             cityContainer.innerHTML = '';
             
             let selectedStates = [];
             
-            // Récupérer les wilayas cochées
             stateCheckboxes.forEach(checkbox => {
                 if (checkbox.checked) {
                     selectedStates.push(checkbox.value);
                 }
             });
 
-            // Si aucune wilaya n'est sélectionnée, on n'affiche rien (ou vous pouvez décider de tout afficher)
             if (selectedStates.length === 0) {
                 const msg = document.createElement('div');
                 msg.textContent = "Select a state to see cities";
@@ -523,40 +639,81 @@
                 msg.style.fontSize = "14px";
                 msg.style.fontStyle = "italic";
                 cityContainer.appendChild(msg);
+                filterDoctors();
                 return;
             }
 
-            // Pour chaque wilaya sélectionnée, ajouter ses villes
+            let allCitiesInSelectedStates = [];
+
             selectedStates.forEach(state => {
                 if (citiesByState[state]) {
-                    // Trier les villes par ordre alphabétique pour un meilleur affichage
+                    // Ajout du titre de la Wilaya pour séparer les listes
+                    const stateTitle = document.createElement('h5');
+                    stateTitle.textContent = state;
+                    stateTitle.style.marginTop = '15px';
+                    stateTitle.style.marginBottom = '5px';
+                    stateTitle.style.color = '#333';
+                    stateTitle.style.fontSize = '14px';
+                    cityContainer.appendChild(stateTitle);
+                    
                     const sortedCities = citiesByState[state].sort();
                     
                     sortedCities.forEach(city => {
-                        // Création de l'élément HTML pour la ville
                         const div = document.createElement('div');
                         div.className = 'checkbox-item';
                         
-                        // ID unique généré en supprimant les espaces
-                        const cityId = city.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+                        const cityId = `city-${city.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`;
                         
                         div.innerHTML = `
-                            <input type="checkbox" id="${cityId}" name="city" value="${city}">
+                            <input type="checkbox" id="${cityId}" name="city" value="${city}" class="city-checkbox">
                             <label for="${cityId}">${city}</label>
                         `;
                         
                         cityContainer.appendChild(div);
+                        // Conserver la référence pour ajouter l'écouteur d'événement
+                        allCitiesInSelectedStates.push(div.querySelector('.city-checkbox'));
                     });
                 }
             });
+            
+            // Attacher l'écouteur de changement à toutes les nouvelles cases de ville
+            allCitiesInSelectedStates.forEach(checkbox => {
+                checkbox.addEventListener('change', filterDoctors);
+            });
+
+            filterDoctors();
+        }
+        
+        // Fonctions d'action (simulées)
+        function bookAppointment(doctorId, day, time) {
+            alert(`Booking appointment with Doctor #${doctorId} on ${day} at ${time}.`);
         }
 
-        // Ajouter les écouteurs d'événements sur les cases des wilayas
+        function bookAppointmentOnline(doctorId) {
+            alert(`Proceeding to online booking for Doctor #${doctorId}.`);
+        }
+
+        function showMoreSlots(doctorId) {
+            alert(`Showing more slots for Doctor #${doctorId}.`);
+        }
+        
+        
+        // CONNEXION DES ÉVÉNEMENTS
+        
+        // Wilaya (State) : Appelle updateCities (qui appelle filterDoctors)
         stateCheckboxes.forEach(checkbox => {
             checkbox.addEventListener('change', updateCities);
         });
 
-        // Appeler la fonction au chargement initial pour afficher les villes d'Alger (car Alger est "checked" par défaut)
+        // Specialty : Appelle directement filterDoctors
+        specialtyCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', filterDoctors);
+        });
+
+        // Global Search : Appelle filterDoctors sur chaque frappe
+        globalSearchInput.addEventListener('input', filterDoctors);
+
+        // Initialisation : Afficher les villes (d'Alger par défaut) et filtrer les docteurs au chargement
         document.addEventListener('DOMContentLoaded', updateCities);
     </script>
 </body>
