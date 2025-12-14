@@ -71,8 +71,9 @@
         }
 
         .stats-grid {
+            /* Adjusted grid to handle 3 items well */
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -107,21 +108,13 @@
 
         .stat-icon {
             font-size: 2rem;
+            color: #0d9488;
         }
-
-        .icon-teal { color: #0d9488; }
-        .icon-orange { color: #f59e0b; }
-        .icon-blue { color: #0ea5e9; }
-        .icon-cyan { color: #06b6d4; }
 
         .tabs {
             display: flex;
             gap: 1rem;
             margin-bottom: 2rem;
-            background: white;
-            padding: 0.5rem;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .tab {
@@ -129,19 +122,20 @@
             padding: 0.75rem;
             text-align: center;
             border: none;
-            background: transparent;
+            background: white;
             cursor: pointer;
             font-size: 1rem;
             font-weight: 500;
             color: #64748b;
-            border-radius: 8px;
+            border-radius: 12px;
             transition: all 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .tab.active {
             background: white;
             color: #0d9488;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(13, 148, 136, 0.2);
         }
 
         .tab-content {
@@ -152,212 +146,211 @@
             display: block;
         }
 
-        .content-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .content-card h2 {
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
             font-size: 1.5rem;
-        }
-
-        .message-item {
-            display: flex;
-            gap: 1rem;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            background: #f8fafc;
-            align-items: center;
-            transition: background 0.2s;
-        }
-
-        .message-item:hover {
-            background: #f1f5f9;
-        }
-
-        .avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 1rem;
-            flex-shrink: 0;
-        }
-
-        .avatar-green { background: #d1fae5; color: #059669; }
-        .avatar-blue { background: #dbeafe; color: #0284c7; }
-
-        .message-content {
-            flex: 1;
-        }
-
-        .message-content h4 {
-            margin-bottom: 0.25rem;
-            font-size: 1rem;
-        }
-
-        .message-content p {
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-
-        .message-time {
-            color: #94a3b8;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .unread-dot {
-            width: 8px;
-            height: 8px;
-            background: #0d9488;
-            border-radius: 50%;
-        }
-
-        .appointments-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .appointments-table th {
-            text-align: left;
-            padding: 1rem;
-            color: #64748b;
-            font-weight: 600;
-            font-size: 0.9rem;
-            border-bottom: 2px solid #e2e8f0;
-        }
-
-        .appointments-table td {
-            padding: 1.25rem 1rem;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .patient-info h4 {
-            margin-bottom: 0.25rem;
-        }
-
-        .patient-info p {
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 0.35rem 0.75rem;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-
-        .status-confirmed {
-            background: #d1fae5;
-            color: #059669;
-        }
-
-        .status-pending {
-            background: #fef3c7;
-            color: #d97706;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .btn-secondary {
-            background: #f1f5f9;
-            color: #475569;
-        }
-
-        .btn-secondary:hover {
-            background: #e2e8f0;
         }
 
         .btn-primary {
             background: #0d9488;
             color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
         }
 
         .btn-primary:hover {
             background: #0f766e;
         }
 
-        .availability-section {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
+        .appointment-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
         }
 
-        .day-card {
-            background: #f8fafc;
-            padding: 1.5rem;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-        }
-
-        .day-header {
+        .appointment-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
+            align-items: start;
+            margin-bottom: 1.5rem;
         }
 
-        .day-header h3 {
+        .doctor-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .doctor-info p {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .status-badge {
+            padding: 0.4rem 0.9rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-upcoming {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-completed {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .status-cancelled {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .appointment-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #475569;
+        }
+
+        .detail-icon {
+            color: #0d9488;
             font-size: 1.1rem;
         }
 
-        .btn-edit {
-            background: transparent;
-            color: #0d9488;
-            border: 1px solid #0d9488;
-            padding: 0.4rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
+        .appointment-address {
+            color: #64748b;
             font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .appointment-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
             transition: all 0.2s;
         }
 
-        .btn-edit:hover {
+        .btn-details {
             background: #0d9488;
             color: white;
         }
 
-        .time-slots {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+        .btn-details:hover {
+            background: #0f766e;
         }
 
-        .time-slot h4 {
+        .btn-cancel {
+            background: white;
             color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-cancel:hover {
+            background: #f8fafc;
+        }
+
+        .notification-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            position: relative;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .notification-item.unread {
+            border-left-color: #0d9488;
+            background: #f0fdfa;
+        }
+
+        .notification-item:hover {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .icon-bell {
+            background: #fef3c7;
+        }
+
+        .icon-message {
+            background: #dbeafe;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-content h4 {
             font-size: 0.95rem;
             margin-bottom: 0.25rem;
+            color: #1a202c;
         }
 
-        .time-slot p {
-            color: #64748b;
-            font-size: 0.9rem;
+        .notification-time {
+            color: #94a3b8;
+            font-size: 0.85rem;
         }
+
+        .unread-indicator {
+            width: 8px;
+            height: 8px;
+            background: #0d9488;
+            border-radius: 50%;
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Removed conversation-related CSS */
     </style>
 </head>
 <body>
@@ -372,176 +365,124 @@
     </header>
 
     <div class="container">
-        <h1>Practitioner Dashboard</h1>
-        <p class="subtitle">Manage your appointments and communicate with your patients</p>
+        <h1>Welcome, Sarah!</h1>
+        <p class="subtitle">Manage your medical appointments and communicate with your healthcare providers</p>
 
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-info">
-                    <h3>Appointments today</h3>
+                    <h3>Upcoming appointments</h3>
                     <div class="number">2</div>
                 </div>
-                <div class="stat-icon icon-teal">📅</div>
+                <div class="stat-icon">📅</div>
             </div>
             <div class="stat-card">
                 <div class="stat-info">
-                    <h3>Pending</h3>
+                    <h3>Completed appointments</h3>
                     <div class="number">1</div>
                 </div>
-                <div class="stat-icon icon-orange">🕐</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-info">
-                    <h3>Patients this month</h3>
-                    <div class="number">24</div>
-                </div>
-                <div class="stat-icon icon-blue">👥</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-info">
-                    <h3>Unread messages</h3>
-                    <div class="number">3</div>
-                </div>
-                <div class="stat-icon icon-cyan">💬</div>
+                <div class="stat-icon">🔔</div>
             </div>
         </div>
 
         <div class="tabs">
-            <button class="tab" onclick="switchTab('appointments')">Appointments</button>
-            <button class="tab active" onclick="switchTab('messages')">Messages</button>
-            <button class="tab" onclick="switchTab('availability')">Availability</button>
+            <button class="tab active" onclick="switchTab('appointments')">My Appointments</button>
+            <button class="tab" onclick="switchTab('notifications')">Notifications</button>
         </div>
 
-        <div id="appointments" class="tab-content">
-            <div class="content-card">
-                <table class="appointments-table">
-                    <thead>
-                        <tr>
-                            <th>Patient</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="patient-info">
-                                    <h4>Sarah Benali</h4>
-                                    <p>Cardiac consultation</p>
-                                </div>
-                            </td>
-                            <td>Sat, Nov 25</td>
-                            <td>14:30</td>
-                            <td><span class="status-badge status-confirmed">Confirmed</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn btn-secondary">Details</button>
-                                    <button class="btn btn-primary">Contact</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="patient-info">
-                                    <h4>Mohammed Karim</h4>
-                                    <p>Post-operative follow-up</p>
-                                </div>
-                            </td>
-                            <td>Sat, Nov 25</td>
-                            <td>15:00</td>
-                            <td><span class="status-badge status-pending">Pending</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn btn-secondary">Details</button>
-                                    <button class="btn btn-primary">Contact</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="patient-info">
-                                    <h4>Amina Djamal</h4>
-                                    <p>Annual health check-up</p>
-                                </div>
-                            </td>
-                            <td>Sun, Nov 26</td>
-                            <td>10:00</td>
-                            <td><span class="status-badge status-confirmed">Confirmed</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn btn-secondary">Details</button>
-                                    <button class="btn btn-primary">Contact</button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div id="appointments" class="tab-content active">
+            <div class="section-header">
+                <h2>My Appointments </h2>
+                <button class="btn-primary">New appointment</button>
             </div>
-        </div>
 
-        <div id="messages" class="tab-content active">
-            <div class="content-card">
-                <h2>Conversations with patients</h2>
-                <div class="message-item">
-                    <div class="avatar avatar-green">Sa</div>
-                    <div class="message-content">
-                        <h4>Sarah Benali</h4>
-                        <p>Thank you for your advice, doctor</p>
+            <div class="appointment-card" data-appointment-id="1">
+                <div class="appointment-header">
+                    <div class="doctor-info">
+                        <h3>Dr. Amine Benali</h3>
+                        <p>Cardiology</p>
                     </div>
-                    <div class="message-time">
-                        1 hour ago
-                        <span class="unread-dot"></span>
+                    <span class="status-badge status-upcoming">Upcoming</span>
+                </div>
+
+                <div class="appointment-details">
+                    <div class="detail-item">
+                        <span class="detail-icon">📅</span>
+                        <span>Saturday, November 25, 2023</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">🕐</span>
+                        <span>14:30</span>
                     </div>
                 </div>
-                <div class="message-item">
-                    <div class="avatar avatar-blue">Mo</div>
-                    <div class="message-content">
-                        <h4>Mohammed Karim</h4>
-                        <p>I need to book an appointment for follow-up</p>
+
+                <div class="appointment-address">
+                    📍 12 Rue Didouche Mourad, Alger
+                </div>
+
+                <div class="appointment-actions">
+                    <button class="btn btn-details" onclick="viewDetails(1)">Details</button>
+                    <button class="btn btn-cancel" onclick="cancelAppointment(1)">Cancel</button>
+                </div>
+            </div>
+
+            <div class="appointment-card" data-appointment-id="2">
+                <div class="appointment-header">
+                    <div class="doctor-info">
+                        <h3>Dr. Karim Slimani</h3>
+                        <p>General Medicine</p>
                     </div>
-                    <div class="message-time">3 hours ago</div>
+                    <span class="status-badge status-upcoming">Upcoming</span>
+                </div>
+
+                <div class="appointment-details">
+                    <div class="detail-item">
+                        <span class="detail-icon">📅</span>
+                        <span>Monday, November 27, 2023</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">🕐</span>
+                        <span>10:00</span>
+                    </div>
+                </div>
+
+                <div class="appointment-address">
+                    📍 45 Avenue de l'Indépendance, Alger
+                </div>
+
+                <div class="appointment-actions">
+                    <button class="btn btn-details" onclick="viewDetails(2)">Details</button>
+                    <button class="btn btn-cancel" onclick="cancelAppointment(2)">Cancel</button>
                 </div>
             </div>
         </div>
 
-        <div id="availability" class="tab-content">
-            <div class="content-card">
-                <h2>Manage your availability</h2>
-                <div class="availability-section">
-                    <div class="day-card">
-                        <div class="day-header">
-                            <h3>Monday</h3>
-                            <button class="btn-edit">Edit</button>
-                        </div>
-                        <div class="time-slots">
-                            <div class="time-slot">
-                                <h4>Morning</h4>
-                                <p>09:00 - 12:00</p>
-                            </div>
-                            <div class="time-slot">
-                                <h4>Afternoon</h4>
-                                <p>14:00 - 18:00</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="day-card">
-                        <div class="day-header">
-                            <h3>Tuesday</h3>
-                            <button class="btn-edit">Edit</button>
-                        </div>
-                        <div class="time-slots">
-                            <div class="time-slot">
-                                <h4>Morning</h4>
-                                <p>09:00 - 12:00</p>
-                            </div>
-                            <div class="time-slot">
-                                <h4>Afternoon</h4>
-                                <p>14:00 - 18:00</p>
-                            </div>
-                        </div>
-                    </div>
+        <div id="notifications" class="tab-content">
+            <h2 style="margin-bottom: 1.5rem;">Your Notifications</h2>
+
+            <div class="notification-item unread">
+                <div class="notification-icon icon-bell">🔔</div>
+                <div class="notification-content">
+                    <h4>Your appointment with Dr. Benali is scheduled for tomorrow at 14:30</h4>
+                    <div class="notification-time">2 hours ago</div>
+                </div>
+                <span class="unread-indicator"></span>
+            </div>
+
+            <div class="notification-item unread">
+                <div class="notification-icon icon-message">💬</div>
+                <div class="notification-content">
+                    <h4>Dr. Slimani sent you a message</h4>
+                    <div class="notification-time">1 hour ago</div>
+                </div>
+                <span class="unread-indicator"></span>
+            </div>
+
+            <div class="notification-item">
+                <div class="notification-icon icon-bell">🔔</div>
+                <div class="notification-content">
+                    <h4>Don't forget to bring your documents for your visit</h4>
+                    <div class="notification-time">3 hours ago</div>
                 </div>
             </div>
         </div>
@@ -558,6 +499,67 @@
             event.target.classList.add('active');
             document.getElementById(tabName).classList.add('active');
         }
+
+        function markAsCompleted(appointmentId) {
+            const card = document.querySelector(`[data-appointment-id="${appointmentId}"]`);
+            if (!card) return;
+
+            // Changer le badge de statut
+            const statusBadge = card.querySelector('.status-badge');
+            statusBadge.textContent = 'Completed';
+            statusBadge.className = 'status-badge status-completed';
+
+            // Masquer les boutons d'action
+            const actionsDiv = card.querySelector('.appointment-actions');
+            actionsDiv.style.display = 'none';
+
+            // Mettre à jour le compteur de rendez-vous terminés
+            updateCompletedCount();
+            updateUpcomingCount();
+        }
+
+        function cancelAppointment(appointmentId) {
+            if (confirm('Êtes-vous sûr de vouloir annuler ce rendez-vous ?')) {
+                const card = document.querySelector(`[data-appointment-id="${appointmentId}"]`);
+                if (!card) return;
+
+                // Changer le badge de statut
+                const statusBadge = card.querySelector('.status-badge');
+                statusBadge.textContent = 'Cancelled';
+                statusBadge.className = 'status-badge status-cancelled';
+
+                // Masquer les boutons d'action
+                const actionsDiv = card.querySelector('.appointment-actions');
+                actionsDiv.style.display = 'none';
+
+                // Mettre à jour les compteurs
+                updateUpcomingCount();
+            }
+        }
+
+        function viewDetails(appointmentId) {
+            alert(`Affichage des détails du rendez-vous #${appointmentId}`);
+            // Ici vous pouvez ouvrir une modal ou rediriger vers une page de détails
+        }
+
+        function updateUpcomingCount() {
+            const upcomingCards = document.querySelectorAll('.status-upcoming');
+            const countElement = document.querySelector('.stats-grid .stat-card:first-child .number');
+            countElement.textContent = upcomingCards.length;
+        }
+
+        function updateCompletedCount() {
+            const completedCards = document.querySelectorAll('.status-completed');
+            const countElement = document.querySelector('.stats-grid .stat-card:last-child .number');
+            countElement.textContent = completedCards.length;
+        }
+
+        // Exemple : Marquer automatiquement comme complété après 3 secondes (pour démonstration)
+        // Décommentez la ligne suivante pour tester
+        // setTimeout(() => markAsCompleted(1), 3000);
+
+        // Pour tester manuellement, ajoutez un bouton temporaire
+        // Vous pouvez appeler markAsCompleted(1) dans la console du navigateur
     </script>
 </body>
 </html>
