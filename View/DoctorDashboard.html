@@ -112,7 +112,7 @@
         .icon-teal { color: #0d9488; }
         .icon-orange { color: #f59e0b; }
         .icon-blue { color: #0ea5e9; }
-        .icon-cyan { color: #06b6d4; }
+        /* Removed icon-cyan as it was for messages */
 
         .tabs {
             display: flex;
@@ -164,64 +164,7 @@
             font-size: 1.5rem;
         }
 
-        .message-item {
-            display: flex;
-            gap: 1rem;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            background: #f8fafc;
-            align-items: center;
-            transition: background 0.2s;
-        }
-
-        .message-item:hover {
-            background: #f1f5f9;
-        }
-
-        .avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 1rem;
-            flex-shrink: 0;
-        }
-
-        .avatar-green { background: #d1fae5; color: #059669; }
-        .avatar-blue { background: #dbeafe; color: #0284c7; }
-
-        .message-content {
-            flex: 1;
-        }
-
-        .message-content h4 {
-            margin-bottom: 0.25rem;
-            font-size: 1rem;
-        }
-
-        .message-content p {
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-
-        .message-time {
-            color: #94a3b8;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .unread-dot {
-            width: 8px;
-            height: 8px;
-            background: #0d9488;
-            border-radius: 50%;
-        }
+        /* Message specific CSS removed here */
 
         .appointments-table {
             width: 100%;
@@ -373,7 +316,7 @@
 
     <div class="container">
         <h1>Doctor Dashboard</h1>
-        <p class="subtitle">Manage your appointments and communicate with your patients</p>
+        <p class="subtitle">Manage your appointments and availability</p>
 
         <div class="stats-grid">
             <div class="stat-card">
@@ -397,22 +340,14 @@
                 </div>
                 <div class="stat-icon icon-blue">👥</div>
             </div>
-            <div class="stat-card">
-                <div class="stat-info">
-                    <h3>Unread messages</h3>
-                    <div class="number">3</div>
-                </div>
-                <div class="stat-icon icon-cyan">💬</div>
             </div>
-        </div>
 
         <div class="tabs">
-            <button class="tab" onclick="switchTab('appointments')">Appointments</button>
-            <button class="tab active" onclick="switchTab('messages')">Messages</button>
+            <button class="tab active" onclick="switchTab('appointments')">Appointments</button>
             <button class="tab" onclick="switchTab('availability')">Availability</button>
         </div>
 
-        <div id="appointments" class="tab-content">
+        <div id="appointments" class="tab-content active">
             <div class="content-card">
                 <table class="appointments-table">
                     <thead>
@@ -478,31 +413,6 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-        </div>
-
-        <div id="messages" class="tab-content active">
-            <div class="content-card">
-                <h2>Conversations with patients</h2>
-                <div class="message-item">
-                    <div class="avatar avatar-green">Sa</div>
-                    <div class="message-content">
-                        <h4>Sarah Benali</h4>
-                        <p>Thank you for your advice, doctor</p>
-                    </div>
-                    <div class="message-time">
-                        1 hour ago
-                        <span class="unread-dot"></span>
-                    </div>
-                </div>
-                <div class="message-item">
-                    <div class="avatar avatar-blue">Mo</div>
-                    <div class="message-content">
-                        <h4>Mohammed Karim</h4>
-                        <p>I need to book an appointment for follow-up</p>
-                    </div>
-                    <div class="message-time">3 hours ago</div>
-                </div>
             </div>
         </div>
 
