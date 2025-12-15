@@ -1,7 +1,6 @@
-ID,First Name,Last Name,Wilaya,City,Email,Password,Phone Number
-ID01,aminemohamed@gmail.com,BkFrm731,Mohamed,Amine,Algiers,Algiers,0770123456
-ID02,fatimazahra@gmail.com,TkSlm492,Fatima,Zahra,Oran,Oran,0559876543
-ID03,ahmedkarim@gmail.com,VkBrn805,Ahmed,Karim,Constantine,Constantine,0665551234
-ID04,aichabennani@gmail.com,RkClm687,Aicha,Bennani,Annaba,Annaba,0774449876
-ID05,youssefhadj@gmail.com,MkTsv913,Youssef,Hadj,Blida,Blida,0553334567
-
+ID,First Name,Last Name,Wilaya,City,Email,Password,Phone Number,Sexe
+ID01,Amine,Mohamed,Algiers,Algiers,aminemohamed@gmail.com,BkFrm731,07 70 12 34 56,M
+ID02,Fatima,Zahra,Oran,Oran,fatimazahra@gmail.com,TkSlm492,05 59 87 65 43,F
+ID03,Ahmed,Karim,Constantine,Constantine,ahmedkarim@gmail.com,VkBrn805,06 65 55 12 34,M
+ID04,Aicha,Bennani,Annaba,Annaba,aichabennani@gmail.com,RkClm687,07 74 44 98 76,F
+ID05,Youssef,Hadj,Blida,Blida,youssefhadj@gmail.com,MkTsv913,05 53 33 45 67,M
