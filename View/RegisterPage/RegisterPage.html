@@ -137,6 +137,8 @@
         input[type="email"],
         input[type="password"],
         input[type="tel"],
+        input[type="url"],
+        input[type="file"],
         select {
             width: 100%;
             padding: 8px 10px;
@@ -152,11 +154,34 @@
         input[type="email"]:focus,
         input[type="password"]:focus,
         input[type="tel"]:focus,
+        input[type="url"]:focus,
+        input[type="file"]:focus,
         select:focus {
             outline: none;
             border-color: #0066cc;
             background-color: #ffffff;
             box-shadow: 0 0 8px rgba(0, 102, 204, 0.2);
+        }
+
+        /* Added styling for file input */
+        input[type="file"] {
+            padding: 6px 10px;
+            cursor: pointer;
+        }
+
+        input[type="file"]::file-selector-button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background: #0052a3;
         }
 
         .submit-btn {
@@ -270,7 +295,16 @@
                     </div>
                 </div>
 
-                <div class="form-group form-row full">
+                <!-- Updated sex field to only Male/Female options for doctor -->
+                <div class="form-group form-row">
+                    <div>
+                        <label for="doctor-sex">Sex</label>
+                        <select id="doctor-sex" required>
+                            <option value="">Select Sex</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
                     <div>
                         <label for="doctor-phone">Phone Number</label>
                         <input type="tel" id="doctor-phone" placeholder="Enter your phone number" required>
@@ -324,6 +358,22 @@
                     </div>
                 </div>
 
+                <!-- Added diploma upload field for doctor -->
+                <div class="form-group form-row full">
+                    <div>
+                        <label for="doctor-diploma">Upload Diploma</label>
+                        <input type="file" id="doctor-diploma" accept=".pdf,.jpg,.jpeg,.png" required>
+                    </div>
+                </div>
+
+                <!-- Renamed label from "Google Maps Cabinet Link" to "Cabinet Link" -->
+                <div class="form-group form-row full">
+                    <div>
+                        <label for="doctor-map-link">Cabinet Link</label>
+                        <input type="url" id="doctor-map-link" placeholder="https://maps.google.com/..." required>
+                    </div>
+                </div>
+
                 <button type="submit" class="submit-btn">Register as Doctor</button>
             </form>
 
@@ -356,7 +406,16 @@
                     </div>
                 </div>
 
-                <div class="form-group form-row full">
+                <!-- Updated sex field to only Male/Female options for patient -->
+                <div class="form-group form-row">
+                    <div>
+                        <label for="patient-sex">Sex</label>
+                        <select id="patient-sex" required>
+                            <option value="">Select Sex</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
                     <div>
                         <label for="patient-phone">Phone Number</label>
                         <input type="tel" id="patient-phone" placeholder="Enter your phone number" required>
