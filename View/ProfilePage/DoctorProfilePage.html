@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareLink - Doctor Profile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f7fa;
+            color: #1a202c;
+        }
+
+        .header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #0d9488;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: #0d9488;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .back-btn {
+            background: #0d9488;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #0f766e;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .profile-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            margin: 0 auto 1rem;
+        }
+
+        .profile-header h1 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-header p {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            color: #1a202c;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-grid.two-col {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #475569;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #0d9488;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 0.875rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #0d9488;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0f766e;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+        }
+
+        .success-message {
+            background: #d1fae5;
+            color: #059669;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .form-group input:disabled {
+            background-color: #f1f5f9;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid.two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">❤️</div>
+            <span>CareLink</span>
+        </div>
+        <button class="back-btn" onclick="window.location.href='doctor-dashboard.html'">← Back to Dashboard</button>
+    </header>
+
+    <div class="container">
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="profile-avatar">⚕️</div>
+                <h1>My Profile</h1>
+                <p>Manage your professional information</p>
+            </div>
+
+            <div id="successMessage" class="success-message">
+                ✓ Your profile has been updated successfully!
+            </div>
+
+            <form id="profileForm" onsubmit="saveProfile(event)">
+                <div class="form-section">
+                    <h2>Personal Information (Read Only)</h2>
+                    <div class="form-grid two-col">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" value="Amine" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" value="Benali" disabled>
+                        </div>
+                    </div>
+                    <div class="form-grid two-col">
+                        <div class="form-group">
+                            <label for="sexe">Sexe</label>
+                            <input type="text" id="sexe" name="sexe" value="Male" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="speciality">Speciality</label>
+                            <input type="text" id="speciality" name="speciality" value="Cardiology" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2>Contact Information</h2>
+                    <div class="form-grid two-col">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" value="dr.benali@carelink.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" value="+213 555 987 654" required>
+                        </div>
+                    </div>
+                    <div class="form-grid two-col">
+                        <div class="form-group">
+                            <label for="wilaya">Wilaya</label>
+                            <input type="text" id="wilaya" name="wilaya" value="Alger" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" name="city" value="Bab El Oued" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2>Location Information</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="locationLink">Location Link (Google Maps)</label>
+                            <input type="url" id="locationLink" name="locationLink" value="https://maps.google.com/?q=36.7538,3.0588" placeholder="https://maps.google.com/?q=...">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2>Security</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="Enter new password to change">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='doctor-dashboard.html'">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function saveProfile(event) {
+            event.preventDefault();
+            
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password && password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            // Get form data
+            const formData = new FormData(event.target);
+            const profileData = Object.fromEntries(formData.entries());
+            
+            // Remove empty password fields
+            if (!profileData.password) {
+                delete profileData.password;
+            }
+            delete profileData.confirmPassword;
+            
+            // Save to localStorage (in a real app, this would be sent to a server)
+            localStorage.setItem('doctorProfile', JSON.stringify(profileData));
+            
+            // Show success message
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Hide success message after 3 seconds
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+        }
+
+        // Load saved profile data on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedProfile = localStorage.getItem('doctorProfile');
+            if (savedProfile) {
+                const profileData = JSON.parse(savedProfile);
+                
+                // Populate form fields
+                Object.keys(profileData).forEach(key => {
+                    const field = document.getElementById(key);
+                    if (field && !field.disabled) {
+                        field.value = profileData[key];
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
