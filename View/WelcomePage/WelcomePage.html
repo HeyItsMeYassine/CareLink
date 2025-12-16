@@ -146,6 +146,22 @@
           gap: 0.5rem;
         }
 
+        .home-btn {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .home-btn:hover {
+            background: #4b5563;
+        }
+
         /* Hero Section */
         .hero-section {
           width: 100%;
@@ -295,8 +311,9 @@
                 <span class="brand-text">CareLink</span>
             </div>
             <div class="navbar-buttons">
-                <button class="btn-ghost">LOGIN</button>
-                <button class="btn-primary">REGISTER</button>
+                <button class="btn-ghost" onclick="window.location.href='.././LoginPage/LoginPage.html'">LOGIN</button>
+                <button class="btn-primary" onclick="window.location.href='.././RegisterPage/RegisterPage.html'">REGISTER</button>
+                <button class="home-btn" onclick="window.location.href='.././WelcomePage/WelcomePage.html'">Home</button>
             </div>
         </div>
     </nav>
@@ -312,11 +329,11 @@
                 </div>
                 
                 <div class="hero-buttons">
-                    <button class="btn-primary btn-large">
+                    <button class="btn-primary btn-large" onclick="window.location.href='.././LoginPage/LoginPage.html'">
                         LOGIN
                         <span class="arrow">→</span>
                     </button>
-                    <button class="btn-outline btn-large">REGISTER</button>
+                    <button class="btn-outline btn-large" onclick="window.location.href='.././RegisterPage/RegisterPage.html'">REGISTER</button>
                 </div>
             </div>
 
@@ -329,29 +346,7 @@
 
     <!-- Embedded JavaScript -->
     <script>
-        // Add click handlers for buttons
-        document.addEventListener("DOMContentLoaded", () => {
-          const loginButtons = document.querySelectorAll(".btn-primary:not(.btn-outline), .btn-ghost")
-          const registerButtons = document.querySelectorAll(".btn-outline, .btn-primary")
-
-          loginButtons.forEach((btn) => {
-            if (btn.textContent.includes("LOGIN")) {
-              btn.addEventListener("click", () => {
-                console.log("Login button clicked")
-                // Add your login logic here
-              })
-            }
-          })
-
-          registerButtons.forEach((btn) => {
-            if (btn.textContent.includes("REGISTER")) {
-              btn.addEventListener("click", () => {
-                console.log("Register button clicked")
-                // Add your register logic here
-              })
-            }
-          })
-        })
+        // No additional script needed; onclick handles redirects
     </script>
 </body>
 </html>

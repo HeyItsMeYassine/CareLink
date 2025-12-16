@@ -51,6 +51,39 @@
             background: #dc2626;
         }
 
+        .home-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-right: 10px;
+        }
+
+        .home-btn:hover {
+            background: #1e40af;
+        }
+
+        .back-btn {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #4b5563;
+        }
+
         .logo-icon {
             width: 40px;
             height: 40px;
@@ -146,10 +179,13 @@
             border-radius: 12px;
             margin-bottom: 20px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .search-bar input {
-            width: 100%;
+            width: calc(100% - 120px);
             border: 1px solid #e5e7eb;
             padding: 12px 15px 12px 40px;
             border-radius: 8px;
@@ -316,7 +352,10 @@
             <div class="logo-icon">❤️</div>
             <span>CareLink</span>
         </div>
-        <button class="logout-btn" onclick="alert('Logout...')">Logout</button>
+        <div>
+            <button class="home-btn" onclick="window.location.href='./WelcomePage/WelcomePage.html'">Home</button>
+            <button class="logout-btn" onclick="window.location.href='./WelcomePage/WelcomePage.html'">Logout</button>
+        </div>
     </header>
 
     <div class="container">
@@ -386,8 +425,11 @@
             <div class="filter-section">
                 <h4>City</h4>
                 <div id="city-container">
-                    </div>
+                    <!-- Cities will be populated here -->
+                </div>
             </div>
+
+            <button class="back-btn" onclick="window.location.href='./PatientDashboard.html'">Back to Dashboard</button>
         </aside>
 
         <main class="main-content">
@@ -401,7 +443,8 @@
             </div>
 
             <div id="doctors-results">
-                </div>
+                <!-- Doctors will be rendered here -->
+            </div>
         </main>
     </div>
 
@@ -687,10 +730,14 @@
         // Fonctions d'action (simulées)
         function bookAppointment(doctorId, day, time) {
             alert(`Booking appointment with Doctor #${doctorId} on ${day} at ${time}.`);
+            // In real app, redirect or update dashboard
+            window.location.href = './PatientDashboard.html'; // Redirect back after booking
         }
 
         function bookAppointmentOnline(doctorId) {
             alert(`Proceeding to online booking for Doctor #${doctorId}.`);
+            // In real app, redirect or update
+            window.location.href = './PatientDashboard.html'; // Redirect back after booking
         }
 
         function showMoreSlots(doctorId) {

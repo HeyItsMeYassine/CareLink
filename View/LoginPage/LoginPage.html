@@ -54,6 +54,22 @@
             font-size: 16px;
         }
 
+        .home-btn {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .home-btn:hover {
+            background: #4b5563;
+        }
+
         .tab-container {
             display: flex;
             padding: 0 40px;
@@ -182,15 +198,59 @@
             object-fit: contain;
         }
 
+        /* Nouveaux styles pour l'overlay d'erreur (centré, blanc/bleu/rouge) */
+        .error-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent pour focus */
+            align-items: center;
+            justify-content: center;
+            z-index: 1000; /* Au-dessus de tout */
+            transition: opacity 0.3s ease;
+        }
+
+        .error-content {
+            background: white; /* Fond blanc */
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+            border: 2px solid red; /* Bordure rouge pour accent erreur */
+        }
+
+        .error-text {
+            color: #0070f3; /* Texte bleu principal */
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .error-accent {
+            color: red; /* Accent rouge pour "Error:" */
+            font-weight: 700;
+        }
+
     </style>
 </head>
 <body>
+
     <div class="container">
+        <!-- Overlay d'erreur ajouté au body pour centrage global -->
+<div id="error-overlay" class="error-overlay">
+    <div class="error-content">
+        <p class="error-text"><span class="error-accent">Error:</span> <span id="error-message"></span></p>
+    </div>
+</div>
         <div class="header">
             <div class="logo">
                 <div class="logo-icon">💙</div>
                 <span>CareLink</span>
             </div>
+            <button class="home-btn" onclick="window.location.href='.././WelcomePage/WelcomePage.html'">Home</button>
         </div>
 
         <div class="tab-container">
@@ -221,7 +281,7 @@
                     </form>
 
                     <div class="signup-text">
-                        Don't have an account? <a href="#">Register here</a>
+                        Don't have an account? <a href=".././RegisterPage/RegisterPage.html">Register here</a>  <!-- Lien modified -->
                     </div>
                 </div>
 
@@ -253,7 +313,7 @@
                     </form>
 
                     <div class="signup-text">
-                        Don't have an account? <a href="#">Register here</a>
+                        Don't have an account? <a href=".././RegisterPage/RegisterPage.html">Register here</a>  <!-- Lien modified -->
                     </div>
                 </div>
 
@@ -266,7 +326,6 @@
 
         </div>
     </div>
-
     <script>
         function switchTab(tabName) {
             document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
@@ -275,13 +334,65 @@
             document.getElementById(tabName).classList.add("active");
             event.target.classList.add("active");
         }
+// Contrôleur simple (MVC-inspired) avec patrons
+        const AuthController = {
+            // Singleton pour modèle de données
+            getStorage: function() {
+                if (!this.storage) {
+                    this.storage = {
+                        users: JSON.parse(localStorage.getItem('users')) || []
+                    };
+                }
+                return this.storage;
+            },
+            
+            // Stratégie de validation login
+            validateLogin: function(email, password, type) {
+                const storage = this.getStorage();
+                const user = storage.users.find(u => u.email === email && u.type === type);
+                return user && user.password === password;
+            },
+            
+            // Fonction pour afficher l'erreur stylée (remplace notify pour erreurs)
+            showError: function(message) {
+                document.getElementById('error-message').innerText = message;
+                document.getElementById('error-overlay').style.display = 'flex';
+                
+                // Auto-hide après 5 secondes (extensible avec Observateur)
+                setTimeout(() => {
+                    document.getElementById('error-overlay').style.display = 'none';
+                }, 5000);
+            },
+
+            // Notify pour succès (garde alert pour l'instant, à styliser similairement si besoin)
+            notifySuccess: function(message) {
+                alert(message);
+            }
+        };
+
+        // Listener pour dismiss on click (Observateur sur overlay)
+        document.getElementById('error-overlay').addEventListener('click', () => {
+            document.getElementById('error-overlay').style.display = 'none';
+        });
 
         function handleLogin(event, type) {
             event.preventDefault();
             const email = document.getElementById(type + "-email").value;
             const pass = document.getElementById(type + "-password").value;
-            alert(`Login attempt as ${type}\nEmail: ${email}`);
+            
+            if (AuthController.validateLogin(email, pass, type)) {
+                AuthController.notifySuccess(`Login successful as ${type}!`);
+                // Redirect vers dashboard correspondant
+                if (type === 'patient') {
+                    window.location.href = 'PatientDashboard.html';
+                } else if (type === 'doctor') {
+                    window.location.href = 'DoctorDashboard.html';
+                }
+            } else {
+                AuthController.showError(`Account does not exist or invalid credentials for ${type}.`);  // Erreur centrée
+            }
         }
+
     </script>
 
 </body>

@@ -249,6 +249,35 @@
                 flex: 0 0 200px;
             }
         }
+
+        .signup-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .signup-text a {
+            color: #0066cc;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .home-btn {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .home-btn:hover {
+            background: #4b5563;
+        }
     </style>
 </head>
 <body>
@@ -256,6 +285,7 @@
         <!-- ========== HEADER ========== -->
         <div class="header">
             <div class="logo">❤️<span class="logo-text">CareLink</span></div>
+            <button class="home-btn" onclick="window.location.href='.././WelcomePage/WelcomePage.html'">Home</button>
         </div>
 
         <!-- ========== TABS ========== -->
@@ -449,6 +479,10 @@
                 <img id="patient-illustration" src="PatientPic.png" alt="Patient illustration" class="illustration" style="display:none;">
             </div>
         </div>
+
+        <div class="signup-text">
+            Already have an account? <a href=".././LoginPage/LoginPage.html">Login here</a>
+        </div>
     </div>
 
     <script>
@@ -545,12 +579,14 @@
         // ========== EVENT LISTENERS ==========
         document.getElementById('doctor-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Doctor registration submitted! (Demo)');
+            // Simulate registration and redirect to login
+            window.location.href = 'LoginPage.html';
         });
 
         document.getElementById('patient-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Patient registration submitted! (Demo)');
+            // Simulate registration and redirect to login
+            window.location.href = 'LoginPage.html';
         });
 
         // ========== INITIALIZATION ==========
