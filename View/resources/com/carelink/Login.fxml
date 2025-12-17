@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.carelink.controller.LoginController"
+            style="-fx-background-color: linear-gradient(to bottom right, #f5f7fa, #e9f0f5);">
+
+    <!-- ================= HEADER ================= -->
+    <top>
+        <VBox spacing="10" style="-fx-padding: 20;">
+            <!-- Logo + Back Button -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Button text="← Back to Home"
+                        onAction="#handleBackToHome"
+                        style="-fx-background-color: transparent;
+                               -fx-text-fill: #0066cc;
+                               -fx-font-weight: bold;
+                               -fx-cursor: hand;
+                               -fx-underline: true;"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Label text="❤️ CareLink"
+                       style="-fx-font-size: 24px;
+                              -fx-font-weight: bold;
+                              -fx-text-fill: #0066cc;"/>
+            </HBox>
+
+            <!-- Tabs -->
+            <HBox spacing="0">
+                <Button fx:id="btnDoctor"
+                        text="Doctor Login"
+                        onAction="#handleDoctorClick"
+                        style="-fx-background-color: #ffffff;
+                               -fx-border-color: #0066cc;
+                               -fx-border-width: 0 0 4 0;
+                               -fx-padding: 12 32;
+                               -fx-font-weight: bold;
+                               -fx-text-fill: #0066cc;"/>
+
+                <Button fx:id="btnPatient"
+                        text="Patient Login"
+                        onAction="#handlePatientClick"
+                        style="-fx-background-color: #e0e7f1;
+                               -fx-padding: 12 32;"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ================= CENTER ================= -->
+    <center>
+        <StackPane style="-fx-padding: 40;">
+
+            <!-- ================= DOCTOR LOGIN ================= -->
+            <VBox fx:id="doctorForm"
+                  spacing="15"
+                  style="-fx-background-color: rgba(212, 241, 249, 0.6);
+                         -fx-background-radius: 15;
+                         -fx-padding: 40;
+                         -fx-max-width: 400;">
+
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <ImageView fitHeight="70" fitWidth="70" preserveRatio="true">
+                        <Image url="@DoctorPic.png"/>
+                    </ImageView>
+                    <Label text="Welcome Back, Doctor!"
+                           style="-fx-font-size: 20px;
+                                  -fx-font-weight: bold;"/>
+                </HBox>
+
+                <TextField fx:id="doctorEmail"
+                           promptText="Email"
+                           style="-fx-padding: 10;
+                                  -fx-background-radius: 8;"/>
+
+                <PasswordField fx:id="doctorPassword"
+                               promptText="Password"
+                               style="-fx-padding: 10;
+                                      -fx-background-radius: 8;"/>
+
+                <Button text="Login"
+                        onAction="#handleDoctorLogin"
+                        style="-fx-background-color: linear-gradient(to right, #0066cc, #0052a3);
+                               -fx-text-fill: white;
+                               -fx-font-weight: bold;
+                               -fx-padding: 10 24;
+                               -fx-background-radius: 8;
+                               -fx-cursor: hand;"/>
+
+                <Hyperlink text="Don't have an account? Register here"
+                           onAction="#handleGoToRegister"
+                           style="-fx-text-fill: #0066cc;"/>
+            </VBox>
+
+            <!-- ================= PATIENT LOGIN ================= -->
+            <VBox fx:id="patientForm"
+                  spacing="15"
+                  visible="false"
+                  managed="false"
+                  style="-fx-background-color: rgba(212, 241, 249, 0.6);
+                         -fx-background-radius: 15;
+                         -fx-padding: 40;
+                         -fx-max-width: 400;">
+
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <ImageView fitHeight="70" fitWidth="70" preserveRatio="true">
+                        <Image url="@PatientPic.png"/>
+                    </ImageView>
+                    <Label text="Welcome Back, Patient!"
+                           style="-fx-font-size: 20px;
+                                  -fx-font-weight: bold;"/>
+                </HBox>
+
+                <TextField fx:id="patientEmail"
+                           promptText="Email"
+                           style="-fx-padding: 10;
+                                  -fx-background-radius: 8;"/>
+
+                <PasswordField fx:id="patientPassword"
+                               promptText="Password"
+                               style="-fx-padding: 10;
+                                      -fx-background-radius: 8;"/>
+
+                <Button text="Login"
+                        onAction="#handlePatientLogin"
+                        style="-fx-background-color: linear-gradient(to right, #0066cc, #0052a3);
+                               -fx-text-fill: white;
+                               -fx-font-weight: bold;
+                               -fx-padding: 10 24;
+                               -fx-background-radius: 8;
+                               -fx-cursor: hand;"/>
+
+                <Hyperlink text="Don't have an account? Register here"
+                           onAction="#handleGoToRegister"
+                           style="-fx-text-fill: #0066cc;"/>
+            </VBox>
+
+        </StackPane>
+    </center>
+
+</BorderPane>

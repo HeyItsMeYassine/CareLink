@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.carelink.controller.RegisterController"
+            style="-fx-background-color: linear-gradient(to bottom right, #f5f7fa, #e9f0f5);">
+
+    <!-- ================= HEADER ================= -->
+    <top>
+        <VBox spacing="10" style="-fx-padding: 20;">
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Button text="← Back to Home"
+                        onAction="#handleBackToHome"
+                        style="-fx-background-color: transparent;
+                               -fx-text-fill: #0066cc;
+                               -fx-font-weight: bold;
+                               -fx-cursor: hand;
+                               -fx-underline: true;"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Label text="❤️ CareLink"
+                       style="-fx-font-size: 24px;
+                              -fx-font-weight: bold;
+                              -fx-text-fill: #0066cc;"/>
+            </HBox>
+
+            <HBox spacing="0">
+                <Button fx:id="btnDoctor"
+                        text="Doctor Registration"
+                        onAction="#handleDoctorClick"
+                        style="-fx-background-color: #ffffff;
+                               -fx-border-color: #0066cc;
+                               -fx-border-width: 0 0 4 0;
+                               -fx-padding: 12 32;
+                               -fx-font-weight: bold;
+                               -fx-text-fill: #0066cc;"/>
+
+                <Button fx:id="btnPatient"
+                        text="Patient Registration"
+                        onAction="#handlePatientClick"
+                        style="-fx-background-color: #e0e7f1;
+                               -fx-padding: 12 32;"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ================= CENTER ================= -->
+    <center>
+        <StackPane style="-fx-padding: 20;">
+
+            <!-- ================= DOCTOR FORM ================= -->
+            <VBox fx:id="doctorForm"
+                  spacing="15"
+                  style="-fx-background-color: rgba(212, 241, 249, 0.5);
+                         -fx-background-radius: 15;
+                         -fx-padding: 30;
+                         -fx-max-width: 720;">
+
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <ImageView fitHeight="80" fitWidth="80" preserveRatio="true">
+                        <Image url="@DoctorPic.png"/>
+                    </ImageView>
+                    <Label text="Welcome, Doctor!"
+                           style="-fx-font-size: 20px;
+                                  -fx-font-weight: bold;"/>
+                </HBox>
+
+                <!-- Email + Password -->
+                <HBox spacing="10">
+                    <TextField fx:id="doctorEmail" promptText="Email" HBox.hgrow="ALWAYS"/>
+                    <PasswordField fx:id="doctorPassword" promptText="Password" HBox.hgrow="ALWAYS"/>
+                </HBox>
+
+                <!-- First name + Last name -->
+                <HBox spacing="10">
+                    <TextField fx:id="doctorFirstName" promptText="First Name" HBox.hgrow="ALWAYS"/>
+                    <TextField fx:id="doctorLastName" promptText="Last Name" HBox.hgrow="ALWAYS"/>
+                </HBox>
+
+                <!-- Phone + Sex + Wilaya + City + Specialty -->
+                <HBox spacing="10">
+                    <TextField fx:id="doctorPhone" promptText="Phone" prefWidth="160"/>
+                    <ComboBox fx:id="doctorSex" promptText="Sex" prefWidth="90"/>
+                    <ComboBox fx:id="doctorWilaya" promptText="Wilaya"
+                              onAction="#handleDoctorWilayaChange" prefWidth="110"/>
+                    <ComboBox fx:id="doctorCity" promptText="City" prefWidth="160"/>
+                    <ComboBox fx:id="doctorSpecialty" promptText="Specialty" HBox.hgrow="ALWAYS"/>
+                </HBox>
+
+                <!-- Documents -->
+                <Label text="Required Documents"
+                       style="-fx-font-weight: bold;
+                              -fx-text-fill: #0066cc;"/>
+
+                <HBox spacing="15">
+
+                    <!-- ID Card -->
+                    <VBox spacing="5">
+                        <Label text="ID Card"/>
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <Button text="Choose File" onAction="#handleIdCardUpload"/>
+                            <Label fx:id="idCardLabel" text="No file"/>
+                            <Button text="✖"
+                                    onAction="#handleIdCardDelete"
+                                    style="-fx-background-color: transparent;
+                                           -fx-text-fill: red;
+                                           -fx-font-weight: bold;
+                                           -fx-cursor: hand;"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Professional License -->
+                    <VBox spacing="5">
+                        <Label text="Professional License"/>
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <Button text="Choose File" onAction="#handleProfessionalCardUpload"/>
+                            <Label fx:id="professionalCardLabel" text="No file"/>
+                            <Button text="✖"
+                                    onAction="#handleProfessionalCardDelete"
+                                    style="-fx-background-color: transparent;
+                                           -fx-text-fill: red;
+                                           -fx-font-weight: bold;
+                                           -fx-cursor: hand;"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Practice Authorization -->
+                    <VBox spacing="5">
+                        <Label text="Practice Authorization"/>
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <Button text="Choose File" onAction="#handleOpeningApprovalUpload"/>
+                            <Label fx:id="openingApprovalLabel" text="No file"/>
+                            <Button text="✖"
+                                    onAction="#handleOpeningApprovalDelete"
+                                    style="-fx-background-color: transparent;
+                                           -fx-text-fill: red;
+                                           -fx-font-weight: bold;
+                                           -fx-cursor: hand;"/>
+                        </HBox>
+                    </VBox>
+
+                </HBox>
+
+                <Button text="Register as Doctor"
+                        onAction="#handleDoctorRegister"
+                        style="-fx-background-color: linear-gradient(to right, #0066cc, #0052a3);
+                               -fx-text-fill: white;
+                               -fx-font-weight: bold;"/>
+
+                <Hyperlink text="Already have an account? Login here"
+                           onAction="#handleGoToLogin"/>
+            </VBox>
+
+            <!-- ================= PATIENT FORM ================= -->
+            <VBox fx:id="patientForm"
+                  spacing="15"
+                  visible="false"
+                  managed="false"
+                  style="-fx-background-color: rgba(212, 241, 249, 0.5);
+                         -fx-background-radius: 15;
+                         -fx-padding: 30;
+                         -fx-max-width: 720;">
+
+                <HBox spacing="15">
+                    <ImageView fitHeight="80" fitWidth="80" preserveRatio="true">
+                        <Image url="@PatientPic.png"/>
+                    </ImageView>
+                    <Label text="Welcome, Patient!"
+                           style="-fx-font-size: 20px;
+                                  -fx-font-weight: bold;"/>
+                </HBox>
+
+                <HBox spacing="10">
+                    <TextField fx:id="patientEmail" promptText="Email" HBox.hgrow="ALWAYS"/>
+                    <PasswordField fx:id="patientPassword" promptText="Password" HBox.hgrow="ALWAYS"/>
+                </HBox>
+
+                <HBox spacing="10">
+                    <TextField fx:id="patientFirstName" promptText="First Name" HBox.hgrow="ALWAYS"/>
+                    <TextField fx:id="patientLastName" promptText="Last Name" HBox.hgrow="ALWAYS"/>
+                </HBox>
+
+                <HBox spacing="10">
+                    <TextField fx:id="patientPhone" promptText="Phone Number" prefWidth="160"/>
+                    <ComboBox fx:id="patientSex" promptText="Sex" prefWidth="90"/>
+                    <ComboBox fx:id="patientWilaya" promptText="Wilaya"
+                              onAction="#handlePatientWilayaChange" HBox.hgrow="ALWAYS"/>
+                    <ComboBox fx:id="patientCity" promptText="City" HBox.hgrow="ALWAYS"/>
+                </HBox>
+
+                <Button text="Register as Patient"
+                        onAction="#handlePatientRegister"
+                        style="-fx-background-color: linear-gradient(to right, #0066cc, #0052a3);
+                               -fx-text-fill: white;
+                               -fx-font-weight: bold;"/>
+
+                <Hyperlink text="Already have an account? Login here"
+                           onAction="#handleGoToLogin"/>
+            </VBox>
+
+        </StackPane>
+    </center>
+
+</BorderPane>

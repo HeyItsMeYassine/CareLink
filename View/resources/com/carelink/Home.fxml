@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.carelink.controller.HomeController"
+            style="-fx-background-color: linear-gradient(to bottom right, #f5f7fa, #e9f0f5);">
+
+    <center>
+        <VBox spacing="35" alignment="CENTER" style="-fx-padding: 40;">
+
+            <!-- ================= HERO ================= -->
+            <HBox spacing="50" alignment="CENTER">
+
+                <VBox spacing="18" maxWidth="400">
+
+                    <Label text="❤️ CareLink"
+                           style="-fx-font-size: 48px;
+                                  -fx-font-weight: bold;
+                                  -fx-text-fill: #0066cc;"/>
+
+                    <Label text="Book appointments with trusted doctors in just a few clicks."
+                           wrapText="true"
+                           style="-fx-font-size: 15px;
+                                  -fx-text-fill: #6b7280;"/>
+
+                    <HBox spacing="12">
+                        <Button text="Login"
+                                onAction="#goToLogin"
+                                style="-fx-background-color: linear-gradient(to right, #0066cc, #0052a3);
+                                       -fx-text-fill: white;
+                                       -fx-font-weight: bold;
+                                       -fx-background-radius: 8;
+                                       -fx-padding: 8 22;"/>
+
+                        <Button text="Register"
+                                onAction="#goToRegister"
+                                style="-fx-background-color: white;
+                                       -fx-border-color: #0066cc;
+                                       -fx-border-radius: 8;
+                                       -fx-font-weight: bold;
+                                       -fx-text-fill: #0066cc;
+                                       -fx-padding: 8 22;"/>
+                    </HBox>
+
+                </VBox>
+
+                <ImageView fitWidth="360" preserveRatio="true">
+                    <Image url="@doctor.png"/>
+                </ImageView>
+
+            </HBox>
+
+            <!-- ================= FEATURES ================= -->
+            <HBox spacing="20" alignment="CENTER">
+
+                <VBox spacing="10" alignment="CENTER"
+                      prefWidth="170"
+                      style="-fx-background-color: white;
+                             -fx-background-radius: 16;
+                             -fx-padding: 18;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 5);">
+
+                    <Label text="📅" style="-fx-font-size: 28px;"/>
+                    <Label text="Easy Booking" style="-fx-font-weight: bold;"/>
+                    <Label text="Schedule appointments easily"
+                           wrapText="true"
+                           style="-fx-font-size: 12px; -fx-text-fill: #6b7280;"/>
+                </VBox>
+
+                <VBox spacing="10" alignment="CENTER"
+                      prefWidth="170"
+                      style="-fx-background-color: white;
+                             -fx-background-radius: 16;
+                             -fx-padding: 18;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 5);">
+
+                    <Label text="👨‍⚕️" style="-fx-font-size: 28px;"/>
+                    <Label text="Trusted Doctors" style="-fx-font-weight: bold;"/>
+                    <Label text="Verified professionals"
+                           wrapText="true"
+                           style="-fx-font-size: 12px; -fx-text-fill: #6b7280;"/>
+                </VBox>
+
+                <VBox spacing="10" alignment="CENTER"
+                      prefWidth="170"
+                      style="-fx-background-color: white;
+                             -fx-background-radius: 16;
+                             -fx-padding: 18;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 5);">
+
+                    <Label text="⏰" style="-fx-font-size: 28px;"/>
+                    <Label text="24/7 Access" style="-fx-font-weight: bold;"/>
+                    <Label text="Manage anytime"
+                           wrapText="true"
+                           style="-fx-font-size: 12px; -fx-text-fill: #6b7280;"/>
+                </VBox>
+
+            </HBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>
