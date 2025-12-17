@@ -62,7 +62,7 @@
             background: transparent;
             border: none;
             cursor: pointer;
-            padding: 0.5rem;
+            padding: 0.25rem;
             border-radius: 50%;
             transition: background 0.2s;
         }
@@ -72,8 +72,8 @@
         }
 
         .profile-icon {
-            width: 32px;
-            height: 32px;
+            width: 24px;
+            height: 24px;
             color: #64748b;
         }
 
@@ -147,9 +147,8 @@
         }
 
         .stats-grid {
-            /* Adjusted grid to handle 3 items well */
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -185,41 +184,6 @@
         .stat-icon {
             font-size: 2rem;
             color: #0d9488;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 0.75rem;
-            text-align: center;
-            border: none;
-            background: white;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
-            color: #64748b;
-            border-radius: 12px;
-            transition: all 0.3s;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .tab.active {
-            background: white;
-            color: #0d9488;
-            box-shadow: 0 2px 4px rgba(13, 148, 136, 0.2);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
         }
 
         .section-header {
@@ -325,6 +289,7 @@
 
         .appointment-actions {
             display: flex;
+            gap: 0.75rem;
             justify-content: flex-start;
         }
 
@@ -337,87 +302,51 @@
             cursor: pointer;
             transition: all 0.2s;
             max-width: 200px;
+            flex: 1;
+        }
+
+        .btn-location {
+            background: #0d9488;
+            color: white;
+            border: 1px solid #0f766e;
+        }
+
+        .btn-location:hover {
+            background: #0f766e;
         }
 
         .btn-cancel {
             background: #ef4444;
             color: white;
-            border: 1px solid #dc2626;
         }
 
         .btn-cancel:hover {
             background: #dc2626;
         }
 
-        .notification-item {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: start;
-            gap: 1rem;
-            position: relative;
-            border-left: 3px solid transparent;
-            transition: all 0.2s;
-        }
-
-        .notification-item.unread {
-            border-left-color: #0d9488;
+        .location-link-container {
+            margin-top: 0.75rem;
+            padding: 0.75rem;
             background: #f0fdfa;
+            border: 1px solid #99f6e4;
+            border-radius: 8px;
+            display: none;
         }
 
-        .notification-item:hover {
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        .location-link-container.show {
+            display: block;
         }
 
-        .notification-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            flex-shrink: 0;
+        .location-link {
+            color: #0d9488;
+            text-decoration: none;
+            word-break: break-all;
+            font-size: 0.9rem;
         }
 
-        .icon-bell {
-            background: #fef3c7;
+        .location-link:hover {
+            text-decoration: underline;
         }
-
-        .icon-message {
-            background: #dbeafe;
-        }
-
-        .notification-content {
-            flex: 1;
-        }
-
-        .notification-content h4 {
-            font-size: 0.95rem;
-            margin-bottom: 0.25rem;
-            color: #1a202c;
-        }
-
-        .notification-time {
-            color: #94a3b8;
-            font-size: 0.85rem;
-        }
-
-        .unread-indicator {
-            width: 8px;
-            height: 8px;
-            background: #0d9488;
-            border-radius: 50%;
-            position: absolute;
-            right: 1.5rem;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        /* Removed conversation-related CSS */
     </style>
 </head>
 <body>
@@ -471,107 +400,80 @@
                     <h3>Completed appointments</h3>
                     <div class="number">1</div>
                 </div>
-                <div class="stat-icon">🔔</div>
+                <div class="stat-icon">✓</div>
             </div>
         </div>
 
-        <div class="tabs">
-            <button class="tab active" onclick="switchTab('appointments')">My Appointments</button>
-            <button class="tab" onclick="switchTab('notifications')">Notifications</button>
+        <div class="section-header">
+            <h2>My Appointments</h2>
+            <button class="btn-primary" onclick="window.location.href='main.html'">New appointment</button>
         </div>
 
-        <div id="appointments" class="tab-content active">
-            <div class="section-header">
-                <h2>My Appointments</h2>
-                <button class="btn-primary" onclick="window.location.href='main.html'">New appointment</button>
+        <div class="appointment-card" data-appointment-id="1">
+            <div class="appointment-header">
+                <div class="doctor-info">
+                    <h3>Dr. Amine Benali</h3>
+                    <p>Cardiology</p>
+                </div>
+                <span class="status-badge status-upcoming">Upcoming</span>
             </div>
 
-            <div class="appointment-card" data-appointment-id="1">
-                <div class="appointment-header">
-                    <div class="doctor-info">
-                        <h3>Dr. Amine Benali</h3>
-                        <p>Cardiology</p>
-                    </div>
-                    <span class="status-badge status-upcoming">Upcoming</span>
+            <div class="appointment-details">
+                <div class="detail-item">
+                    <span class="detail-icon">📅</span>
+                    <span>Saturday, November 25, 2023</span>
                 </div>
-
-                <div class="appointment-details">
-                    <div class="detail-item">
-                        <span class="detail-icon">📅</span>
-                        <span>Saturday, November 25, 2023</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-icon">🕐</span>
-                        <span>14:30</span>
-                    </div>
-                </div>
-
-                <div class="appointment-address">
-                    📍 12 Rue Didouche Mourad, Alger
-                </div>
-
-                <div class="appointment-actions">
-                    <button class="btn btn-cancel" onclick="cancelAppointment(1)">Cancel</button>
+                <div class="detail-item">
+                    <span class="detail-icon">🕐</span>
+                    <span>14:30</span>
                 </div>
             </div>
 
-            <div class="appointment-card" data-appointment-id="2">
-                <div class="appointment-header">
-                    <div class="doctor-info">
-                        <h3>Dr. Karim Slimani</h3>
-                        <p>General Medicine</p>
-                    </div>
-                    <span class="status-badge status-upcoming">Upcoming</span>
-                </div>
+            <div class="appointment-address">
+                📍 12 Rue Didouche Mourad, Alger
+            </div>
 
-                <div class="appointment-details">
-                    <div class="detail-item">
-                        <span class="detail-icon">📅</span>
-                        <span>Monday, November 27, 2023</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-icon">🕐</span>
-                        <span>10:00</span>
-                    </div>
-                </div>
+            <div class="appointment-actions">
+                <button class="btn btn-location" onclick="toggleLocation(1)">View Location</button>
+                <button class="btn btn-cancel" onclick="cancelAppointment(1)">Cancel</button>
+            </div>
 
-                <div class="appointment-address">
-                    📍 45 Avenue de l'Indépendance, Alger
-                </div>
-
-                <div class="appointment-actions">
-                    <button class="btn btn-cancel" onclick="cancelAppointment(2)">Cancel</button>
-                </div>
+            <div class="location-link-container" id="location-1">
+                <a href="https://maps.google.com/?q=12+Rue+Didouche+Mourad,+Alger" target="_blank" class="location-link">https://maps.google.com/?q=12+Rue+Didouche+Mourad,+Alger</a>
             </div>
         </div>
 
-        <div id="notifications" class="tab-content">
-            <h2 style="margin-bottom: 1.5rem;">Your Notifications</h2>
-
-            <div class="notification-item unread">
-                <div class="notification-icon icon-bell">🔔</div>
-                <div class="notification-content">
-                    <h4>Your appointment with Dr. Benali is scheduled for tomorrow at 14:30</h4>
-                    <div class="notification-time">2 hours ago</div>
+        <div class="appointment-card" data-appointment-id="2">
+            <div class="appointment-header">
+                <div class="doctor-info">
+                    <h3>Dr. Karim Slimani</h3>
+                    <p>General Medicine</p>
                 </div>
-                <span class="unread-indicator"></span>
+                <span class="status-badge status-upcoming">Upcoming</span>
             </div>
 
-            <div class="notification-item unread">
-                <div class="notification-icon icon-message">💬</div>
-                <div class="notification-content">
-                    <h4>Dr. Slimani sent you a message</h4>
-                    <div class="notification-time">1 hour ago</div>
+            <div class="appointment-details">
+                <div class="detail-item">
+                    <span class="detail-icon">📅</span>
+                    <span>Monday, November 27, 2023</span>
                 </div>
-                <span class="unread-indicator"></span>
+                <div class="detail-item">
+                    <span class="detail-icon">🕐</span>
+                    <span>10:00</span>
+                </div>
             </div>
 
-            <div class="notification-item">
-                <div class="notification-icon icon-bell">🔔</div>
-                <div class="notification-content">
-                    <h4>Don't forget to bring your documents for your visit</h4>
-                    <div class="notification-time">3 hours ago</div>
-                </div>
+            <div class="appointment-address">
+                📍 45 Avenue de l'Indépendance, Alger
+            </div>
+
+            <div class="appointment-actions">
+                <button class="btn btn-location" onclick="toggleLocation(2)">View Location</button>
+                <button class="btn btn-cancel" onclick="cancelAppointment(2)">Cancel</button>
+            </div>
+
+            <div class="location-link-container" id="location-2">
+                <a href="https://maps.google.com/?q=45+Avenue+de+l+Indépendance,+Alger" target="_blank" class="location-link">https://maps.google.com/?q=45+Avenue+de+l+Indépendance,+Alger</a>
             </div>
         </div>
     </div>
@@ -598,72 +500,24 @@
             }
         });
 
-        function switchTab(tabName) {
-            const tabs = document.querySelectorAll('.tab');
-            const contents = document.querySelectorAll('.tab-content');
-            
-            tabs.forEach(tab => tab.classList.remove('active'));
-            contents.forEach(content => content.classList.remove('active'));
-            
-            event.target.classList.add('active');
-            document.getElementById(tabName).classList.add('active');
-        }
-
-        function markAsCompleted(appointmentId) {
-            const card = document.querySelector(`[data-appointment-id="${appointmentId}"]`);
-            if (!card) return;
-
-            // Changer le badge de statut
-            const statusBadge = card.querySelector('.status-badge');
-            statusBadge.textContent = 'Completed';
-            statusBadge.className = 'status-badge status-completed';
-
-            // Masquer les boutons d'action
-            const actionsDiv = card.querySelector('.appointment-actions');
-            actionsDiv.style.display = 'none';
-
-            // Mettre à jour le compteur de rendez-vous terminés
-            updateCompletedCount();
-            updateUpcomingCount();
+        function toggleLocation(appointmentId) {
+            const locationContainer = document.getElementById(`location-${appointmentId}`);
+            locationContainer.classList.toggle('show');
         }
 
         function cancelAppointment(appointmentId) {
-            if (confirm('Êtes-vous sûr de vouloir annuler ce rendez-vous ?')) {
+            if (confirm('Are you sure you want to cancel this appointment?')) {
                 const card = document.querySelector(`[data-appointment-id="${appointmentId}"]`);
                 if (!card) return;
 
-                // Changer le badge de statut
                 const statusBadge = card.querySelector('.status-badge');
                 statusBadge.textContent = 'Cancelled';
                 statusBadge.className = 'status-badge status-cancelled';
 
-                // Masquer les boutons d'action
-                const actionsDiv = card.querySelector('.appointment-actions');
-                actionsDiv.style.display = 'none';
-
-                // Mettre à jour les compteurs
-                updateUpcomingCount();
+                const actionsContainer = card.querySelector('.appointment-actions');
+                actionsContainer.innerHTML = '<p style="color: #64748b;">This appointment has been cancelled</p>';
             }
         }
-
-        function updateUpcomingCount() {
-            const upcomingCards = document.querySelectorAll('.status-upcoming');
-            const countElement = document.querySelector('.stats-grid .stat-card:first-child .number');
-            countElement.textContent = upcomingCards.length;
-        }
-
-        function updateCompletedCount() {
-            const completedCards = document.querySelectorAll('.status-completed');
-            const countElement = document.querySelector('.stats-grid .stat-card:last-child .number');
-            countElement.textContent = completedCards.length;
-        }
-
-        // Exemple : Marquer automatiquement comme complété après 3 secondes (pour démonstration)
-        // Décommentez la ligne suivante pour tester
-        // setTimeout(() => markAsCompleted(1), 3000);
-
-        // Pour tester manuellement, ajoutez un bouton temporaire
-        // Vous pouvez appeler markAsCompleted(1) dans la console du navigateur
     </script>
 </body>
 </html>
