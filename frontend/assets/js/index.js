@@ -1,32 +1,34 @@
 // Add click handlers for buttons
 document.addEventListener("DOMContentLoaded", () => {
-  const loginButtons = document.querySelectorAll(".btn-primary:not(.btn-outline), .btn-ghost")
-  const registerButtons = document.querySelectorAll(".btn-outline, .btn-primary")
+  // Get all buttons
+  const loginBtn = document.getElementById("loginBtn");
+  const registerBtn = document.getElementById("registerBtn");
+  const heroLoginBtn = document.getElementById("heroLoginBtn");
+  const heroRegisterBtn = document.getElementById("heroRegisterBtn");
 
-  loginButtons.forEach((btn) => {
-    if (btn.textContent.includes("LOGIN")) {
-      btn.addEventListener("click", () => {
-        console.log("Login button clicked")
-        window.location.href = "pages/login.html"
-      })
-    }
-  })
+  // Navigation function
+  const navigateTo = (page) => {
+    console.log(`Navigating to: pages/${page}`);
+    window.location.href = `pages/${page}`;
+  };
 
-  registerButtons.forEach((btn) => {
-    if (btn.textContent.includes("REGISTER")) {
-      btn.addEventListener("click", () => {
-        console.log("Register button clicked")
-        window.location.href = "pages/register.html"
-      })
-    }
-  })
+  // Add event listeners
+  if (loginBtn) {
+    loginBtn.addEventListener("click", () => navigateTo("login.html"));
+  }
 
-  // Handle home button if exists
-  const homeButtons = document.querySelectorAll(".home-btn")
-  homeButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      console.log("Home button clicked")
-      window.location.href = "pages/index.html"
-    })
-  })
-})
+  if (registerBtn) {
+    registerBtn.addEventListener("click", () => navigateTo("register.html"));
+  }
+
+  if (heroLoginBtn) {
+    heroLoginBtn.addEventListener("click", () => navigateTo("login.html"));
+  }
+
+  if (heroRegisterBtn) {
+    heroRegisterBtn.addEventListener("click", () => navigateTo("register.html"));
+  }
+
+  // Log initialization
+  console.log("CareLink Home Page initialized successfully");
+});
