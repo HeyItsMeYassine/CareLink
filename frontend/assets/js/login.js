@@ -1,105 +1,151 @@
 // ========== CONFIGURATION ==========
 const CONFIG = {
-    apiBaseUrl: 'http://localhost:4567/api'
-};
-
-// ========== API SERVICE ==========
-const ApiService = {
-    // Login doctor
-    loginDoctor: async function(email, password) {
-        const response = await fetch(`${CONFIG.apiBaseUrl}/login/doctor`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password })
-        });
-        return await response.json();
-    },
-    
-    // Login patient
-    loginPatient: async function(email, password) {
-        const response = await fetch(`${CONFIG.apiBaseUrl}/login/patient`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password })
-        });
-        return await response.json();
-    },
-    
-    // Check session
-    checkSession: async function() {
-        const sessionId = localStorage.getItem('sessionId');
-        if (!sessionId) return { valid: false };
-        
-        const response = await fetch(`${CONFIG.apiBaseUrl}/check-session`, {
-            method: 'GET',
-            headers: {
-                'Session-ID': sessionId
-            }
-        });
-        return await response.json();
-    },
-    
-    // Logout
-    logout: async function() {
-        const sessionId = localStorage.getItem('sessionId');
-        if (sessionId) {
-            await fetch(`${CONFIG.apiBaseUrl}/logout`, {
-                method: 'POST',
-                headers: {
-                    'Session-ID': sessionId
-                }
-            });
-        }
-        localStorage.removeItem('sessionId');
-        localStorage.removeItem('currentUser');
+    csvPaths: {
+        patients: '../../backend/data/patients.csv',
+        doctors: '../../backend/data/doctors.csv'
     }
 };
 
-// ========== AUTH CONTROLLER (UPDATED) ==========
-const AuthController = {
-    // Validate login via backend API
-    validateLogin: async function(email, password, type) {
-        try {
-            let response;
-            if (type === 'patient') {
-                response = await ApiService.loginPatient(email, password);
-            } else if (type === 'doctor') {
-                response = await ApiService.loginDoctor(email, password);
-            }
-            
-            if (response.success) {
-                // Store session and user data
-                localStorage.setItem('sessionId', response.user.sessionId);
-                localStorage.setItem('currentUser', JSON.stringify(response.user));
-                return {
-                    success: true,
-                    user: response.user,
-                    redirect: response.redirect
-                };
-            } else {
-                return {
-                    success: false,
-                    message: response.message || 'Invalid credentials'
-                };
-            }
-        } catch (error) {
-            console.error('API Error:', error);
-            return {
-                success: false,
-                message: 'Connection error. Please try again.'
-            };
+// ========== CSV PARSING FUNCTIONS ==========
+
+/**
+ * Parse CSV string into array of objects
+ */
+function parseCSV(csv) {
+    const lines = csv.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim());
+    
+    return lines.slice(1).map(line => {
+        const values = line.split(',').map(v => v.trim());
+        const obj = {};
+        headers.forEach((header, index) => {
+            obj[header] = values[index] || '';
+        });
+        return obj;
+    });
+}
+
+/**
+ * Load and parse CSV file
+ */
+async function loadCSV(filePath) {
+    try {
+        const response = await fetch(filePath);
+        if (!response.ok) {
+            throw new Error(`Failed to load ${filePath}`);
         }
+        const csvText = await response.text();
+        return parseCSV(csvText);
+    } catch (error) {
+        console.error(`Error loading ${filePath}:`, error);
+        return [];
+    }
+}
+
+/**
+ * Convert CSV ID to dashboard ID format
+ * ID01 → p1, ID001 → d1
+ */
+function convertToDashboardId(csvId, type) {
+    if (type === 'patient') {
+        // ID01 → p1
+        const number = csvId.replace('ID', '');
+        return `p${parseInt(number)}`;
+    } else if (type === 'doctor') {
+        // ID001 → d1
+        const number = csvId.replace('ID', '');
+        return `d${parseInt(number)}`;
+    }
+    return csvId;
+}
+
+// ========== AUTH CONTROLLER ==========
+const AuthController = {
+    // Load patients data
+    loadPatientsData: async function() {
+        return await loadCSV(CONFIG.csvPaths.patients);
     },
     
-    // Show error message
+    // Load doctors data
+    loadDoctorsData: async function() {
+        return await loadCSV(CONFIG.csvPaths.doctors);
+    },
+    
+    // Validate patient login
+    validatePatientLogin: async function(email, password) {
+        const patients = await this.loadPatientsData();
+        const patient = patients.find(p => 
+            p.Email === email && p.Password === password
+        );
+        
+        if (patient) {
+            return {
+                success: true,
+                user: {
+                    name: `${patient['First Name']} ${patient['Last Name']}`,
+                    firstName: patient['First Name'],
+                    id: convertToDashboardId(patient.ID, 'patient'),
+                    email: patient.Email,
+                    type: 'patient',
+                    wilaya: patient.Wilaya,
+                    city: patient.City,
+                    phone: patient['Phone Number'],
+                    sex: patient.Sexe
+                }
+            };
+        }
+        return { success: false };
+    },
+    
+    // Validate doctor login
+    validateDoctorLogin: async function(email, password) {
+        const doctors = await this.loadDoctorsData();
+        const doctor = doctors.find(d => 
+            d.Email === email && d.Password === password
+        );
+        
+        if (doctor) {
+            return {
+                success: true,
+                user: {
+                    name: `Dr. ${doctor.First_Name} ${doctor.Last_Name}`,
+                    firstName: doctor.First_Name,
+                    id: convertToDashboardId(doctor.ID, 'doctor'),
+                    email: doctor.Email,
+                    type: 'doctor',
+                    wilaya: doctor.Wilaya,
+                    city: doctor.City,
+                    phone: doctor['Phone Number'],
+                    sex: doctor.Sexe,
+                    specialty: doctor.Speciality,
+                    locationLink: doctor.Location_Link
+                }
+            };
+        }
+        return { success: false };
+    },
+    
+    // Validate login based on type
+    validateLogin: async function(email, password, type) {
+        if (type === 'patient') {
+            return await this.validatePatientLogin(email, password);
+        } else if (type === 'doctor') {
+            return await this.validateDoctorLogin(email, password);
+        }
+        return { success: false };
+    },
+    
+    // Store user session
+    storeUserSession: function(userData) {
+        localStorage.setItem('currentUser', JSON.stringify(userData));
+    },
+    
+    // Show styled error message
     showError: function(message) {
         document.getElementById('error-message').textContent = message;
         document.getElementById('error-overlay').style.display = 'flex';
         
+        // Auto-hide after 5 seconds
         setTimeout(() => {
             this.hideError();
         }, 5000);
@@ -113,11 +159,6 @@ const AuthController = {
     // Show success notification
     notifySuccess: function(message) {
         alert(message);
-    },
-    
-    // Store user session (compatibility with existing code)
-    storeUserSession: function(userData) {
-        localStorage.setItem('currentUser', JSON.stringify(userData));
     }
 };
 
@@ -136,7 +177,7 @@ function switchTab(tabName) {
     document.getElementById(tabName).classList.add("active");
 }
 
-// ========== LOGIN HANDLING (UPDATED) ==========
+// ========== LOGIN HANDLING ==========
 async function handleLogin(event, type) {
     event.preventDefault();
     
@@ -156,17 +197,23 @@ async function handleLogin(event, type) {
     submitBtn.disabled = true;
     
     try {
-        // Validate against backend API
+        // Validate against CSV data
         const result = await AuthController.validateLogin(email, password, type);
         
         if (result.success) {
+            // Store user session
+            AuthController.storeUserSession(result.user);
+            
             AuthController.notifySuccess(`Login successful! Welcome, ${result.user.firstName}!`);
             
             // Redirect to correct dashboard
-            window.location.href = result.redirect || 
-                (type === 'patient' ? 'patientdashboard.html' : 'doctordashboard.html');
+            if (type === 'patient') {
+                window.location.href = 'patientdashboard.html';
+            } else if (type === 'doctor') {
+                window.location.href = 'doctordashboard.html'; // You'll need to create this
+            }
         } else {
-            AuthController.showError(result.message || `Invalid email or password for ${type}. Please try again.`);
+            AuthController.showError(`Invalid email or password for ${type}. Please try again.`);
         }
         
     } catch (error) {
@@ -218,32 +265,21 @@ function setupEventListeners() {
             AuthController.hideError();
         }
     });
-    
-    // Check for existing session on load
-    checkExistingSession();
-}
-
-// ========== SESSION MANAGEMENT ==========
-async function checkExistingSession() {
-    const response = await ApiService.checkSession();
-    if (response.valid && response.user) {
-        console.log('User already logged in:', response.user.name);
-        // Auto-redirect if on login page
-        if (window.location.pathname.includes('login.html')) {
-            if (response.user.type === 'patient') {
-                window.location.href = 'patientdashboard.html';
-            } else if (response.user.type === 'doctor') {
-                window.location.href = 'doctordashboard.html';
-            }
-        }
-    }
 }
 
 // ========== INITIALIZATION ==========
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
     
-    // Clear session for testing (comment out in production)
-    // localStorage.removeItem('sessionId');
+    // Clear any existing session (for testing)
     // localStorage.removeItem('currentUser');
+    
+    // You can keep demo users for testing, but CSV is now primary
+    if (!localStorage.getItem('users')) {
+        const demoUsers = [
+            { email: 'aminemohamed@gmail.com', password: 'BkFrm731', type: 'patient' },
+            { email: 'zoubirfarid@gmail.com', password: 'VqRzE749', type: 'doctor' }
+        ];
+        localStorage.setItem('users', JSON.stringify(demoUsers));
+    }
 });
