@@ -5,12 +5,12 @@ const CONFIG = {
         specialties: '../../backend/data/specialities.csv'
     },
     imagePaths: {
-        doctor: '../assets/images/DoctorPic.png',
-        patient: '../assets/images/PatientPic.png'
+        doctor: '../assets/images/doctor.png',
+        patient: '../assets/images/patient.png'
     },
     redirectPaths: {
-        home: 'WelcomePage/WelcomePage.html',
-        login: 'LoginPage/LoginPage.html'
+        home: '../index.html',  // Fixed: Go back to index.html
+        login: 'login.html'     // Fixed: Login is in same folder
     }
 };
 
@@ -423,6 +423,15 @@ async function handleSubmit(event, userType) {
         // For now, we'll simulate a successful registration
         console.log('Registration data:', formData);
         
+        // Save user to localStorage (for demo purposes)
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        users.push({
+            ...formData,
+            id: Date.now().toString(),
+            password: formData.password // In real app, hash this!
+        });
+        localStorage.setItem('users', JSON.stringify(users));
+        
         // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 1500));
         
@@ -448,7 +457,6 @@ async function handleSubmit(event, userType) {
  * @param {string} message - Error message
  */
 function showError(message) {
-    // You can implement a better error display system here
     console.error('User error:', message);
     // For now, we'll just use alert
     if (message.includes('Failed to load')) {
@@ -464,9 +472,9 @@ function showError(message) {
 function setupEventListeners() {
     // Tab switching
     document.querySelectorAll('.tab').forEach(tab => {
-        tab.addEventListener('click', () => {
+        tab.addEventListener('click', (e) => {
             const type = tab.getAttribute('data-type');
-            switchTab(type);
+            switchTab.call(tab, type);
         });
     });
     
