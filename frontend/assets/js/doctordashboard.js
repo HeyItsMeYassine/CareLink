@@ -208,7 +208,6 @@ function renderAppointments() {
 function renderAvailability() {
     const container = document.getElementById('availabilityContainer');
     
-    // Default availability - in a real app, this would come from a database
     const availability = [
         { day: 'Monday', morning: '09:00 - 12:00', afternoon: '14:00 - 18:00' },
         { day: 'Tuesday', morning: '09:00 - 12:00', afternoon: '14:00 - 18:00' },
@@ -270,12 +269,17 @@ function cancelDoctorAppointment(appointmentId) {
 // ========== NAVIGATION FUNCTIONS ==========
 
 function goToProfile() {
-    window.location.href = 'doctor-profile.html';
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser && currentUser.type === 'doctor') {
+        window.location.href = 'doctorprofile.html';
+    } else {
+        window.location.href = '../index.html'; // Fallback
+    }
 }
 
 function logout() {
     localStorage.removeItem('currentUser');
-    window.location.href = '../index.html';
+    window.location.href = '../index.html'; // Back to home page
 }
 
 function goToHome() {
