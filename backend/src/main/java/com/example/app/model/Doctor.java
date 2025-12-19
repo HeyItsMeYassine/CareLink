@@ -1,71 +1,80 @@
-package com.carelink.model;
+import java.util.ArrayList;
+import java.util.List;
+import java.time.LocalTime;
 
 public class Doctor {
+
     private String id;
-    private String firstName;
-    private String lastName;
-    private String wilaya;
-    private String city;
-    private String email;
-    private String password;
-    private String phoneNumber;
-    private String sex;
-    private String specialty;
-    private String locationLink;
+    private String lastName; 
+    private String firstName; 
+    private String specialty; 
+    private String city; 
     
-    // Constructor
-    public Doctor(String id, String firstName, String lastName, String wilaya, String city, 
-                  String email, String password, String phoneNumber, String sex, 
-                  String specialty, String locationLink) {
+    private List<LocalTime> availabilities; 
+
+    private List<Observer> observers; 
+
+    public Doctor(String id, String lastName, String firstName, String specialty, String city) {
         this.id = id;
-        this.firstName = firstName;
         this.lastName = lastName;
-        this.wilaya = wilaya;
-        this.city = city;
-        this.email = email;
-        this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.sex = sex;
+        this.firstName = firstName;
         this.specialty = specialty;
-        this.locationLink = locationLink;
+        this.city = city;
+        
+        this.availabilities = new ArrayList<>();
+        this.observers = new ArrayList<>();
+        
+        initDefaultSlots();
     }
-    
-    // Getters and Setters
+
+    private void initDefaultSlots() {
+        availabilities.add(LocalTime.of(9, 0));
+        availabilities.add(LocalTime.of(10, 0));
+        availabilities.add(LocalTime.of(11, 0));
+        availabilities.add(LocalTime.of(14, 0));
+        availabilities.add(LocalTime.of(15, 0));
+    }
+
     public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
-    
-    public String getFirstName() { return firstName; }
-    public void setFirstName(String firstName) { this.firstName = firstName; }
-    
     public String getLastName() { return lastName; }
-    public void setLastName(String lastName) { this.lastName = lastName; }
-    
-    public String getWilaya() { return wilaya; }
-    public void setWilaya(String wilaya) { this.wilaya = wilaya; }
-    
-    public String getCity() { return city; }
-    public void setCity(String city) { this.city = city; }
-    
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-    
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
-    
-    public String getPhoneNumber() { return phoneNumber; }
-    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
-    
-    public String getSex() { return sex; }
-    public void setSex(String sex) { this.sex = sex; }
-    
+    public String getFirstName() { return firstName; }
     public String getSpecialty() { return specialty; }
-    public void setSpecialty(String specialty) { this.specialty = specialty; }
-    
-    public String getLocationLink() { return locationLink; }
-    public void setLocationLink(String locationLink) { this.locationLink = locationLink; }
+    public String getCity() { return city; }
+    public List<LocalTime> getAvailabilities() { return availabilities; }
+
+
+    public boolean bookSlot(LocalTime time) { 
+        if (availabilities.contains(time)) {
+            availabilities.remove(time);
+            System.out.println(">>> Success: Slot at " + time + " booked for Dr. " + lastName);
+            
+            notifyObservers("ALERT: The slot at " + time + " with Dr " + lastName + " has just been booked!");
+            
+            return true;
+        } else {
+            System.out.println(">>> Error: Slot at " + time + " is not available.");
+            return false;
+        }
+    }
+
+
+    public void addObserver(Observer o) {
+        observers.add(o);
+    }
+
+    public void removeObserver(Observer o) {
+        observers.remove(o);
+    }
+
+    private void notifyObservers(String message) {
+        for (Observer o : observers) {
+            o.update(message);
+        }
+    }
     
     @Override
     public String toString() {
-        return "Doctor{id='" + id + "', name='" + firstName + " " + lastName + "', email='" + email + "'}";
+        return String.format("Dr. %-10s %-10s | Specialty: %-15s | City: %-10s | Free Slots: %d", 
+                lastName, firstName, specialty, city, availabilities.size());
     }
 }
