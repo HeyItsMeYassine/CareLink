@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (btn.textContent.includes("LOGIN")) {
       btn.addEventListener("click", () => {
         console.log("Login button clicked")
-        window.location.href = "pages/LoginPage.html"
+        window.location.href = "pages/login.html"
       })
     }
   })
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
   homeButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
       console.log("Home button clicked")
-      window.location.href = "pages/WelcomePage.html"
+      window.location.href = "pages/index.html"
     })
   })
 })
