@@ -269,7 +269,7 @@ function goToHome() {
 }
 
 function goToNewAppointment() {
-    window.location.href = 'main.html';
+    window.location.href = 'appointment.html'; // Changed to appointment.html
 }
 
 // ========== EVENT LISTENERS SETUP ==========
