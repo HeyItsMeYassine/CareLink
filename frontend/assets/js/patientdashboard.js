@@ -31,15 +31,12 @@ function parseCSV(csv) {
 
 async function loadCSV(filePath) {
     try {
-        console.log(`Loading CSV from: ${filePath}`);
         const response = await fetch(filePath);
         if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: Failed to load ${filePath}`);
+            throw new Error(`Failed to load ${filePath}`);
         }
         const csvText = await response.text();
-        const data = parseCSV(csvText);
-        console.log(`Successfully loaded ${data.length} records from ${filePath}`);
-        return data;
+        return parseCSV(csvText);
     } catch (error) {
         console.error(`Error loading ${filePath}:`, error);
         return [];
@@ -254,12 +251,17 @@ function cancelAppointment(appointmentId) {
 // ========== NAVIGATION FUNCTIONS ==========
 
 function goToProfile() {
-    window.location.href = 'patient-profile.html';
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser && currentUser.type === 'patient') {
+        window.location.href = 'patientprofile.html';
+    } else {
+        window.location.href = '../index.html'; // Fallback
+    }
 }
 
 function logout() {
     localStorage.removeItem('currentUser');
-    window.location.href = '../index.html';
+    window.location.href = '../index.html'; // Back to home page
 }
 
 function goToHome() {
@@ -273,12 +275,37 @@ function goToNewAppointment() {
 // ========== EVENT LISTENERS SETUP ==========
 
 function setupEventListeners() {
-    document.getElementById('profileBtn')?.addEventListener('click', toggleProfileDropdown);
-    document.getElementById('editProfileBtn')?.addEventListener('click', goToProfile);
-    document.getElementById('logoutBtn')?.addEventListener('click', logout);
-    document.getElementById('homeBtn')?.addEventListener('click', goToHome);
-    document.getElementById('newAppointmentBtn')?.addEventListener('click', goToNewAppointment);
+    // Profile dropdown
+    const profileBtn = document.getElementById('profileBtn');
+    if (profileBtn) {
+        profileBtn.addEventListener('click', toggleProfileDropdown);
+    }
     
+    // Edit profile button
+    const editProfileBtn = document.getElementById('editProfileBtn');
+    if (editProfileBtn) {
+        editProfileBtn.addEventListener('click', goToProfile);
+    }
+    
+    // Logout button
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', logout);
+    }
+    
+    // Home button
+    const homeBtn = document.getElementById('homeBtn');
+    if (homeBtn) {
+        homeBtn.addEventListener('click', goToHome);
+    }
+    
+    // New appointment button
+    const newAppointmentBtn = document.getElementById('newAppointmentBtn');
+    if (newAppointmentBtn) {
+        newAppointmentBtn.addEventListener('click', goToNewAppointment);
+    }
+    
+    // Close dropdown when clicking outside
     window.addEventListener('click', function(event) {
         if (!event.target.closest('.profile-container')) {
             const dropdown = document.getElementById('profileDropdown');
@@ -290,6 +317,7 @@ function setupEventListeners() {
 }
 
 function setupAppointmentEventListeners() {
+    // Location buttons
     document.querySelectorAll('.btn-location').forEach(button => {
         button.addEventListener('click', function() {
             const appointmentId = this.getAttribute('data-appointment-id');
@@ -297,6 +325,7 @@ function setupAppointmentEventListeners() {
         });
     });
     
+    // Cancel buttons
     document.querySelectorAll('.btn-cancel').forEach(button => {
         button.addEventListener('click', function() {
             const appointmentId = this.getAttribute('data-appointment-id');
@@ -346,6 +375,7 @@ async function initializeDashboard() {
     }
 }
 
+// Toggle profile dropdown
 function toggleProfileDropdown() {
     const dropdown = document.getElementById('profileDropdown');
     dropdown.classList.toggle('show');
