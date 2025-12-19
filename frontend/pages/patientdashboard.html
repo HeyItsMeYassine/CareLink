@@ -1,353 +1,10 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CareLink - Patient Dashboard</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: #f5f7fa;
-            color: #1a202c;
-        }
-
-        .header {
-            background: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #0d9488;
-        }
-
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: #0d9488;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-        }
-
-        .home-icon {
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-            color: #64748b;
-        }
-
-        .profile-container {
-            position: relative;
-        }
-
-        .profile-btn {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 0.25rem;
-            border-radius: 50%;
-            transition: background 0.2s;
-        }
-
-        .profile-btn:hover {
-            background: #f1f5f9;
-        }
-
-        .profile-icon {
-            width: 24px;
-            height: 24px;
-            color: #64748b;
-        }
-
-        .profile-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            margin-top: 0.5rem;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            min-width: 200px;
-            display: none;
-            z-index: 1000;
-        }
-
-        .profile-dropdown.show {
-            display: block;
-        }
-
-        .dropdown-item {
-            padding: 0.75rem 1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            color: #475569;
-            font-size: 0.95rem;
-            transition: background 0.2s;
-            border: none;
-            background: transparent;
-            width: 100%;
-            text-align: left;
-        }
-
-        .dropdown-item:first-child {
-            border-radius: 8px 8px 0 0;
-        }
-
-        .dropdown-item:last-child {
-            border-radius: 0 0 8px 8px;
-        }
-
-        .dropdown-item:hover {
-            background: #f8fafc;
-        }
-
-        .dropdown-item.logout {
-            color: #ef4444;
-        }
-
-        .dropdown-icon {
-            width: 20px;
-            height: 20px;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .subtitle {
-            color: #64748b;
-            margin-bottom: 2rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: transform 0.2s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .stat-info h3 {
-            color: #64748b;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-info .number {
-            font-size: 2rem;
-            font-weight: 700;
-        }
-
-        .stat-icon {
-            font-size: 2rem;
-            color: #0d9488;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .section-header h2 {
-            font-size: 1.5rem;
-        }
-
-        .btn-primary {
-            background: #0d9488;
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .btn-primary:hover {
-            background: #0f766e;
-        }
-
-        .appointment-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            margin-bottom: 1.5rem;
-        }
-
-        .appointment-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 1.5rem;
-        }
-
-        .doctor-info h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .doctor-info p {
-            color: #64748b;
-            font-size: 0.95rem;
-        }
-
-        .status-badge {
-            padding: 0.4rem 0.9rem;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-
-        .status-upcoming {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-
-        .status-completed {
-            background: #d1fae5;
-            color: #059669;
-        }
-
-        .status-cancelled {
-            background: #fee2e2;
-            color: #dc2626;
-        }
-
-        .appointment-details {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .detail-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            color: #475569;
-        }
-
-        .detail-icon {
-            color: #0d9488;
-            font-size: 1.1rem;
-        }
-
-        .appointment-address {
-            color: #64748b;
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .appointment-actions {
-            display: flex;
-            gap: 0.75rem;
-            justify-content: flex-start;
-        }
-
-        .btn {
-            padding: 0.75rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            max-width: 200px;
-            flex: 1;
-        }
-
-        .btn-location {
-            background: #0d9488;
-            color: white;
-            border: 1px solid #0f766e;
-        }
-
-        .btn-location:hover {
-            background: #0f766e;
-        }
-
-        .btn-cancel {
-            background: #ef4444;
-            color: white;
-        }
-
-        .btn-cancel:hover {
-            background: #dc2626;
-        }
-
-        .location-link-container {
-            margin-top: 0.75rem;
-            padding: 0.75rem;
-            background: #f0fdfa;
-            border: 1px solid #99f6e4;
-            border-radius: 8px;
-            display: none;
-        }
-
-        .location-link-container.show {
-            display: block;
-        }
-
-        .location-link {
-            color: #0d9488;
-            text-decoration: none;
-            word-break: break-all;
-            font-size: 0.9rem;
-        }
-
-        .location-link:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link rel="stylesheet" href="../assets/css/patient-dashboard.css">
 </head>
 <body>
     <header class="header">
@@ -355,24 +12,24 @@
             <div class="logo-icon">❤️</div>
             <span>CareLink</span>
         </div>
-        <div style="display: flex; align-items: center; gap: 1rem;">
-            <svg class="home-icon" onclick="window.location.href='WelcomePage/WelcomePage.html'" fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Home">
+        <div class="header-controls">
+            <svg class="home-icon" id="homeBtn" fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Home">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
             </svg>
             <div class="profile-container">
-                <button class="profile-btn" onclick="toggleProfileDropdown()">
+                <button class="profile-btn" id="profileBtn">
                     <svg class="profile-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                     </svg>
                 </button>
                 <div class="profile-dropdown" id="profileDropdown">
-                    <button class="dropdown-item" onclick="goToProfile()">
+                    <button class="dropdown-item" id="editProfileBtn">
                         <svg class="dropdown-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                         </svg>
                         Edit Profile
                     </button>
-                    <button class="dropdown-item logout" onclick="logout()">
+                    <button class="dropdown-item logout" id="logoutBtn">
                         <svg class="dropdown-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                         </svg>
@@ -406,7 +63,7 @@
 
         <div class="section-header">
             <h2>My Appointments</h2>
-            <button class="btn-primary" onclick="window.location.href='main.html'">New appointment</button>
+            <button class="btn-primary" id="newAppointmentBtn">New appointment</button>
         </div>
 
         <div class="appointment-card" data-appointment-id="1">
@@ -434,8 +91,8 @@
             </div>
 
             <div class="appointment-actions">
-                <button class="btn btn-location" onclick="toggleLocation(1)">View Location</button>
-                <button class="btn btn-cancel" onclick="cancelAppointment(1)">Cancel</button>
+                <button class="btn btn-location" data-appointment-id="1">View Location</button>
+                <button class="btn btn-cancel" data-appointment-id="1">Cancel</button>
             </div>
 
             <div class="location-link-container" id="location-1">
@@ -468,8 +125,8 @@
             </div>
 
             <div class="appointment-actions">
-                <button class="btn btn-location" onclick="toggleLocation(2)">View Location</button>
-                <button class="btn btn-cancel" onclick="cancelAppointment(2)">Cancel</button>
+                <button class="btn btn-location" data-appointment-id="2">View Location</button>
+                <button class="btn btn-cancel" data-appointment-id="2">Cancel</button>
             </div>
 
             <div class="location-link-container" id="location-2">
@@ -478,46 +135,6 @@
         </div>
     </div>
 
-    <script>
-        function toggleProfileDropdown() {
-            const dropdown = document.getElementById('profileDropdown');
-            dropdown.classList.toggle('show');
-        }
-
-        function goToProfile() {
-            window.location.href = 'patient-profile.html';
-        }
-
-        function logout() {
-            window.location.href = 'WelcomePage/WelcomePage.html';
-        }
-
-        // Close dropdown when clicking outside
-        window.addEventListener('click', function(event) {
-            if (!event.target.closest('.profile-container')) {
-                const dropdown = document.getElementById('profileDropdown');
-                dropdown.classList.remove('show');
-            }
-        });
-
-        function toggleLocation(appointmentId) {
-            const locationContainer = document.getElementById(`location-${appointmentId}`);
-            locationContainer.classList.toggle('show');
-        }
-
-        function cancelAppointment(appointmentId) {
-            if (confirm('Are you sure you want to cancel this appointment?')) {
-                const card = document.querySelector(`[data-appointment-id="${appointmentId}"]`);
-                if (!card) return;
-
-                const statusBadge = card.querySelector('.status-badge');
-                statusBadge.textContent = 'Cancelled';
-                statusBadge.className = 'status-badge status-cancelled';
-
-                const actionsContainer = card.querySelector('.appointment-actions');
-                actionsContainer.innerHTML = '<p style="color: #64748b;">This appointment has been cancelled</p>';
-            }
-        }
-    </script>
+    <script src="../assets/js/patient-dashboard.js"></script>
 </body>
 </html>
