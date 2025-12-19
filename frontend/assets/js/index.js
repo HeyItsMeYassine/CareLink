@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (btn.textContent.includes("LOGIN")) {
       btn.addEventListener("click", () => {
         console.log("Login button clicked")
-        // Add your login logic here
+        window.location.href = "pages/LoginPage.html"
       })
     }
   })
@@ -16,8 +16,17 @@ document.addEventListener("DOMContentLoaded", () => {
     if (btn.textContent.includes("REGISTER")) {
       btn.addEventListener("click", () => {
         console.log("Register button clicked")
-        // Add your register logic here
+        window.location.href = "pages/register.html"
       })
     }
+  })
+
+  // Handle home button if exists
+  const homeButtons = document.querySelectorAll(".home-btn")
+  homeButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      console.log("Home button clicked")
+      window.location.href = "pages/WelcomePage.html"
+    })
   })
 })
