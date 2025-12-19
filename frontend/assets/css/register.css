@@ -1,0 +1,320 @@
+/* ========== RESET & BASE STYLES ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e9f0f5 100%);
+    height: 100vh;
+    overflow: hidden;
+    padding: 12px;
+}
+
+/* ========== LAYOUT ========== */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.content-wrapper {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* ========== HEADER ========== */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #0066cc;
+}
+
+.logo-text {
+    margin-left: 8px;
+    color: #0066cc;
+}
+
+/* ========== TABS ========== */
+.tabs-container {
+    display: flex;
+    gap: 0;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+}
+
+.tab {
+    padding: 12px 32px;
+    background-color: #e0e7f1;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    transition: all 0.3s ease;
+    border-bottom: 4px solid transparent;
+    position: relative;
+}
+
+.tab:hover {
+    background-color: #d0dce8;
+}
+
+.tab.active {
+    background-color: #ffffff;
+    color: #0066cc;
+    border-bottom-color: #0066cc;
+}
+
+/* ========== FORM SECTION ========== */
+.form-section {
+    flex: 1;
+    background: linear-gradient(135deg, #d4f1f9 0%, #e8f4f8 100%);
+    padding: 24px;
+    border-radius: 15px;
+    display: none;
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+.form-section.active {
+    display: block;
+}
+
+.form-title {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* ========== FORM ELEMENTS ========== */
+.form-group {
+    margin-bottom: 12px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.form-row.full {
+    grid-template-columns: 1fr;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="url"],
+input[type="file"],
+select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 2px solid #b8d4e8;
+    border-radius: 6px;
+    font-size: 13px;
+    background-color: rgba(255, 255, 255, 0.7);
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="file"]:focus,
+select:focus {
+    outline: none;
+    border-color: #0066cc;
+    background-color: #ffffff;
+    box-shadow: 0 0 8px rgba(0, 102, 204, 0.2);
+}
+
+/* File input styling */
+input[type="file"] {
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+input[type="file"]::file-selector-button {
+    background: #0066cc;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-right: 10px;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background: #0052a3;
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+    color: white;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 8px;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 102, 204, 0.3);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+.submit-btn:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* ========== ILLUSTRATION ========== */
+.illustration-section {
+    flex: 0 0 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.illustration {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    object-fit: contain;
+}
+
+/* ========== LOADING STATES ========== */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: "Loading...";
+    display: inline-block;
+    margin-left: 10px;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { content: "Loading."; }
+    33% { content: "Loading.."; }
+    66% { content: "Loading..."; }
+}
+
+/* ========== ERROR STATES ========== */
+.error {
+    border-color: #ff4444 !important;
+}
+
+.error-message {
+    color: #ff4444;
+    font-size: 12px;
+    margin-top: 4px;
+    display: none;
+}
+
+.error-message.show {
+    display: block;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    .content-wrapper {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .tab {
+        padding: 10px 20px;
+        font-size: 13px;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .illustration-section {
+        flex: 0 0 200px;
+    }
+}
+
+/* ========== FOOTER ========== */
+.signup-text {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+.signup-text a {
+    color: #0066cc;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.signup-text a:hover {
+    text-decoration: underline;
+}
+
+.home-btn {
+    background: #6b7280;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.home-btn:hover {
+    background: #4b5563;
+}
