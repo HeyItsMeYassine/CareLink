@@ -1,137 +1,116 @@
 package com.carelink.controller;
 
-import com.carelink.service.AuthService;
-import com.google.gson.Gson;
-import spark.Request;
-import spark.Response;
-import spark.Route;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static spark.Spark.*;
+import java.io.IOException;
 
 public class LoginController {
-    private final AuthService authService;
-    private final Gson gson;
-    
-    public LoginController() {
-        this.authService = new AuthService();
-        this.gson = new Gson();
-        setupRoutes();
+
+    // ================= UI =================
+    @FXML
+    private VBox doctorForm;
+
+    @FXML
+    private VBox patientForm;
+
+    @FXML
+    private Button btnDoctor;
+
+    @FXML
+    private Button btnPatient;
+
+    // ================= NAVIGATION =================
+
+    @FXML
+    private void handleBackToHome(ActionEvent event) {
+        loadPage(event, "/com/carelink/Home.fxml", "CareLink - Home");
     }
-    
-    private void setupRoutes() {
-        // Enable CORS
-        options("/*", (request, response) -> {
-            String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
-            if (accessControlRequestHeaders != null) {
-                response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
-            }
-            String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
-            if (accessControlRequestMethod != null) {
-                response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
-            }
-            return "OK";
-        });
-        
-        before((request, response) -> {
-            response.header("Access-Control-Allow-Origin", "*");
-            response.header("Access-Control-Request-Method", "GET,POST,PUT,DELETE,OPTIONS");
-            response.header("Access-Control-Allow-Headers", "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin");
-            response.type("application/json");
-        });
-        
-        // Login routes
-        post("/api/login/doctor", handleDoctorLogin);
-        post("/api/login/patient", handlePatientLogin);
-        post("/api/logout", handleLogout);
-        get("/api/check-session", checkSession);
-        
-        // Home and register navigation
-        get("/api/home", (req, res) -> {
-            Map<String, String> response = new HashMap<>();
-            response.put("redirect", "../index.html");
-            return gson.toJson(response);
-        });
-        
-        get("/api/register", (req, res) -> {
-            Map<String, String> response = new HashMap<>();
-            response.put("redirect", "../pages/register.html");
-            return gson.toJson(response);
-        });
+
+    @FXML
+    private void handleGoToRegister(ActionEvent event) {
+        loadPage(event, "/com/carelink/Register.fxml", "Register - CareLink");
     }
-    
-    private final Route handleDoctorLogin = (Request req, Response res) -> {
-        Map<String, Object> requestBody = gson.fromJson(req.body(), Map.class);
-        String email = (String) requestBody.get("email");
-        String password = (String) requestBody.get("password");
-        
-        Map<String, Object> result = authService.loginDoctor(email, password);
-        
-        if (result != null) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", true);
-            response.put("message", "Login successful!");
-            response.put("user", result);
-            response.put("redirect", "../pages/doctordashboard.html");
-            return gson.toJson(response);
-        } else {
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", false);
-            response.put("message", "Invalid email or password");
-            res.status(401);
-            return gson.toJson(response);
+
+    // ================= TABS =================
+
+    @FXML
+    private void handleDoctorClick(ActionEvent event) {
+        doctorForm.setVisible(true);
+        doctorForm.setManaged(true);
+
+        patientForm.setVisible(false);
+        patientForm.setManaged(false);
+
+        btnDoctor.setStyle(activeTabStyle());
+        btnPatient.setStyle(inactiveTabStyle());
+    }
+
+    @FXML
+    private void handlePatientClick(ActionEvent event) {
+        patientForm.setVisible(true);
+        patientForm.setManaged(true);
+
+        doctorForm.setVisible(false);
+        doctorForm.setManaged(false);
+
+        btnPatient.setStyle(activeTabStyle());
+        btnDoctor.setStyle(inactiveTabStyle());
+    }
+
+    // ================= LOGIN ACTIONS =================
+
+    @FXML
+    private void handleDoctorLogin(ActionEvent event) {
+        System.out.println("Doctor login clicked");
+        // TODO : authentification doctor
+    }
+
+    @FXML
+    private void handlePatientLogin(ActionEvent event) {
+        System.out.println("Patient login clicked");
+        // TODO : authentification patient
+    }
+
+    // ================= UTIL =================
+
+    private void loadPage(ActionEvent event, String fxmlPath, String title) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+
+            Scene scene = new Scene(loader.load(), 900, 700);
+            Stage stage = (Stage) ((Node) event.getSource())
+                    .getScene()
+                    .getWindow();
+
+            stage.setTitle(title);
+            stage.setScene(scene);
+            stage.centerOnScreen();
+            stage.show();
+
+        } catch (IOException e) {
+            System.err.println("Erreur chargement : " + fxmlPath);
+            e.printStackTrace();
         }
-    };
-    
-    private final Route handlePatientLogin = (Request req, Response res) -> {
-        Map<String, Object> requestBody = gson.fromJson(req.body(), Map.class);
-        String email = (String) requestBody.get("email");
-        String password = (String) requestBody.get("password");
-        
-        Map<String, Object> result = authService.loginPatient(email, password);
-        
-        if (result != null) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", true);
-            response.put("message", "Login successful!");
-            response.put("user", result);
-            response.put("redirect", "../pages/patientdashboard.html");
-            return gson.toJson(response);
-        } else {
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", false);
-            response.put("message", "Invalid email or password");
-            res.status(401);
-            return gson.toJson(response);
-        }
-    };
-    
-    private final Route handleLogout = (Request req, Response res) -> {
-        String sessionId = req.headers("Session-ID");
-        if (sessionId != null) {
-            authService.logout(sessionId);
-        }
-        
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        response.put("message", "Logged out successfully");
-        response.put("redirect", "../index.html");
-        return gson.toJson(response);
-    };
-    
-    private final Route checkSession = (Request req, Response res) -> {
-        String sessionId = req.headers("Session-ID");
-        Map<String, Object> response = new HashMap<>();
-        
-        if (sessionId != null && authService.validateSession(sessionId)) {
-            response.put("valid", true);
-            response.put("user", authService.getUserFromSession(sessionId));
-        } else {
-            response.put("valid", false);
-        }
-        
-        return gson.toJson(response);
-    };
+    }
+
+    private String activeTabStyle() {
+        return "-fx-background-color: #ffffff;"
+                + "-fx-border-color: #0066cc;"
+                + "-fx-border-width: 0 0 4 0;"
+                + "-fx-font-weight: bold;"
+                + "-fx-text-fill: #0066cc;"
+                + "-fx-padding: 12 32;";
+    }
+
+    private String inactiveTabStyle() {
+        return "-fx-background-color: #e0e7f1;"
+                + "-fx-padding: 12 32;";
+    }
 }
