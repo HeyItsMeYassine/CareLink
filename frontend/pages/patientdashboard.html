@@ -41,21 +41,21 @@
     </header>
 
     <div class="container">
-        <h1>Welcome, Sarah!</h1>
+        <h1 id="welcomeMessage">Welcome!</h1>
         <p class="subtitle">Manage your medical appointments and communicate with your healthcare providers</p>
 
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-info">
                     <h3>Upcoming appointments</h3>
-                    <div class="number">2</div>
+                    <div class="number" id="upcomingCount">0</div>
                 </div>
                 <div class="stat-icon">📅</div>
             </div>
             <div class="stat-card">
                 <div class="stat-info">
                     <h3>Completed appointments</h3>
-                    <div class="number">1</div>
+                    <div class="number" id="completedCount">0</div>
                 </div>
                 <div class="stat-icon">✓</div>
             </div>
@@ -66,72 +66,9 @@
             <button class="btn-primary" id="newAppointmentBtn">New appointment</button>
         </div>
 
-        <div class="appointment-card" data-appointment-id="1">
-            <div class="appointment-header">
-                <div class="doctor-info">
-                    <h3>Dr. Amine Benali</h3>
-                    <p>Cardiology</p>
-                </div>
-                <span class="status-badge status-upcoming">Upcoming</span>
-            </div>
-
-            <div class="appointment-details">
-                <div class="detail-item">
-                    <span class="detail-icon">📅</span>
-                    <span>Saturday, November 25, 2023</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-icon">🕐</span>
-                    <span>14:30</span>
-                </div>
-            </div>
-
-            <div class="appointment-address">
-                📍 12 Rue Didouche Mourad, Alger
-            </div>
-
-            <div class="appointment-actions">
-                <button class="btn btn-location" data-appointment-id="1">View Location</button>
-                <button class="btn btn-cancel" data-appointment-id="1">Cancel</button>
-            </div>
-
-            <div class="location-link-container" id="location-1">
-                <a href="https://maps.google.com/?q=12+Rue+Didouche+Mourad,+Alger" target="_blank" class="location-link">https://maps.google.com/?q=12+Rue+Didouche+Mourad,+Alger</a>
-            </div>
-        </div>
-
-        <div class="appointment-card" data-appointment-id="2">
-            <div class="appointment-header">
-                <div class="doctor-info">
-                    <h3>Dr. Karim Slimani</h3>
-                    <p>General Medicine</p>
-                </div>
-                <span class="status-badge status-upcoming">Upcoming</span>
-            </div>
-
-            <div class="appointment-details">
-                <div class="detail-item">
-                    <span class="detail-icon">📅</span>
-                    <span>Monday, November 27, 2023</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-icon">🕐</span>
-                    <span>10:00</span>
-                </div>
-            </div>
-
-            <div class="appointment-address">
-                📍 45 Avenue de l'Indépendance, Alger
-            </div>
-
-            <div class="appointment-actions">
-                <button class="btn btn-location" data-appointment-id="2">View Location</button>
-                <button class="btn btn-cancel" data-appointment-id="2">Cancel</button>
-            </div>
-
-            <div class="location-link-container" id="location-2">
-                <a href="https://maps.google.com/?q=45+Avenue+de+l+Indépendance,+Alger" target="_blank" class="location-link">https://maps.google.com/?q=45+Avenue+de+l+Indépendance,+Alger</a>
-            </div>
+        <div id="appointmentsContainer">
+            <!-- Appointments will be loaded dynamically here -->
+            <div class="loading-message">Loading appointments...</div>
         </div>
     </div>
 
