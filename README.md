@@ -147,5 +147,5 @@ Rules:
 
 ### Using Maven
 ```bash
-mvn spring-boot:run```
+mvn spring-boot:run
 
