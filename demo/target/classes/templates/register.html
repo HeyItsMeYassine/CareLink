@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CareLink - Register</title>
+
+  <link rel="stylesheet" th:href="@{/assets/css/register.css}" />
+
+  <!-- Bootstrap (optional, you already use it) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="auth-shell">
+  <div class="auth-card">
+
+    <!-- Header -->
+    <header class="auth-header">
+      <div class="logo" onclick="window.location.href='/'" role="button" aria-label="Go home">
+        <div class="logo-icon" aria-hidden="true">
+          <!-- Heart pulse icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 22l7.8-8.6 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+            <path d="M3.8 12h4l1.2-2.4L11 15l1.4-3H15l1-2 1 2h3"/>
+          </svg>
+        </div>
+        <span class="logo-text">CareLink</span>
+      </div>
+
+      <button class="btn-ghost" id="homeBtn" type="button" onclick="window.location.href='/'">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h4m8-11v10a1 1 0 01-1 1h-4"/>
+        </svg>
+        Home
+      </button>
+    </header>
+
+    <!-- Tabs (keep .tab + data-type for your JS) -->
+    <div class="tabs">
+      <button class="tab active" data-type="doctor" type="button">
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 11a4 4 0 100-8 4 4 0 000 8z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 21v-2a4 4 0 014-4h10a4 4 0 014 4v2"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 13v-1a3 3 0 013-3h0a3 3 0 013 3v1"/>
+        </svg>
+        Doctor Register
+      </button>
+
+      <button class="tab" data-type="patient" type="button">
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 11a4 4 0 100-8 4 4 0 000 8z"/>
+        </svg>
+        Patient Register
+      </button>
+    </div>
+
+    <!-- Message Display (your JS uses #message-container) -->
+    <div class="message-wrap">
+      <div id="message-container" style="display:none;"></div>
+    </div>
+
+    <!-- Body -->
+    <div class="auth-body">
+
+      <!-- LEFT: Forms -->
+      <div class="forms-area">
+
+        <!-- Doctor Form -->
+        <form id="doctor-form" class="form-section active">
+          <h2 class="title">Create your account</h2>
+          <p class="subtitle">Register as a doctor to manage your schedule and patients.</p>
+
+          <div class="form-grid">
+
+            <div class="form-group full">
+              <label for="doctor-email">Email</label>
+              <div class="input-wrap">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h16v16H4z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6l8 7 8-7"/>
+                </svg>
+                <input type="email" id="doctor-email" placeholder="Enter your email" required>
+              </div>
+              <div class="error-message" id="doctor-email-error"></div>
+            </div>
+
+            <div class="form-group full">
+              <label for="doctor-password">Password</label>
+              <div class="input-wrap">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11V7a4 4 0 10-8 0v4"/>
+                  <rect x="6" y="11" width="12" height="10" rx="2" ry="2" stroke-width="2"/>
+                </svg>
+                <input type="password" id="doctor-password" placeholder="Create a password" required>
+              </div>
+              <div class="error-message" id="doctor-password-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="doctor-fname">First Name</label>
+              <input type="text" id="doctor-fname" placeholder="First Name" required>
+              <div class="error-message" id="doctor-fname-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="doctor-lname">Last Name</label>
+              <input type="text" id="doctor-lname" placeholder="Last Name" required>
+              <div class="error-message" id="doctor-lname-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="doctor-sex">Sex</label>
+              <select id="doctor-sex" required>
+                <option value="">Select Sex</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+              <div class="error-message" id="doctor-sex-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="doctor-phone">Phone Number</label>
+              <input type="tel" id="doctor-phone" placeholder="Enter your phone number" required>
+              <div class="error-message" id="doctor-phone-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="doctor-wilaya">Wilaya</label>
+              <select id="doctor-wilaya" required>
+                <option value="">Select Wilaya</option>
+              </select>
+              <div class="error-message" id="doctor-wilaya-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="doctor-city">City</label>
+              <select id="doctor-city" required disabled>
+                <option value="">Select a Wilaya first</option>
+              </select>
+              <div class="error-message" id="doctor-city-error"></div>
+            </div>
+
+            <div class="form-group full">
+              <label for="doctor-specialty">Specialty</label>
+              <select id="doctor-specialty" required>
+                <option value="">Select Specialty</option>
+              </select>
+              <div class="error-message" id="doctor-specialty-error"></div>
+            </div>
+
+            <div class="form-group full">
+              <label for="doctor-map-link">Cabinet Link (Optional)</label>
+              <input type="url" id="doctor-map-link" placeholder="https://maps.google.com/...">
+            </div>
+
+          </div>
+
+          <div class="actions">
+            <button type="submit" class="btn-primary full">Register as Doctor</button>
+            <div class="spinner-border spinner-border-sm" id="doctor-spinner" style="display:none;" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        </form>
+
+        <!-- Patient Form -->
+        <form id="patient-form" class="form-section">
+          <h2 class="title">Create your account</h2>
+          <p class="subtitle">Register as a patient to book appointments and manage your profile.</p>
+
+          <div class="form-grid">
+
+            <div class="form-group full">
+              <label for="patient-email">Email</label>
+              <div class="input-wrap">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h16v16H4z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6l8 7 8-7"/>
+                </svg>
+                <input type="email" id="patient-email" placeholder="Enter your email" required>
+              </div>
+              <div class="error-message" id="patient-email-error"></div>
+            </div>
+
+            <div class="form-group full">
+              <label for="patient-password">Password</label>
+              <div class="input-wrap">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11V7a4 4 0 10-8 0v4"/>
+                  <rect x="6" y="11" width="12" height="10" rx="2" ry="2" stroke-width="2"/>
+                </svg>
+                <input type="password" id="patient-password" placeholder="Create a password" required>
+              </div>
+              <div class="error-message" id="patient-password-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="patient-fname">First Name</label>
+              <input type="text" id="patient-fname" placeholder="First Name" required>
+              <div class="error-message" id="patient-fname-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="patient-lname">Last Name</label>
+              <input type="text" id="patient-lname" placeholder="Last Name" required>
+              <div class="error-message" id="patient-lname-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="patient-sex">Sex</label>
+              <select id="patient-sex" required>
+                <option value="">Select Sex</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+              <div class="error-message" id="patient-sex-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="patient-phone">Phone Number</label>
+              <input type="tel" id="patient-phone" placeholder="Enter your phone number" required>
+              <div class="error-message" id="patient-phone-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="patient-wilaya">Wilaya</label>
+              <select id="patient-wilaya" required>
+                <option value="">Select Wilaya</option>
+              </select>
+              <div class="error-message" id="patient-wilaya-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="patient-city">City</label>
+              <select id="patient-city" required disabled>
+                <option value="">Select a Wilaya first</option>
+              </select>
+              <div class="error-message" id="patient-city-error"></div>
+            </div>
+
+          </div>
+
+          <div class="actions">
+            <button type="submit" class="btn-primary full">Register as Patient</button>
+            <div class="spinner-border spinner-border-sm" id="patient-spinner" style="display:none;" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        </form>
+
+        <div class="footer-link">
+          Already have an account?
+          <a href="/login" id="loginLink">Login here</a>
+        </div>
+      </div>
+
+      <!-- RIGHT: Visual -->
+      <aside class="side-visual">
+        <div class="visual-card">
+          <div class="visual-badge" id="visual-badge">Doctor Portal</div>
+          <div class="visual-title" id="visual-title">Join CareLink</div>
+          <div class="visual-subtitle" id="visual-subtitle">Create your account in seconds.</div>
+
+          <div class="visual-image">
+            <img id="doctor-illustration" th:src="@{/assets/images/doctor.png}" alt="Doctor illustration" style="display:block;">
+            <img id="patient-illustration" th:src="@{/assets/images/patient.png}" alt="Patient illustration" style="display:none;">
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Your JS -->
+<script th:src="@{/assets/js/register.js}"></script>
+
+<!-- Small helper to update the right visual text when switching tabs (doesn't touch your register.js) -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const badge = document.getElementById('visual-badge');
+    const title = document.getElementById('visual-title');
+    const sub = document.getElementById('visual-subtitle');
+
+    document.querySelectorAll('.tab').forEach(t => {
+      t.addEventListener('click', () => {
+        const type = t.getAttribute('data-type');
+        if (type === 'doctor') {
+          badge.textContent = 'Doctor Portal';
+          title.textContent = 'Join CareLink';
+          sub.textContent = 'Create your account and manage your schedule.';
+        } else {
+          badge.textContent = 'Patient Portal';
+          title.textContent = 'Join CareLink';
+          sub.textContent = 'Create your account and book appointments easily.';
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

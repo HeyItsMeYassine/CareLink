@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CareLink - Doctor Profile</title>
+
+    <link rel="stylesheet" th:href="@{/assets/css/doctorprofile.css}" />
+
+    <!-- Bootstrap Icons (same as dashboard) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+</head>
+
+<body>
+<header class="header">
+    <!-- ✅ SAME LOGO AS PATIENT DASHBOARD -->
+    <div class="logo" role="button" aria-label="Go home" onclick="window.location.href='/'">
+        <div class="logo-icon" aria-hidden="true">
+            <i class="bi bi-heart-pulse-fill"></i>
+        </div>
+        <span>CareLink</span>
+    </div>
+
+    <div class="header-controls">
+        <!-- Back to dashboard -->
+        <button class="btn-app-secondary" type="button"
+                th:onclick="|window.location.href='@{/doctor/dashboard}'|">
+            <i class="bi bi-arrow-left"></i>
+            Back to Dashboard
+        </button>
+    </div>
+</header>
+
+<main class="container">
+    <div class="page-head">
+        <div class="avatar" id="doctorAvatar" aria-hidden="true">
+            <i class="bi bi-person-badge"></i>
+        </div>
+
+        <div class="page-titles">
+            <h1 id="doctorName">My Profile</h1>
+            <p class="subtitle" id="doctorSpeciality">Manage your professional information</p>
+        </div>
+    </div>
+
+    <div id="successMessage" class="success-message" role="status" aria-live="polite">
+        <i class="bi bi-check2-circle"></i>
+        Your profile has been updated successfully!
+    </div>
+
+    <form id="profileForm" class="profile-form">
+        <!-- Personal -->
+        <section class="section-card">
+            <div class="section-title">
+                <h2>Personal Information</h2>
+                <p class="section-hint">Personal information and speciality cannot be edited.</p>
+            </div>
+
+            <div class="grid two">
+                <div class="field">
+                    <label for="firstName">First Name</label>
+                    <div class="input-wrap">
+                        <i class="bi bi-person input-icon"></i>
+                        <input type="text" id="firstName" name="firstName" disabled />
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="lastName">Last Name</label>
+                    <div class="input-wrap">
+                        <i class="bi bi-person input-icon"></i>
+                        <input type="text" id="lastName" name="lastName" disabled />
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid two">
+                <div class="field">
+                    <label for="sexe">Gender</label>
+                    <div class="input-wrap">
+                        <i class="bi bi-gender-ambiguous input-icon"></i>
+                        <select id="sexe" name="sexe" disabled>
+                            <option value="">Select Gender</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="speciality">Speciality</label>
+                    <div class="input-wrap">
+                        <i class="bi bi-briefcase-medical input-icon"></i>
+                        <select id="speciality" name="speciality" disabled>
+                            <option value="">Select Speciality</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section class="section-card">
+            <div class="section-title">
+                <h2>Contact Information</h2>
+                <p class="section-hint">Keep your contact details up to date.</p>
+            </div>
+
+            <div class="grid two">
+                <div class="field">
+                    <label for="email">Email</label>
+                    <div class="input-wrap">
+                        <i class="bi bi-envelope input-icon"></i>
+                        <input type="email" id="email" name="email" required />
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="phone">Phone Number</label>
+                    <div class="input-wrap">
+                        <i class="bi bi-telephone input-icon"></i>
+                        <input type="tel" id="phone" name="phone" required />
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid two">
+                <div class="field">
+                    <label for="wilaya">Wilaya</label>
+                    <div class="input-wrap">
+                        <i class="bi bi-geo-alt input-icon"></i>
+                        <select id="wilaya" name="wilaya" required>
+                            <option value="">Select Wilaya</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="city">City</label>
+                    <div class="input-wrap">
+                        <i class="bi bi-building input-icon"></i>
+                        <select id="city" name="city" required disabled>
+                            <option value="">Select City</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Location -->
+        <section class="section-card">
+            <div class="section-title">
+                <h2>Location Information</h2>
+                <p class="section-hint">Add your clinic Google Maps link (optional).</p>
+            </div>
+
+            <div class="grid one">
+                <div class="field">
+                    <label for="locationLink">Location Link (Google Maps)</label>
+                    <div class="input-wrap">
+                        <i class="bi bi-map input-icon"></i>
+                        <input type="url" id="locationLink" name="locationLink"
+                               placeholder="https://maps.google.com/?q=..." />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Security -->
+        <section class="section-card">
+            <div class="section-title">
+                <h2>Security</h2>
+                <p class="section-hint">Leave empty if you don’t want to change password.</p>
+            </div>
+
+            <div class="grid two">
+                <div class="field">
+                    <label for="password">New Password (optional)</label>
+                    <div class="input-wrap">
+                        <i class="bi bi-lock input-icon"></i>
+                        <input type="password" id="password" name="password"
+                               placeholder="Enter new password" />
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="confirmPassword">Confirm New Password</label>
+                    <div class="input-wrap">
+                        <i class="bi bi-lock-fill input-icon"></i>
+                        <input type="password" id="confirmPassword" name="confirmPassword"
+                               placeholder="Confirm new password" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="actions">
+            <button type="button" class="btn-app-secondary"
+                    th:onclick="|window.location.href='@{/doctor/dashboard}'|">
+                Cancel
+            </button>
+
+            <button type="submit" class="btn-app">
+                <i class="bi bi-save2"></i>
+                Save Changes
+            </button>
+        </div>
+    </form>
+</main>
+
+<script th:src="@{/assets/js/doctorprofile.js}"></script>
+</body>
+</html>
