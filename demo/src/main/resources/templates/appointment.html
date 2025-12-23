@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Appointment - CareLink</title>
+
+  <link rel="stylesheet" th:href="@{/assets/css/appointment.css}">
+  <link rel="icon" th:href="@{/assets/images/doctor.png}" type="image/png">
+
+  <!-- Bootstrap Icons (nice, consistent icons) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+<header class="header">
+  <div class="header-content">
+    <div class="logo" onclick="window.location.href='/patient/dashboard'">
+      <div class="logo-icon" aria-hidden="true"><i class="bi bi-heart-pulse-fill"></i></div>
+      <span class="logo-text">CareLink</span>
+    </div>
+
+    <div class="header-controls">
+      <button class="icon-btn" th:onclick="|window.location.href='@{/patient/dashboard}'|" type="button" aria-label="Back" title="Back">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="page-header">
+    <h1 class="page-title">Book New Appointment</h1>
+    <p class="page-description">Follow the steps to schedule your medical appointment</p>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-steps">
+      <div class="progress-step">
+        <div class="step-circle active" id="step-1-circle">1</div>
+        <div class="step-line inactive" id="line-1"></div>
+      </div>
+      <div class="progress-step">
+        <div class="step-circle inactive" id="step-2-circle">2</div>
+        <div class="step-line inactive" id="line-2"></div>
+      </div>
+      <div class="progress-step">
+        <div class="step-circle inactive" id="step-3-circle">3</div>
+        <div class="step-line inactive" id="line-3"></div>
+      </div>
+      <div class="progress-step">
+        <div class="step-circle inactive" id="step-4-circle">4</div>
+      </div>
+    </div>
+
+    <div class="progress-labels">
+      <span>Filters</span>
+      <span>Doctor</span>
+      <span>Date & Time</span>
+      <span>Confirm</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title" id="card-title">Select Filters</h2>
+      <p class="card-description" id="card-description">Choose wilaya and specialty to find doctors</p>
+    </div>
+
+    <div class="card-content">
+
+      <!-- Step 1 -->
+      <div id="step-1">
+        <div class="form-group">
+          <label for="wilaya-select">Wilaya</label>
+          <select id="wilaya-select">
+            <option value="">Select a wilaya</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="specialty-select">Specialty</label>
+          <select id="specialty-select" disabled>
+            <option value="">Select a specialty</option>
+          </select>
+        </div>
+
+        <div class="button-group">
+          <div></div>
+          <button class="btn-primary" id="next-1" disabled>
+            Next <i class="bi bi-arrow-right ms-1"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div id="step-2" class="hidden">
+        <div class="form-group">
+          <label for="city-filter-select">City (optional)</label>
+          <select id="city-filter-select" disabled>
+            <option value="">All cities</option>
+          </select>
+        </div>
+
+        <div id="doctors-list"></div>
+
+        <div class="button-group">
+          <button class="btn-secondary" id="back-2">
+            <i class="bi bi-arrow-left me-1"></i> Back
+          </button>
+          <button class="btn-primary" id="next-2" disabled>
+            Next <i class="bi bi-arrow-right ms-1"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div id="step-3" class="hidden">
+        <div class="form-group">
+          <label>Select Date</label>
+          <div class="calendar-container">
+            <div class="calendar" id="calendar"></div>
+          </div>
+        </div>
+
+        <div class="form-group hidden" id="time-group">
+          <label>Select Time</label>
+          <div class="time-slots" id="time-slots"></div>
+        </div>
+
+        <div class="button-group">
+          <button class="btn-secondary" id="back-3">
+            <i class="bi bi-arrow-left me-1"></i> Back
+          </button>
+          <button class="btn-primary" id="next-3" disabled>
+            Next <i class="bi bi-arrow-right ms-1"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div id="step-4" class="hidden">
+        <div class="confirmation-box" id="confirmation-details"></div>
+
+        <div class="button-group">
+          <button class="btn-secondary" id="back-4">
+            <i class="bi bi-arrow-left me-1"></i> Back
+          </button>
+          <button class="btn-primary" id="confirm-appointment">
+            <i class="bi bi-check2-circle me-1"></i> Confirm Appointment
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- Toast container -->
+<div id="toast-container" class="toast-container"></div>
+
+<script th:src="@{/assets/js/appointment.js}"></script>
+</body>
+</html>

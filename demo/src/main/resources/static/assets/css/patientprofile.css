@@ -1,0 +1,564 @@
+/* ========== RESET & BASE STYLES ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root{
+    --blue: #1e88e5;
+    --blue-dark: #1565c0;
+    --green: #22c55e;
+    --green-dark: #15803d;
+
+    --bg: #f6f9ff;
+    --card: #ffffff;
+
+    --text: #0f172a;
+    --muted: #475569;
+
+    --border: rgba(15, 23, 42, 0.10);
+    --shadow: 0 12px 28px rgba(2, 6, 23, 0.08);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background:
+        radial-gradient(1200px 500px at 15% 0%, rgba(30,136,229,0.14), transparent 60%),
+        radial-gradient(900px 400px at 80% 10%, rgba(34,197,94,0.12), transparent 55%),
+        var(--bg);
+    min-height: 100vh;
+    color: var(--text);
+}
+
+/* ========== HEADER (matches dashboard) ========== */
+.header {
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(10px);
+    padding: 1rem 2rem;
+    box-shadow: 0 6px 18px rgba(2, 6, 23, 0.06);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--blue-dark);
+    cursor: pointer;
+    user-select: none;
+}
+
+.logo:hover {
+    transform: translateY(-1px);
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--blue), var(--green));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+    box-shadow: 0 10px 18px rgba(30,136,229,0.18);
+}
+
+.header-controls{
+    display:flex;
+    align-items:center;
+    gap: 0.75rem;
+}
+
+/* icon button like dashboard */
+.icon-btn{
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.85);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    color: var(--muted);
+    font-size: 1.2rem;
+}
+
+.icon-btn:hover{
+    color: var(--blue-dark);
+    background: rgba(30,136,229,0.10);
+    border-color: rgba(30,136,229,0.22);
+    transform: translateY(-1px);
+}
+
+/* (Old .back-btn kept for safety in case HTML still uses it) */
+.back-btn {
+    background: linear-gradient(135deg, var(--blue), var(--green));
+    color: white;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 900;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    box-shadow: 0 12px 20px rgba(30,136,229,0.18);
+}
+
+.back-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 26px rgba(30,136,229,0.22);
+}
+
+/* ========== CONTAINER ========== */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem;
+    animation: fadeIn 0.45s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== PROFILE CARD ========== */
+.profile-card {
+    background: var(--card);
+    padding: 2.25rem;
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+}
+
+/* ========== PROFILE HEADER ========== */
+.profile-header {
+    text-align: center;
+    margin-bottom: 2.2rem;
+    padding-bottom: 1.8rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.profile-avatar {
+    width: 110px;
+    height: 110px;
+    background: linear-gradient(135deg, var(--blue), var(--green));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.75rem;
+    color: white;
+    margin: 0 auto 1.2rem;
+    box-shadow: 0 16px 26px rgba(30,136,229,0.18);
+    overflow: hidden;
+}
+
+.avatar-initials {
+    font-size: 2.25rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.profile-header h1 {
+    font-size: 2.15rem;
+    margin-bottom: 0.35rem;
+    font-weight: 950;
+    background: linear-gradient(135deg, var(--blue-dark), var(--green-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.profile-header p {
+    color: var(--muted);
+    font-size: 1.05rem;
+}
+
+/* ========== PROFILE NOTICE ========== */
+.profile-notice {
+    background: linear-gradient(135deg, rgba(30,136,229,0.90), rgba(34,197,94,0.90));
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 520px;
+}
+
+/* ========== MESSAGE CONTAINER ========== */
+.message-container {
+    margin-bottom: 1.5rem;
+}
+
+/* ========== FORM SECTIONS ========== */
+.form-section {
+    margin-bottom: 2.2rem;
+    padding-bottom: 2.2rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.form-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 1.4rem;
+}
+
+.form-section h2 {
+    font-size: 1.35rem;
+    margin-bottom: 1.25rem;
+    color: var(--text);
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    position: relative;
+    padding-left: 12px;
+}
+
+.form-section h2::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 4px;
+    height: 22px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, var(--blue), var(--green));
+}
+
+/* ========== INFO BADGE ========== */
+.info-badge {
+    background-color: rgba(30,136,229,0.12);
+    color: var(--blue-dark);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    margin-left: 0.5rem;
+    font-weight: 800;
+    vertical-align: middle;
+}
+
+/* ========== FORM GRID ========== */
+.form-grid {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.form-grid.two-col {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+/* ========== FORM GROUPS ========== */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.read-only-label {
+    color: rgba(148, 163, 184, 0.95) !important;
+    font-weight: 700 !important;
+}
+
+/* ========== FORM HELP TEXT ========== */
+.form-help-text {
+    font-size: 0.85rem;
+    color: rgba(71, 85, 105, 0.75);
+    margin-top: 0.25rem;
+}
+
+/* ========== INPUT STYLES ========== */
+.form-group input,
+.form-group select {
+    padding: 0.85rem;
+    border: 2px solid rgba(15,23,42,0.10);
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background-color: white;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: rgba(30,136,229,0.55);
+    box-shadow: 0 0 0 3px rgba(30,136,229,0.12);
+}
+
+.form-group input.is-invalid,
+.form-group select.is-invalid {
+    border-color: #ef4444;
+}
+
+.form-group input.is-invalid:focus,
+.form-group select.is-invalid:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+}
+
+/* ========== READ-ONLY FIELDS ========== */
+.read-only-field {
+    background-color: #f8fafc !important;
+    color: #64748b !important;
+    cursor: not-allowed !important;
+    border-color: rgba(15,23,42,0.12) !important;
+    opacity: 0.92;
+}
+
+.form-group input:disabled,
+.form-group select:disabled {
+    background-color: #f8fafc;
+    color: #64748b;
+    cursor: not-allowed;
+    border-color: rgba(15,23,42,0.10);
+}
+
+/* ========== PASSWORD INPUT ========== */
+.password-input {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    border: 1px solid rgba(15,23,42,0.10);
+    background: rgba(255,255,255,0.85);
+    color: var(--muted);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.password-toggle:hover {
+    color: var(--blue-dark);
+    background: rgba(30,136,229,0.10);
+    border-color: rgba(30,136,229,0.22);
+}
+
+/* ========== INVALID FEEDBACK ========== */
+.invalid-feedback {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    font-weight: 700;
+    min-height: 1.25rem;
+}
+
+/* ========== FORM ACTIONS ========== */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    justify-content: flex-end;
+}
+
+/* Keep bootstrap buttons but theme them */
+.btn.btn-primary {
+    background: linear-gradient(135deg, var(--blue), var(--green));
+    border: none;
+    font-weight: 900;
+    border-radius: 12px;
+    padding: 0.85rem 1.4rem;
+    box-shadow: 0 12px 20px rgba(30,136,229,0.18);
+}
+
+.btn.btn-primary:hover {
+    filter: brightness(0.98);
+    transform: translateY(-1px);
+}
+
+.btn.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn.btn-secondary {
+    background: white;
+    color: var(--muted);
+    border: 1px solid rgba(15,23,42,0.12);
+    font-weight: 900;
+    border-radius: 12px;
+    padding: 0.85rem 1.4rem;
+}
+
+.btn.btn-secondary:hover {
+    background: rgba(30,136,229,0.06);
+}
+
+/* ========== LOADING STATE (optional) ========== */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* ========== HIDDEN INPUT ========== */
+input[type="hidden"] {
+    display: none;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+@media (max-width: 768px) {
+    .header {
+        padding: 1rem;
+    }
+
+    .container {
+        padding: 1.25rem;
+    }
+
+    .profile-card {
+        padding: 1.5rem;
+    }
+
+    .form-grid.two-col {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+    }
+
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+        font-size: 2.5rem;
+    }
+
+    .profile-header h1 {
+        font-size: 1.75rem;
+    }
+
+    .profile-header p {
+        font-size: 1rem;
+    }
+
+    .profile-notice {
+        max-width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-card {
+        padding: 1.25rem;
+    }
+
+    .form-section {
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+    }
+}
+
+/* ========== SCROLLBAR STYLING ========== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #eef2ff;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--blue), var(--green));
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--blue-dark), var(--green-dark));
+}
+
+/* ========== SELECT ARROW STYLING ========== */
+.form-group select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23475569'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 20px;
+    padding-right: 40px;
+}
+
+/* ========== DATE INPUT STYLING ========== */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.65;
+    filter: invert(0.2);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+/* ========== TOAST CONTAINER ========== */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1050;
+}
+
+.toast {
+    background: rgba(255,255,255,0.95);
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--blue);
+    max-width: 350px;
+}
+
+/* ========== GENDER DISPLAY FIELD ========== */
+#genderDisplay {
+    display: block !important;
+}
+
+/* ========== HOVER EFFECT FOR EDITABLE FIELDS ========== */
+.form-control:not(.read-only-field):hover,
+.form-select:not(.read-only-field):hover {
+    border-color: rgba(30,136,229,0.55);
+    box-shadow: 0 0 0 3px rgba(30,136,229,0.08);
+}

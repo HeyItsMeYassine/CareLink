@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareLink - Login</title>
+
+    <link rel="stylesheet" th:href="@{/assets/css/login.css}">
+
+    <!-- Bootstrap (optional) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="auth-shell">
+    <div class="auth-card">
+
+        <!-- Top bar -->
+        <header class="auth-header">
+            <!-- ✅ SAME LOGO AS REGISTER -->
+            <div class="logo" onclick="window.location.href='/'" role="button" aria-label="Go home">
+                <div class="logo-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M3 12h3l2-5 4 10 3-7 2 2h4"
+                              stroke="white"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span class="logo-text">CareLink</span>
+            </div>
+
+            <button class="btn-ghost" id="homeBtn" onclick="window.location.href='/'" type="button">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h4m8-11v10a1 1 0 01-1 1h-4"/>
+                </svg>
+                Home
+            </button>
+        </header>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-button active" data-tab="patient" type="button">
+                <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 11a4 4 0 100-8 4 4 0 000 8z"/>
+                </svg>
+                Patient
+            </button>
+
+            <button class="tab-button" data-tab="doctor" type="button">
+                <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 11a4 4 0 100-8 4 4 0 000 8z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M3 21v-2a4 4 0 014-4h10a4 4 0 014 4v2"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M9 13v-1a3 3 0 013-3h0a3 3 0 013 3v1"/>
+                </svg>
+                Doctor
+            </button>
+        </div>
+
+        <!-- Error banner -->
+        <div id="error-overlay" class="error-banner" style="display:none;">
+            <div class="error-banner-inner">
+                <div class="error-left">
+                    <div class="error-dot"></div>
+                    <div>
+                        <div class="error-title">Login error</div>
+                        <div class="error-message" id="error-message"></div>
+                    </div>
+                </div>
+                <button class="error-close" type="button" onclick="hideError()" aria-label="Close">×</button>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="auth-body">
+
+            <!-- Patient -->
+            <section id="patient" class="tab-content active">
+                <div class="form-section">
+                    <h1 class="title">Welcome back</h1>
+                    <p class="subtitle">Login to manage your appointments and profile.</p>
+
+                    <form id="patient-form" class="auth-form">
+                        <div class="form-group">
+                            <label for="patient-email">Email</label>
+                            <div class="input-wrap">
+                                <input type="email" id="patient-email" required placeholder="Enter your email">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="patient-password">Password</label>
+                            <div class="input-wrap">
+                                <input type="password" id="patient-password" required placeholder="Enter your password">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary full">Login</button>
+                    </form>
+
+                    <div class="footer-text">
+                        Don’t have an account?
+                        <a href="/register">Register here</a>
+                    </div>
+                </div>
+
+                <div class="side-visual">
+                    <div class="visual-card">
+                        <div class="visual-badge">Patient Portal</div>
+                        <div class="visual-title">Fast booking</div>
+                        <div class="visual-subtitle">Choose doctor • Pick time • Confirm</div>
+                        <div class="visual-image">
+                            <img th:src="@{/assets/images/patient.png}" alt="Patient illustration">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Doctor -->
+            <section id="doctor" class="tab-content" style="display:none;">
+                <div class="form-section">
+                    <h1 class="title">Welcome back</h1>
+                    <p class="subtitle">Login to manage your schedule and patients.</p>
+
+                    <form id="doctor-form" class="auth-form">
+                        <div class="form-group">
+                            <label for="doctor-email">Email</label>
+                            <div class="input-wrap">
+                                <input type="email" id="doctor-email" required placeholder="Enter your email">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="doctor-password">Password</label>
+                            <div class="input-wrap">
+                                <input type="password" id="doctor-password" required placeholder="Enter your password">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary full">Login</button>
+                    </form>
+
+                    <div class="footer-text">
+                        Don’t have an account?
+                        <a href="/register">Register here</a>
+                    </div>
+                </div>
+
+                <div class="side-visual">
+                    <div class="visual-card">
+                        <div class="visual-badge">Doctor Portal</div>
+                        <div class="visual-title">Smart scheduling</div>
+                        <div class="visual-subtitle">Confirm • Reschedule • Manage</div>
+                        <div class="visual-image">
+                            <img th:src="@{/assets/images/doctor.png}" alt="Doctor illustration">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/assets/js/login.js}"></script>
+</body>
+</html>
