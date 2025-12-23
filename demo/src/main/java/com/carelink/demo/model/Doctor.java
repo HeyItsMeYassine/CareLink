@@ -16,13 +16,14 @@ public class Doctor {
     private String speciality;
     private String locationLink; // Google Maps link
 
-    // For observer pattern
-    private List<Observer> observers = new ArrayList<>();
+    // Observer pattern
+    private final List<Observer> observers = new ArrayList<>();
 
-    // For availability (simplified)
-    private List<String> availableSlots = new ArrayList<>();
+    // Availability
+    private final List<String> availableSlots = new ArrayList<>();
 
     public Doctor() {
+        initDefaultSlots();
     }
 
     public Doctor(String id, String firstName, String lastName, String wilaya, String city,
@@ -43,16 +44,20 @@ public class Doctor {
     }
 
     private void initDefaultSlots() {
-        // Default availability: 9am-5pm with 30-min slots
-        for (int hour = 9; hour <= 16; hour++) {
+        // Default availability: 08:00 → 16:30 (30-min slots)
+        availableSlots.clear();
+        for (int hour = 8; hour <= 16; hour++) {
             availableSlots.add(String.format("%02d:00", hour));
             availableSlots.add(String.format("%02d:30", hour));
         }
     }
 
-    // Observer pattern methods
+    // ================= Observer pattern =================
+
     public void addObserver(Observer observer) {
-        observers.add(observer);
+        if (observer != null && !observers.contains(observer)) {
+            observers.add(observer);
+        }
     }
 
     public void removeObserver(Observer observer) {
@@ -65,7 +70,8 @@ public class Doctor {
         }
     }
 
-    // Booking a slot
+    // ================= Availability =================
+
     public boolean bookSlot(String timeSlot) {
         if (availableSlots.contains(timeSlot)) {
             availableSlots.remove(timeSlot);
@@ -75,7 +81,25 @@ public class Doctor {
         return false;
     }
 
-    // Getters and Setters
+    /**
+     * ✅ FIX: return a defensive copy (removes VS Code warning)
+     */
+    public List<String> getAvailableSlots() {
+        return new ArrayList<>(availableSlots);
+    }
+
+    /**
+     * ✅ FIX: copy input instead of storing external reference
+     */
+    public void setAvailableSlots(List<String> slots) {
+        availableSlots.clear();
+        if (slots != null) {
+            availableSlots.addAll(slots);
+        }
+    }
+
+    // ================= Getters & Setters =================
+
     public String getId() {
         return id;
     }
@@ -164,21 +188,15 @@ public class Doctor {
         this.locationLink = locationLink;
     }
 
-    public List<String> getAvailableSlots() {
-        return availableSlots;
-    }
+    // ================= Helpers =================
 
-    public void setAvailableSlots(List<String> availableSlots) {
-        this.availableSlots = availableSlots;
-    }
-
-    // Helper methods
     public String getFullName() {
         return firstName + " " + lastName;
     }
 
     @Override
     public String toString() {
-        return "Dr. " + firstName + " " + lastName + " (" + speciality + ") - " + city + ", " + wilaya;
+        return "Dr. " + firstName + " " + lastName +
+                " (" + speciality + ") - " + city + ", " + wilaya;
     }
 }
