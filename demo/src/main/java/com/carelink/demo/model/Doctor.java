@@ -3,29 +3,39 @@ package com.carelink.demo.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Modèle représentant un médecin.
+ * Contient ses informations personnelles, sa disponibilité, et la logique de
+ * notification (Observer).
+ */
 public class Doctor {
+
     private String id;
     private String firstName;
     private String lastName;
     private String wilaya;
     private String city;
     private String email;
-    private String passwordHash; // Stored hashed
+    private String passwordHash;
     private String phone;
-    private String sexe; // M or F
+    private String sexe;
     private String speciality;
-    private String locationLink; // Google Maps link
+    private String locationLink;
 
-    // Observer pattern
+    /** Observateurs à notifier lors d'un événement (pattern Observer). */
     private final List<Observer> observers = new ArrayList<>();
 
-    // Availability
+    /** Créneaux horaires disponibles du médecin. */
     private final List<String> availableSlots = new ArrayList<>();
 
+    /** Constructeur par défaut : initialise les créneaux standards. */
     public Doctor() {
         initDefaultSlots();
     }
 
+    /**
+     * Constructeur complet.
+     */
     public Doctor(String id, String firstName, String lastName, String wilaya, String city,
             String email, String passwordHash, String phone, String sexe,
             String speciality, String locationLink) {
@@ -43,8 +53,10 @@ public class Doctor {
         initDefaultSlots();
     }
 
+    /**
+     * Définit les créneaux par défaut : de 08:00 à 16:30 (pas de 30 minutes).
+     */
     private void initDefaultSlots() {
-        // Default availability: 08:00 → 16:30 (30-min slots)
         availableSlots.clear();
         for (int hour = 8; hour <= 16; hour++) {
             availableSlots.add(String.format("%02d:00", hour));
@@ -52,26 +64,35 @@ public class Doctor {
         }
     }
 
-    // ================= Observer pattern =================
+    // -------------------- Observer --------------------
 
+    /** Ajoute un observateur s'il n'est pas déjà présent. */
     public void addObserver(Observer observer) {
         if (observer != null && !observers.contains(observer)) {
             observers.add(observer);
         }
     }
 
+    /** Retire un observateur. */
     public void removeObserver(Observer observer) {
         observers.remove(observer);
     }
 
+    /** Notifie tous les observateurs avec un message. */
     public void notifyObservers(String message) {
         for (Observer observer : observers) {
             observer.update(message);
         }
     }
 
-    // ================= Availability =================
+    // -------------------- Disponibilités --------------------
 
+    /**
+     * Réserve un créneau si celui-ci est encore disponible.
+     *
+     * @param timeSlot créneau à réserver (ex: "10:30")
+     * @return true si la réservation a réussi, sinon false
+     */
     public boolean bookSlot(String timeSlot) {
         if (availableSlots.contains(timeSlot)) {
             availableSlots.remove(timeSlot);
@@ -82,14 +103,15 @@ public class Doctor {
     }
 
     /**
-     * ✅ FIX: return a defensive copy (removes VS Code warning)
+     * Retourne une copie de la liste des créneaux afin de préserver
+     * l'encapsulation.
      */
     public List<String> getAvailableSlots() {
         return new ArrayList<>(availableSlots);
     }
 
     /**
-     * ✅ FIX: copy input instead of storing external reference
+     * Remplace la liste des créneaux en copiant les données fournies.
      */
     public void setAvailableSlots(List<String> slots) {
         availableSlots.clear();
@@ -98,7 +120,7 @@ public class Doctor {
         }
     }
 
-    // ================= Getters & Setters =================
+    // -------------------- Getters & Setters --------------------
 
     public String getId() {
         return id;
@@ -188,12 +210,14 @@ public class Doctor {
         this.locationLink = locationLink;
     }
 
-    // ================= Helpers =================
+    // -------------------- Helpers --------------------
 
+    /** Retourne le nom complet du médecin. */
     public String getFullName() {
         return firstName + " " + lastName;
     }
 
+    /** Description lisible du médecin (utile pour l'affichage). */
     @Override
     public String toString() {
         return "Dr. " + firstName + " " + lastName +

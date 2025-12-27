@@ -1,14 +1,15 @@
-// patientprofile.js - Allows editing email, phone, wilaya, city, and password
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Patient profile page loaded - Restricted edit mode');
+// static/assets/js/patientprofile.js
+// Profil patient : affichage des informations + mise à jour limitée (email, téléphone, wilaya, ville, mot de passe optionnel).
 
+document.addEventListener('DOMContentLoaded', function () {
     initializePage();
     loadUserProfile();
     loadWilayas();
 });
 
-// ========== PAGE INITIALIZATION ==========
-
+/* =======================
+   Initialisation page
+   ======================= */
 function initializePage() {
     const profileForm = document.getElementById('profileForm');
     if (profileForm) {
@@ -24,8 +25,8 @@ function initializePage() {
     disableNonEditableFields();
 }
 
+// Rend certains champs non modifiables (lecture seule)
 function disableNonEditableFields() {
-    // ✅ UPDATED: phone is now editable -> removed from list
     const nonEditableFields = ['firstName', 'lastName', 'genderDisplay'];
 
     nonEditableFields.forEach(fieldId => {
@@ -36,6 +37,7 @@ function disableNonEditableFields() {
         }
     });
 
+    // Afficher le genre en lecture seule (masquer la liste)
     const genderSelect = document.getElementById('gender');
     const genderDisplay = document.getElementById('genderDisplay');
     if (genderSelect && genderDisplay) {
@@ -45,25 +47,31 @@ function disableNonEditableFields() {
     }
 }
 
-// ========== USER PROFILE FUNCTIONS ==========
-
+/* =======================
+   Chargement profil
+   ======================= */
 async function loadUserProfile() {
     try {
         showLoading(true);
 
+        // Vérifier la session
         const sessionResponse = await fetch('/api/session/current');
         if (!sessionResponse.ok) throw new Error(`Session error: ${sessionResponse.status}`);
 
         const user = await sessionResponse.json();
 
+        // Accès patient uniquement
         if (user.userType && user.userType !== 'patient') {
-            showMessage('Access denied. Please login as a patient.', 'warning');
+            showMessage('Accès refusé. Connectez-vous en tant que patient.', 'warning');
             setTimeout(() => window.location.href = '/login', 2000);
             return;
         }
 
+        // Charger le profil
         const profileResponse = await fetch('/api/patient/profile');
-        if (!profileResponse.ok) throw new Error(`Failed to load profile (Status: ${profileResponse.status})`);
+        if (!profileResponse.ok) {
+            throw new Error(`Failed to load profile (Status: ${profileResponse.status})`);
+        }
 
         const profile = await profileResponse.json();
         if (!profile) throw new Error('Profile data is empty');
@@ -72,14 +80,15 @@ async function loadUserProfile() {
         updateDisplayInfo(profile);
 
     } catch (error) {
-        console.error('Error loading user profile:', error);
-        showMessage('Failed to load profile. Please login again.', 'danger');
+        console.error('Erreur chargement profil patient :', error);
+        showMessage('Impossible de charger le profil. Veuillez vous reconnecter.', 'danger');
         setTimeout(() => window.location.href = '/login', 2000);
     } finally {
         showLoading(false);
     }
 }
 
+// Remplit les champs du formulaire à partir de l’objet profil
 function populateForm(profile) {
     document.getElementById('firstName').value = profile.firstName || profile.firstname || '';
     document.getElementById('lastName').value  = profile.lastName  || profile.lastname  || '';
@@ -94,54 +103,58 @@ function populateForm(profile) {
     }
 
     document.getElementById('email').value = profile.email || '';
-
-    // ✅ phone stays populated but is now editable
     document.getElementById('phone').value = profile.phone || profile.phoneNumber || profile.telephone || '';
 
     const wilaya = profile.wilaya || '';
-    const city   = profile.city || '';
+    const city = profile.city || '';
 
+    // Mémoriser wilaya/ville pour pré-sélection
     if (wilaya) window.currentWilaya = wilaya;
-    if (city)   window.currentCity   = city;
+    if (city) window.currentCity = city;
 
+    // Stocker l’identifiant patient (obligatoire pour l’update)
     const patientId = profile.id || profile.patientId || profile.userId || '';
     if (patientId) document.getElementById('patientId').value = patientId;
 }
 
+// Met à jour le bloc d’affichage (nom, email, avatar)
 function updateDisplayInfo(profile) {
     const nameDisplay = document.getElementById('patientName');
     const emailDisplay = document.getElementById('patientEmail');
     const avatar = document.getElementById('patientAvatar');
 
     const firstName = profile.firstName || profile.firstname || '';
-    const lastName  = profile.lastName  || profile.lastname  || '';
+    const lastName = profile.lastName || profile.lastname || '';
 
-    if (nameDisplay) nameDisplay.textContent = `${firstName} ${lastName}`.trim() || 'My Profile';
+    if (nameDisplay) nameDisplay.textContent = `${firstName} ${lastName}`.trim() || 'Mon Profil';
     if (emailDisplay && profile.email) emailDisplay.textContent = profile.email;
 
+    // Initiales dans l’avatar
     if (avatar && firstName && lastName) {
         const initials = `${firstName[0]}${lastName[0]}`.toUpperCase();
         avatar.innerHTML = `<span class="avatar-initials">${initials}</span>`;
     }
 }
 
-// ========== LOCATION FUNCTIONS ==========
-
+/* =======================
+   Wilaya / Villes
+   ======================= */
 async function loadWilayas() {
     try {
         const response = await fetch('/api/wilayas');
         const wilayas = await response.json();
 
         const select = document.getElementById('wilaya');
-        select.innerHTML = '<option value="">Select Wilaya</option>';
+        select.innerHTML = '<option value="">Sélectionner une wilaya</option>';
 
-        wilayas.forEach(w => {
+        (wilayas || []).forEach(w => {
             const opt = document.createElement('option');
             opt.value = w;
             opt.textContent = w;
             select.appendChild(opt);
         });
 
+        // Pré-sélection si déjà enregistrée
         if (window.currentWilaya) {
             select.value = window.currentWilaya;
             setTimeout(() => select.dispatchEvent(new Event('change')), 100);
@@ -149,7 +162,7 @@ async function loadWilayas() {
 
     } catch (error) {
         console.error(error);
-        showMessage('Failed to load wilayas', 'warning');
+        showMessage('Impossible de charger les wilayas', 'warning');
     }
 }
 
@@ -159,7 +172,7 @@ async function handleWilayaChange(event) {
 
     if (!wilaya) {
         citySelect.disabled = true;
-        citySelect.innerHTML = '<option value="">Select City</option>';
+        citySelect.innerHTML = '<option value="">Sélectionner une ville</option>';
         return;
     }
 
@@ -167,8 +180,8 @@ async function handleWilayaChange(event) {
         const response = await fetch(`/api/cities?wilaya=${encodeURIComponent(wilaya)}`);
         const cities = await response.json();
 
-        citySelect.innerHTML = '<option value="">Select City</option>';
-        cities.forEach(c => {
+        citySelect.innerHTML = '<option value="">Sélectionner une ville</option>';
+        (cities || []).forEach(c => {
             const opt = document.createElement('option');
             opt.value = c;
             opt.textContent = c;
@@ -177,18 +190,20 @@ async function handleWilayaChange(event) {
 
         citySelect.disabled = false;
 
+        // Pré-sélection si la ville correspond à la wilaya actuelle
         if (window.currentCity && window.currentWilaya === wilaya) {
             citySelect.value = window.currentCity;
         }
 
     } catch (error) {
         console.error(error);
-        showMessage('Failed to load cities', 'danger');
+        showMessage('Impossible de charger les villes', 'danger');
     }
 }
 
-// ========== FORM SUBMIT ==========
-
+/* =======================
+   Envoi du formulaire
+   ======================= */
 async function handleFormSubmit(event) {
     event.preventDefault();
     if (!validateForm()) return;
@@ -198,7 +213,7 @@ async function handleFormSubmit(event) {
 
         const formData = getEditableFormData();
         if (!formData.id) {
-            showMessage('Patient ID missing. Refresh.', 'danger');
+            showMessage('Identifiant patient manquant. Actualisez la page.', 'danger');
             return;
         }
 
@@ -211,25 +226,25 @@ async function handleFormSubmit(event) {
         const result = await response.json();
 
         if (result.success) {
-            showMessage('Profile updated successfully!', 'success');
+            showMessage('Profil mis à jour avec succès !', 'success');
             document.getElementById('password').value = '';
             document.getElementById('confirmPassword').value = '';
         } else {
-            showMessage(result.message || 'Failed to update profile', 'danger');
+            showMessage(result.message || 'Échec de la mise à jour du profil', 'danger');
         }
 
     } catch (error) {
         console.error(error);
-        showMessage('Update error', 'danger');
+        showMessage('Erreur lors de la mise à jour', 'danger');
     } finally {
         showLoading(false);
     }
 }
 
+// Construit uniquement les champs autorisés à modifier
 function getEditableFormData() {
     const data = { id: document.getElementById('patientId').value };
 
-    // ✅ UPDATED: added phone
     ['email', 'phone', 'wilaya', 'city'].forEach(f => {
         const el = document.getElementById(f);
         if (el && el.value) data[f] = el.value.trim();
@@ -243,14 +258,16 @@ function getEditableFormData() {
     return data;
 }
 
-// ========== VALIDATION ==========
-
+/* =======================
+   Validation (à compléter)
+   ======================= */
 function setupFormValidation() {}
 function validateForm() { return true; }
 
-// ========== UI HELPERS ==========
-
-function showMessage(message, type='info') {
+/* =======================
+   Helpers UI
+   ======================= */
+function showMessage(message, type = 'info') {
     const container = document.getElementById('messageContainer');
     const alert = document.getElementById('messageAlert');
     if (!container || !alert) return;
@@ -271,16 +288,18 @@ function showMessage(message, type='info') {
     container.style.display = 'block';
 }
 
+// Active/désactive le bouton submit + affiche un spinner
 function showLoading(show) {
     const submitBtn = document.getElementById('submitBtn');
     if (!submitBtn) return;
 
     submitBtn.disabled = show;
     submitBtn.innerHTML = show
-        ? '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Saving...'
-        : '<i class="bi bi-save me-2"></i>Save Changes';
+        ? '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Enregistrement...'
+        : '<i class="bi bi-save me-2"></i>Enregistrer';
 }
 
+// Affiche/masque un champ mot de passe
 function togglePassword(fieldId) {
     const field = document.getElementById(fieldId);
     if (!field) return;

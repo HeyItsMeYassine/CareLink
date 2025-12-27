@@ -3,7 +3,12 @@ package com.carelink.demo.model;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Modèle représentant un rendez-vous médical.
+ * Il relie un patient, un médecin, une date/heure et un état.
+ */
 public class Appointment {
+
     private String id;
     private String patientId;
     private String doctorId;
@@ -11,19 +16,33 @@ public class Appointment {
     private Status status;
     private String notes;
 
+    /**
+     * États possibles d'un rendez-vous.
+     */
     public enum Status {
         PENDING,
         CONFIRMED,
-        SCHEDULED, // kept for backward compatibility (old CSV / old logic)
+        SCHEDULED,
         RESCHEDULED,
         CANCELLED,
         COMPLETED
     }
 
+    /** Constructeur par défaut. */
     public Appointment() {
     }
 
-    public Appointment(String id, String patientId, String doctorId, LocalDateTime dateTime, Status status) {
+    /**
+     * Constructeur principal.
+     *
+     * @param id        identifiant du rendez-vous
+     * @param patientId identifiant du patient
+     * @param doctorId  identifiant du médecin
+     * @param dateTime  date et heure du rendez-vous
+     * @param status    état du rendez-vous
+     */
+    public Appointment(String id, String patientId, String doctorId,
+            LocalDateTime dateTime, Status status) {
         this.id = id;
         this.patientId = patientId;
         this.doctorId = doctorId;
@@ -31,7 +50,8 @@ public class Appointment {
         this.status = status;
     }
 
-    // Getters and Setters
+    // ---------- Getters et Setters ----------
+
     public String getId() {
         return id;
     }
@@ -80,13 +100,20 @@ public class Appointment {
         this.notes = notes;
     }
 
-    // Helper methods
+    // ---------- Méthodes utilitaires ----------
+
+    /**
+     * Retourne la date du rendez-vous au format lisible.
+     */
     public String getFormattedDate() {
         if (dateTime == null)
             return "";
         return dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
+    /**
+     * Retourne l'heure du rendez-vous au format lisible.
+     */
     public String getFormattedTime() {
         if (dateTime == null)
             return "";
@@ -94,21 +121,27 @@ public class Appointment {
     }
 
     /**
-     * ✅ IMPORTANT:
-     * These getters are added so your JS can use apt.date and apt.time
-     * (Jackson will serialize them as "date" and "time").
+     * Expose la date pour la sérialisation JSON.
      */
     public String getDate() {
         return getFormattedDate();
     }
 
+    /**
+     * Expose l'heure pour la sérialisation JSON.
+     */
     public String getTime() {
         return getFormattedTime();
     }
 
+    /**
+     * Représentation textuelle du rendez-vous.
+     */
     @Override
     public String toString() {
-        return "Appointment[" + id + "] Patient: " + patientId + ", Doctor: " + doctorId +
-                ", Time: " + getFormattedDate() + " " + getFormattedTime() + ", Status: " + status;
+        return "Appointment[" + id + "] Patient: " + patientId +
+                ", Doctor: " + doctorId +
+                ", Time: " + getFormattedDate() + " " + getFormattedTime() +
+                ", Status: " + status;
     }
 }

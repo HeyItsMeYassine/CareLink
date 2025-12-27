@@ -1,4 +1,6 @@
-/* ========== RESET & BASE ========== */
+/* =========================
+   Base & variables
+   ========================= */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root{
@@ -29,7 +31,9 @@ body{
   color: var(--text);
 }
 
-/* ========== HEADER (same vibe as patientdashboard) ========== */
+/* =========================
+   En-tête
+   ========================= */
 .header{
   background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(10px);
@@ -74,7 +78,9 @@ body{
   gap: 12px;
 }
 
-/* Buttons (aligned with dashboard theme) */
+/* =========================
+   Boutons
+   ========================= */
 .btn-ghost{
   border: 1px solid var(--border);
   background: rgba(255,255,255,0.85);
@@ -124,6 +130,7 @@ body{
   border-color: rgba(30,136,229,0.22);
 }
 
+/* Variante “grand bouton” */
 .btn-large{
   padding: 14px 18px;
   font-size: 1rem;
@@ -132,7 +139,9 @@ body{
   gap: 10px;
 }
 
-/* ========== HERO ========== */
+/* =========================
+   Section d'accueil (hero)
+   ========================= */
 .hero{
   padding: 2.2rem 0 3rem;
 }
@@ -182,6 +191,7 @@ body{
   margin-bottom: 1.25rem;
 }
 
+/* Petite animation sur la flèche */
 .arrow{
   display:inline-block;
   transition: transform 0.2s ease;
@@ -190,7 +200,7 @@ body{
   transform: translateX(4px);
 }
 
-/* little “free” pills */
+/* Pastilles d'information */
 .hero-badges{
   display:flex;
   gap: 10px;
@@ -210,7 +220,9 @@ body{
   background: rgba(255,255,255,0.72);
 }
 
-/* Image side */
+/* =========================
+   Bloc image
+   ========================= */
 .image-wrap{
   border-radius: 18px;
   overflow: hidden;
@@ -226,7 +238,9 @@ body{
   display:block;
 }
 
-/* ========== RESPONSIVE ========== */
+/* =========================
+   Responsive
+   ========================= */
 @media (max-width: 900px){
   .hero-grid{ grid-template-columns: 1fr; }
   .hero-image{ height: 360px; }

@@ -1,10 +1,13 @@
-/* ========== RESET & BASE STYLES ========== */
+/* =======================
+   Réinitialisation & base
+   ======================= */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Variables de thème (couleurs, ombres, etc.) */
 :root{
     --blue: #1e88e5;
     --blue-dark: #1565c0;
@@ -21,9 +24,11 @@
     --shadow: 0 12px 28px rgba(2, 6, 23, 0.08);
 }
 
+/* Style général de la page */
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 
+    /* Fond avec dégradés doux pour donner un effet moderne */
     background:
         radial-gradient(1200px 500px at 15% 0%, rgba(30,136,229,0.14), transparent 60%),
         radial-gradient(900px 400px at 80% 10%, rgba(34,197,94,0.12), transparent 55%),
@@ -33,7 +38,9 @@ body {
     color: var(--text);
 }
 
-/* ========== HEADER ========== */
+/* =======================
+   En-tête (Header)
+   ======================= */
 .header {
     background: rgba(255, 255, 255, 0.88);
     backdrop-filter: blur(10px);
@@ -43,11 +50,14 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    /* Header collant en haut lors du scroll */
     position: sticky;
     top: 0;
     z-index: 1000;
 }
 
+/* Logo + icône */
 .logo {
     display: flex;
     align-items: center;
@@ -71,13 +81,14 @@ body {
     box-shadow: 0 10px 18px rgba(30,136,229,0.18);
 }
 
+/* Zone des boutons à droite */
 .header-controls {
     display: flex;
     align-items: center;
     gap: 1rem;
 }
 
-/* icon button */
+/* Bouton icône (ex: notifications, settings, etc.) */
 .icon-btn{
     width: 44px;
     height: 44px;
@@ -99,9 +110,12 @@ body {
     transform: translateY(-1px);
 }
 
-/* ========== PROFILE MENU ========== */
+/* =======================
+   Menu Profil (dropdown)
+   ======================= */
 .profile-container { position: relative; }
 
+/* Bouton profil */
 .profile-btn {
     background: linear-gradient(135deg, var(--blue), var(--green));
     border: none;
@@ -123,6 +137,7 @@ body {
 
 .profile-icon { font-size: 1.3rem; color: #fff; }
 
+/* Conteneur du menu déroulant */
 .profile-dropdown {
     position: absolute;
     top: 100%;
@@ -132,18 +147,20 @@ body {
     border-radius: 12px;
     box-shadow: 0 18px 40px rgba(2, 6, 23, 0.16);
     min-width: 220px;
-    display: none;
+    display: none; /* affiché via JS */
     z-index: 1000;
     overflow: hidden;
     border: 1px solid var(--border);
     animation: dropdownSlide 0.18s ease;
 }
 
+/* Animation d’ouverture du dropdown */
 @keyframes dropdownSlide {
     from { opacity: 0; transform: translateY(-10px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
+/* Élément du menu */
 .dropdown-item {
     padding: 1rem 1.25rem;
     cursor: pointer;
@@ -163,11 +180,13 @@ body {
 
 .dropdown-item:last-child { border-bottom: none; }
 
+/* Survol standard */
 .dropdown-item:hover {
     background: rgba(30,136,229,0.08);
     color: var(--blue-dark);
 }
 
+/* Survol spécifique pour "logout" */
 .dropdown-item.logout:hover {
     background: rgba(239, 68, 68, 0.08);
     color: #b91c1c;
@@ -176,7 +195,9 @@ body {
 .dropdown-icon { font-size: 1.1rem; color: rgba(71, 85, 105, 0.7); }
 .dropdown-item:hover .dropdown-icon { color: inherit; }
 
-/* ========== MAIN CONTAINER ========== */
+/* =======================
+   Contenu principal
+   ======================= */
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -184,11 +205,13 @@ body {
     animation: fadeIn 0.45s ease;
 }
 
+/* Animation d’apparition du contenu */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(18px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
+/* Titre principal */
 h1 {
     font-size: 2.5rem;
     font-weight: 900;
@@ -199,6 +222,7 @@ h1 {
     background-clip: text;
 }
 
+/* Sous-titre (description) */
 .subtitle {
     color: var(--muted);
     font-size: 1.125rem;
@@ -207,7 +231,9 @@ h1 {
     line-height: 1.6;
 }
 
-/* ========== STATS GRID ========== */
+/* =======================
+   Cartes statistiques
+   ======================= */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -229,6 +255,7 @@ h1 {
     overflow: hidden;
 }
 
+/* Barre décorative à gauche */
 .stat-card::before {
     content: '';
     position: absolute;
@@ -261,6 +288,7 @@ h1 {
     line-height: 1;
 }
 
+/* Icône de la carte */
 .stat-icon {
     width: 46px;
     height: 46px;
@@ -273,13 +301,16 @@ h1 {
     font-size: 1.35rem;
 }
 
+/* Variante "succès" */
 .stat-icon.success{
     border: 1px solid rgba(34,197,94,0.22);
     background: rgba(34,197,94,0.12);
     color: var(--green-dark);
 }
 
-/* ========== SECTION HEADER ========== */
+/* =======================
+   En-têtes de sections
+   ======================= */
 .section-header {
     display: flex;
     justify-content: space-between;
@@ -295,10 +326,12 @@ h1 {
     color: var(--text);
 }
 
-/* ========== APPOINTMENTS CONTAINER ========== */
+/* Conteneur des rendez-vous */
 #appointmentsContainer { min-height: 300px; }
 
-/* ========== APPOINTMENT CARDS ========== */
+/* =======================
+   Cartes de rendez-vous
+   ======================= */
 .appointment-item.card {
     border: 1px solid var(--border);
     border-radius: 16px;
@@ -317,6 +350,7 @@ h1 {
 
 .appointment-item .card-body { padding: 1.5rem; }
 
+/* Infos patient */
 .patient-block {
     display: flex;
     flex-direction: column;
@@ -338,13 +372,13 @@ h1 {
     line-height: 1.25;
 }
 
-/* pending highlight */
+/* Mise en évidence des rendez-vous en attente */
 .appointment-item[data-status="PENDING"]{
     border-color: rgba(245,158,11,0.35);
     box-shadow: 0 10px 22px rgba(245,158,11,0.14);
 }
 
-/* Badges same vibe */
+/* Badges (mêmes couleurs que le thème) */
 .bg-primary { background: linear-gradient(135deg, var(--blue), var(--blue-dark)) !important; }
 .bg-success { background: linear-gradient(135deg, var(--green), var(--green-dark)) !important; }
 .bg-danger { background: linear-gradient(135deg, #ef4444, #b91c1c) !important; }
@@ -353,6 +387,7 @@ h1 {
 .bg-info { background: linear-gradient(135deg, #38bdf8, #3b82f6) !important; }
 .text-dark { color: #0f172a !important; }
 
+/* Groupe de boutons */
 .btn-group { gap: 0.5rem; }
 .btn-sm {
     padding: 0.375rem 0.75rem;
@@ -361,7 +396,9 @@ h1 {
     font-weight: 700;
 }
 
-/* ========== LOADING ========== */
+/* =======================
+   Message de chargement
+   ======================= */
 .loading-message{
     text-align: center;
     padding: 4rem 2rem;
@@ -373,12 +410,15 @@ h1 {
     animation: pulse 1.5s infinite;
 }
 
+/* Animation de pulsation */
 @keyframes pulse {
     0%, 100% { opacity: 1; }
     50%      { opacity: 0.7; }
 }
 
-/* ========== MODAL STYLES (match patientdashboard) ========== */
+/* =======================
+   Modals (fenêtres)
+   ======================= */
 .modal-content {
     border-radius: 16px;
     border: none;
@@ -393,7 +433,6 @@ h1 {
 }
 
 .modal-title { font-weight: 900; color: var(--text); }
-
 .modal-body { padding: 1.5rem; }
 
 .modal-footer {
@@ -401,6 +440,7 @@ h1 {
     padding: 1.5rem;
 }
 
+/* Formulaires */
 .form-label { font-weight: 800; color: var(--text); margin-bottom: 0.5rem; }
 
 .form-control {
@@ -417,7 +457,9 @@ h1 {
     outline: none;
 }
 
-/* ========== TOAST ========== */
+/* =======================
+   Toasts (notifications)
+   ======================= */
 .toast {
     border-radius: 12px;
     border: none;
@@ -427,11 +469,14 @@ h1 {
     color: var(--text);
 }
 
+/* Variantes de couleurs pour les toasts */
 .toast.bg-success { background: rgba(34, 197, 94, 0.95) !important; }
 .toast.bg-danger  { background: rgba(239, 68, 68, 0.95) !important; }
 .toast.bg-warning { background: rgba(245, 158, 11, 0.95) !important; }
 
-/* ========== RESPONSIVE ========== */
+/* =======================
+   Responsive (mobile)
+   ======================= */
 @media (max-width: 768px) {
     .header { padding: 1rem; }
     .container { padding: 1.25rem; }
@@ -440,6 +485,7 @@ h1 {
 
     .stats-grid { grid-template-columns: 1fr; }
 
+    /* Empilement sur petit écran */
     .appointment-item .d-flex {
         flex-direction: column;
         gap: 1rem;
@@ -453,7 +499,9 @@ h1 {
     .btn-group .btn { width: 100%; }
 }
 
-/* ========== SCROLLBAR ========== */
+/* =======================
+   Scrollbar (Chrome/Safari)
+   ======================= */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: #eef2ff; border-radius: 4px; }
 ::-webkit-scrollbar-thumb {

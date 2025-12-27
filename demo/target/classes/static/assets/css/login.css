@@ -1,4 +1,6 @@
-/* ========== RESET ========== */
+/* =========================
+   Base & variables
+   ========================= */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root{
@@ -27,7 +29,9 @@ body{
   color: var(--text);
 }
 
-/* ========== SHELL ========== */
+/* =========================
+   Conteneur d'authentification
+   ========================= */
 .auth-shell{
   min-height: 100vh;
   display: flex;
@@ -46,7 +50,9 @@ body{
   overflow: hidden;
 }
 
-/* ========== HEADER ========== */
+/* =========================
+   En-tête
+   ========================= */
 .auth-header{
   display:flex;
   align-items:center;
@@ -56,7 +62,7 @@ body{
   background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(248,250,252,0.9) 100%);
 }
 
-/* ✅ LOGO (SAME AS REGISTER) */
+/* Logo */
 .logo{
   display:flex;
   align-items:center;
@@ -107,7 +113,9 @@ body{
   box-shadow: 0 18px 34px rgba(37,99,235,0.26);
 }
 
-/* ========== BUTTON ========== */
+/* =========================
+   Bouton secondaire
+   ========================= */
 .btn-ghost{
   display:inline-flex;
   align-items:center;
@@ -128,7 +136,9 @@ body{
 }
 .icon{ width: 18px; height: 18px; }
 
-/* ========== TABS ========== */
+/* =========================
+   Onglets (patient / médecin)
+   ========================= */
 .tabs{
   display:flex;
   gap: 10px;
@@ -168,7 +178,9 @@ body{
 
 .tab-icon{ width: 18px; height: 18px; }
 
-/* ========== ERROR BANNER ========== */
+/* =========================
+   Bandeau d'erreur
+   ========================= */
 .error-banner{
   padding: 0 22px;
   margin-top: 14px;
@@ -225,7 +237,9 @@ body{
 }
 .error-close:hover{ background: rgba(239, 68, 68, 0.12); }
 
-/* ========== BODY ========== */
+/* =========================
+   Corps (contenu)
+   ========================= */
 .auth-body{ padding: 18px 22px 24px; }
 
 .tab-content{
@@ -236,7 +250,9 @@ body{
 }
 .tab-content.active{ display:flex; }
 
-/* ========== FORM SIDE ========== */
+/* =========================
+   Formulaire
+   ========================= */
 .form-section{
   flex: 1.05;
   background: white;
@@ -261,7 +277,6 @@ body{
 }
 
 .auth-form{ margin-top: 10px; }
-
 .form-group{ margin-bottom: 14px; }
 
 label{
@@ -323,7 +338,9 @@ input:focus{
 }
 .footer-text a:hover{ text-decoration: underline; }
 
-/* ========== VISUAL SIDE ========== */
+/* =========================
+   Panneau visuel
+   ========================= */
 .side-visual{ flex: 0.95; display:flex; }
 
 .visual-card{
@@ -369,7 +386,9 @@ input:focus{
   filter: drop-shadow(0 18px 24px rgba(2,6,23,0.10));
 }
 
-/* ========== RESPONSIVE ========== */
+/* =========================
+   Responsive
+   ========================= */
 @media (max-width: 920px){
   .tab-content.active{ flex-direction: column; }
   .side-visual{ order: -1; }

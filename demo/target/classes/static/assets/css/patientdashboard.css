@@ -1,4 +1,6 @@
-/* ========== RESET & BASE STYLES ========== */
+/* =========================
+   Base & variables
+   ========================= */
 * {
     margin: 0;
     padding: 0;
@@ -24,7 +26,7 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 
-    /* Light blue/green background accents */
+    /* Fond doux avec dégradés */
     background:
         radial-gradient(1200px 500px at 15% 0%, rgba(30,136,229,0.14), transparent 60%),
         radial-gradient(900px 400px at 80% 10%, rgba(34,197,94,0.12), transparent 55%),
@@ -34,7 +36,9 @@ body {
     color: var(--text);
 }
 
-/* ========== HEADER ========== */
+/* =========================
+   En-tête
+   ========================= */
 .header {
     background: rgba(255, 255, 255, 0.88);
     backdrop-filter: blur(10px);
@@ -78,7 +82,7 @@ body {
     gap: 1rem;
 }
 
-/* NEW: generic icon button */
+/* Bouton icône réutilisable */
 .icon-btn{
     width: 44px;
     height: 44px;
@@ -100,10 +104,10 @@ body {
     transform: translateY(-1px);
 }
 
-/* ========== PROFILE MENU ========== */
-.profile-container {
-    position: relative;
-}
+/* =========================
+   Menu profil
+   ========================= */
+.profile-container { position: relative; }
 
 .profile-btn {
     background: linear-gradient(135deg, var(--blue), var(--green));
@@ -124,10 +128,7 @@ body {
     box-shadow: 0 14px 22px rgba(30,136,229,0.22);
 }
 
-.profile-icon {
-    font-size: 1.3rem;
-    color: #fff;
-}
+.profile-icon { font-size: 1.3rem; color: #fff; }
 
 .profile-dropdown {
     position: absolute;
@@ -167,9 +168,7 @@ body {
     border-bottom: 1px solid rgba(15,23,42,0.06);
 }
 
-.dropdown-item:last-child {
-    border-bottom: none;
-}
+.dropdown-item:last-child { border-bottom: none; }
 
 .dropdown-item:hover {
     background: rgba(30,136,229,0.08);
@@ -186,11 +185,11 @@ body {
     color: rgba(71, 85, 105, 0.7);
 }
 
-.dropdown-item:hover .dropdown-icon {
-    color: inherit;
-}
+.dropdown-item:hover .dropdown-icon { color: inherit; }
 
-/* ========== MAIN CONTAINER ========== */
+/* =========================
+   Contenu principal
+   ========================= */
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -221,7 +220,9 @@ h1 {
     line-height: 1.6;
 }
 
-/* ========== STATS GRID ========== */
+/* =========================
+   Cartes statistiques
+   ========================= */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -243,6 +244,7 @@ h1 {
     overflow: hidden;
 }
 
+/* Barre colorée à gauche */
 .stat-card::before {
     content: '';
     position: absolute;
@@ -275,7 +277,7 @@ h1 {
     line-height: 1;
 }
 
-/* icon pill */
+/* Icône de la carte */
 .stat-icon {
     width: 46px;
     height: 46px;
@@ -294,7 +296,9 @@ h1 {
     color: var(--green-dark);
 }
 
-/* ========== SECTION HEADER ========== */
+/* =========================
+   En-tête de section
+   ========================= */
 .section-header {
     display: flex;
     justify-content: space-between;
@@ -310,7 +314,9 @@ h1 {
     color: var(--text);
 }
 
-/* ========== CUSTOM PRIMARY BUTTON (no Bootstrap conflict) ========== */
+/* =========================
+   Bouton principal de l'app
+   ========================= */
 .btn-app {
     background: linear-gradient(135deg, var(--blue), var(--green));
     color: white;
@@ -332,12 +338,12 @@ h1 {
     box-shadow: 0 16px 26px rgba(30,136,229,0.22);
 }
 
-/* ========== APPOINTMENTS CONTAINER ========== */
-#appointmentsContainer {
-    min-height: 300px;
-}
+/* =========================
+   Liste des rendez-vous
+   ========================= */
+#appointmentsContainer { min-height: 300px; }
 
-/* ========== APPOINTMENT CARDS (Bootstrap Override) ========== */
+/* Carte rendez-vous */
 .appointment-card {
     border: 1px solid var(--border);
     border-radius: 16px;
@@ -354,9 +360,7 @@ h1 {
     transform: translateY(-2px);
 }
 
-.appointment-card .card-body {
-    padding: 1.5rem;
-}
+.appointment-card .card-body { padding: 1.5rem; }
 
 .appointment-card .card-title {
     font-size: 1.25rem;
@@ -378,7 +382,7 @@ h1 {
     letter-spacing: 0.3px;
 }
 
-/* Doctor block */
+/* Bloc médecin */
 .doctor-block {
     display: flex;
     flex-direction: column;
@@ -408,49 +412,35 @@ h1 {
     color: var(--muted);
 }
 
-/* Badge colors aligned with theme */
-.bg-primary {
-    background: linear-gradient(135deg, var(--blue), var(--blue-dark)) !important;
-}
-.bg-success {
-    background: linear-gradient(135deg, var(--green), var(--green-dark)) !important;
-}
-.bg-danger {
-    background: linear-gradient(135deg, #ef4444, #b91c1c) !important;
-}
-.bg-secondary {
-    background: linear-gradient(135deg, #64748b, #475569) !important;
-}
-.bg-warning {
-    background: linear-gradient(135deg, #f59e0b, #fbbf24) !important;
-}
-.text-dark {
-    color: #0f172a !important;
-}
+/* Couleurs des badges */
+.bg-primary { background: linear-gradient(135deg, var(--blue), var(--blue-dark)) !important; }
+.bg-success { background: linear-gradient(135deg, var(--green), var(--green-dark)) !important; }
+.bg-danger  { background: linear-gradient(135deg, #ef4444, #b91c1c) !important; }
+.bg-secondary { background: linear-gradient(135deg, #64748b, #475569) !important; }
+.bg-warning { background: linear-gradient(135deg, #f59e0b, #fbbf24) !important; }
+.text-dark  { color: #0f172a !important; }
 
-/* Buttons */
-.btn-group {
-    gap: 0.5rem;
-}
+/* Groupe de boutons */
+.btn-group { gap: 0.5rem; }
 
+/* Bouton "modifier" */
 .btn-outline-warning {
     color: #d97706;
     border-color: #d97706;
     font-weight: 700;
 }
-
 .btn-outline-warning:hover {
     background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
     border-color: transparent;
     color: white;
 }
 
+/* Bouton "annuler" */
 .btn-outline-danger {
     color: #ef4444;
     border-color: #ef4444;
     font-weight: 700;
 }
-
 .btn-outline-danger:hover {
     background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
     border-color: transparent;
@@ -464,6 +454,7 @@ h1 {
     font-weight: 700;
 }
 
+/* État désactivé */
 .btn-disabled,
 .btn:disabled {
     opacity: 0.6;
@@ -471,7 +462,9 @@ h1 {
     pointer-events: none;
 }
 
-/* ========== LOADING & EMPTY STATES ========== */
+/* =========================
+   Chargement & état vide
+   ========================= */
 .loading-message {
     text-align: center;
     padding: 4rem 2rem;
@@ -507,7 +500,9 @@ h1 {
     margin-right: auto;
 }
 
-/* ========== MODAL STYLES ========== */
+/* =========================
+   Fenêtre modale
+   ========================= */
 .modal-content {
     border-radius: 16px;
     border: none;
@@ -521,20 +516,15 @@ h1 {
     border-radius: 16px 16px 0 0;
 }
 
-.modal-title {
-    font-weight: 900;
-    color: var(--text);
-}
-
-.modal-body {
-    padding: 1.5rem;
-}
+.modal-title { font-weight: 900; color: var(--text); }
+.modal-body  { padding: 1.5rem; }
 
 .modal-footer {
     border-top: 1px solid rgba(15,23,42,0.08);
     padding: 1.5rem;
 }
 
+/* Champs */
 .form-label {
     font-weight: 800;
     color: var(--text);
@@ -555,7 +545,9 @@ h1 {
     outline: none;
 }
 
-/* ========== TOAST STYLES ========== */
+/* =========================
+   Notifications (toast)
+   ========================= */
 .toast {
     border-radius: 12px;
     border: none;
@@ -569,7 +561,9 @@ h1 {
 .toast.bg-danger  { background: rgba(239, 68, 68, 0.95) !important; }
 .toast.bg-warning { background: rgba(245, 158, 11, 0.95) !important; }
 
-/* ========== RESPONSIVE DESIGN ========== */
+/* =========================
+   Responsive
+   ========================= */
 @media (max-width: 768px) {
     .header { padding: 1rem; }
     .logo { font-size: 1.25rem; }
@@ -591,9 +585,7 @@ h1 {
         width: 100%;
     }
 
-    .btn-group .btn {
-        width: 100%;
-    }
+    .btn-group .btn { width: 100%; }
 
     .appointment-card .d-flex {
         flex-direction: column;
@@ -607,7 +599,9 @@ h1 {
     .modal-dialog { margin: 0.5rem; }
 }
 
-/* ========== SCROLLBAR STYLING ========== */
+/* =========================
+   Barre de défilement
+   ========================= */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: #eef2ff; border-radius: 4px; }
 ::-webkit-scrollbar-thumb {

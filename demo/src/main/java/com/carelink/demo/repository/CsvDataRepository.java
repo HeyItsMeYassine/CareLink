@@ -11,8 +11,17 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Dépôt de données basé sur des fichiers CSV (chargés depuis le classpath).
+ * Cette classe centralise l'accès aux médecins, patients, rendez-vous, wilayas
+ * et spécialités.
+ *
+ * Elle est implémentée en Singleton afin de charger les fichiers une seule
+ * fois.
+ */
 public class CsvDataRepository {
 
+    /** Instance unique (thread-safe) du repository. */
     private static volatile CsvDataRepository instance;
 
     private final Map<String, Doctor> doctors = new HashMap<>();
@@ -21,16 +30,23 @@ public class CsvDataRepository {
     private final Map<String, Wilaya> wilayas = new HashMap<>();
     private final Map<String, Specialty> specialties = new HashMap<>();
 
+    /** Indique si les données ont déjà été chargées. */
     private boolean dataLoaded = false;
 
+    /**
+     * Constructeur privé : force l'utilisation du Singleton.
+     * Charge les données au premier accès.
+     */
     private CsvDataRepository() {
         if (!dataLoaded) {
             loadAllData();
             dataLoaded = true;
-            logDataStats();
         }
     }
 
+    /**
+     * Retourne l'instance unique du repository (double-check locking).
+     */
     public static CsvDataRepository getInstance() {
         if (instance == null) {
             synchronized (CsvDataRepository.class) {
@@ -42,6 +58,9 @@ public class CsvDataRepository {
         return instance;
     }
 
+    /**
+     * Charge l'ensemble des fichiers CSV nécessaires au fonctionnement.
+     */
     private void loadAllData() {
         loadSpecialties();
         loadWilayasAndCities();
@@ -50,15 +69,9 @@ public class CsvDataRepository {
         loadAppointments();
     }
 
-    private void logDataStats() {
-        System.out.println("CSV Data Repository Initialized");
-        System.out.println("Doctors: " + doctors.size());
-        System.out.println("Patients: " + patients.size());
-        System.out.println("Appointments: " + appointments.size());
-        System.out.println("Wilayas: " + wilayas.size());
-        System.out.println("Specialties: " + specialties.size());
-    }
-
+    /**
+     * Charge les spécialités depuis "data/specialties.csv".
+     */
     private void loadSpecialties() {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(
                 new ClassPathResource("data/specialties.csv").getInputStream(), StandardCharsets.UTF_8))) {
@@ -70,11 +83,16 @@ public class CsvDataRepository {
                     specialties.put(specialty.getId(), specialty);
                 }
             });
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        } catch (Exception ignored) {
+            // En cas d'erreur, les données correspondantes resteront vides.
         }
     }
 
+    /**
+     * Charge les wilayas et leurs villes depuis "data/cities.csv".
+     * Utilise le pattern Composite (Wilaya -> City).
+     */
     private void loadWilayasAndCities() {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(
                 new ClassPathResource("data/cities.csv").getInputStream(), StandardCharsets.UTF_8))) {
@@ -89,11 +107,15 @@ public class CsvDataRepository {
                     wilaya.addCity(new City(cityName, wilayaName));
                 }
             });
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        } catch (Exception ignored) {
+            // En cas d'erreur, les données correspondantes resteront vides.
         }
     }
 
+    /**
+     * Charge les médecins depuis "data/doctors.csv".
+     */
     private void loadDoctors() {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(
                 new ClassPathResource("data/doctors.csv").getInputStream(), StandardCharsets.UTF_8))) {
@@ -108,11 +130,15 @@ public class CsvDataRepository {
                     doctors.put(doctor.getId(), doctor);
                 }
             });
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        } catch (Exception ignored) {
+            // En cas d'erreur, les données correspondantes resteront vides.
         }
     }
 
+    /**
+     * Charge les patients depuis "data/patients.csv".
+     */
     private void loadPatients() {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(
                 new ClassPathResource("data/patients.csv").getInputStream(), StandardCharsets.UTF_8))) {
@@ -127,11 +153,17 @@ public class CsvDataRepository {
                     patients.put(patient.getId(), patient);
                 }
             });
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        } catch (Exception ignored) {
+            // En cas d'erreur, les données correspondantes resteront vides.
         }
     }
 
+    /**
+     * Charge les rendez-vous depuis "data/appointments.csv" et les rattache aux
+     * patients.
+     * Le champ dateTime est parsé au format "yyyy-MM-dd'T'HH:mm".
+     */
     private void loadAppointments() {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(
                 new ClassPathResource("data/appointments.csv").getInputStream(), StandardCharsets.UTF_8))) {
@@ -144,6 +176,8 @@ public class CsvDataRepository {
                     try {
                         String raw = p[4].trim().toUpperCase();
                         Appointment.Status status;
+
+                        // Harmonisation d'un ancien état si présent dans les CSV
                         if ("SCHEDULED".equals(raw)) {
                             status = Appointment.Status.CONFIRMED;
                         } else {
@@ -163,15 +197,18 @@ public class CsvDataRepository {
                         if (patient != null) {
                             patient.addAppointment(appointment);
                         }
-                    } catch (Exception ex) {
-                        System.err.println("Error parsing appointment line: " + line);
+                    } catch (Exception ignored) {
+                        // Ligne invalide : rendez-vous ignoré.
                     }
                 }
             });
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        } catch (Exception ignored) {
+            // En cas d'erreur, les données correspondantes resteront vides.
         }
     }
+
+    // -------------------- Accès aux données --------------------
 
     public List<Doctor> getAllDoctors() {
         return new ArrayList<>(doctors.values());
@@ -212,6 +249,8 @@ public class CsvDataRepository {
     public Appointment getAppointmentById(String id) {
         return appointments.get(id);
     }
+
+    // -------------------- Recherches --------------------
 
     public List<Doctor> findDoctorsByWilayaAndCity(String wilaya, String city) {
         return doctors.values().stream()
@@ -278,6 +317,9 @@ public class CsvDataRepository {
                 .collect(Collectors.toList());
     }
 
+    // -------------------- Création / mise à jour des rendez-vous
+    // --------------------
+
     public Appointment createAppointment(Appointment appointment) {
         String newId = "APP" + (appointments.size() + 1);
         appointment.setId(newId);
@@ -287,6 +329,7 @@ public class CsvDataRepository {
         if (patient != null) {
             patient.addAppointment(appointment);
         }
+
         return appointment;
     }
 
@@ -356,15 +399,23 @@ public class CsvDataRepository {
         return true;
     }
 
+    // -------------------- Authentification --------------------
+
     public boolean validateDoctorCredentials(String email, String password) {
         Doctor doctor = getDoctorByEmail(email);
-        return doctor != null && doctor.getPasswordHash() != null && doctor.getPasswordHash().equals(password);
+        return doctor != null
+                && doctor.getPasswordHash() != null
+                && doctor.getPasswordHash().equals(password);
     }
 
     public boolean validatePatientCredentials(String email, String password) {
         Patient patient = getPatientByEmail(email);
-        return patient != null && patient.getPasswordHash() != null && patient.getPasswordHash().equals(password);
+        return patient != null
+                && patient.getPasswordHash() != null
+                && patient.getPasswordHash().equals(password);
     }
+
+    // -------------------- Disponibilités --------------------
 
     public boolean isDoctorAvailable(String doctorId, LocalDateTime dateTime) {
         Doctor doctor = getDoctorById(doctorId);

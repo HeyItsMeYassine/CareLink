@@ -3,27 +3,37 @@ package com.carelink.demo.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Modèle représentant un patient.
+ * Il contient ses informations personnelles, médicales
+ * et implémente le pattern Observer pour recevoir des notifications.
+ */
 public class Patient implements Observer {
+
     private String id;
     private String firstName;
     private String lastName;
     private String wilaya;
     private String city;
     private String email;
-    private String passwordHash; // Stored hashed
+    private String passwordHash;
     private String phone;
-    private String sexe; // M or F
+    private String sexe;
 
-    // Medical information (simplified)
+    /** Informations médicales simplifiées. */
     private String bloodType;
     private String allergies;
 
-    // Appointments
+    /** Liste des rendez-vous du patient. */
     private List<Appointment> appointments = new ArrayList<>();
 
+    /** Constructeur par défaut. */
     public Patient() {
     }
 
+    /**
+     * Constructeur principal.
+     */
     public Patient(String id, String firstName, String lastName, String wilaya, String city,
             String email, String passwordHash, String phone, String sexe) {
         this.id = id;
@@ -37,29 +47,39 @@ public class Patient implements Observer {
         this.sexe = sexe;
     }
 
-    // Observer pattern implementation
+    // -------------------- Observer --------------------
+
+    /**
+     * Reçoit une notification lors d'un événement lié au médecin
+     * ou à un rendez-vous.
+     */
     @Override
     public void update(String message) {
         System.out.println("Notification for " + getFullName() + ": " + message);
-        // In real app, this would trigger email/SMS
     }
 
-    // Appointment management
+    // -------------------- Gestion des rendez-vous --------------------
+
+    /** Ajoute un rendez-vous à la liste du patient. */
     public void addAppointment(Appointment appointment) {
         appointments.add(appointment);
     }
 
+    /** Supprime un rendez-vous de la liste du patient. */
     public void removeAppointment(Appointment appointment) {
         appointments.remove(appointment);
     }
 
+    /**
+     * Retourne la liste des rendez-vous à venir.
+     * (Logique simplifiée dans ce projet.)
+     */
     public List<Appointment> getUpcomingAppointments() {
-        List<Appointment> upcoming = new ArrayList<>();
-        // Logic to filter upcoming appointments
-        return upcoming;
+        return new ArrayList<>();
     }
 
-    // Getters and Setters
+    // -------------------- Getters & Setters --------------------
+
     public String getId() {
         return id;
     }
@@ -156,13 +176,17 @@ public class Patient implements Observer {
         this.appointments = appointments;
     }
 
-    // Helper methods
+    // -------------------- Helpers --------------------
+
+    /** Retourne le nom complet du patient. */
     public String getFullName() {
         return firstName + " " + lastName;
     }
 
+    /** Description lisible du patient. */
     @Override
     public String toString() {
-        return "Patient: " + firstName + " " + lastName + " - " + city + ", " + wilaya;
+        return "Patient: " + firstName + " " + lastName +
+                " - " + city + ", " + wilaya;
     }
 }

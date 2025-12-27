@@ -1,18 +1,24 @@
-// doctordashboard.js - Pending flow (Confirm + Reschedule + Cancel + Complete)
+// static/assets/js/doctordashboard.js
+// Gestion du tableau de bord médecin : stats, liste des rendez-vous et actions (confirmer, reprogrammer, annuler, terminer).
 
 document.addEventListener('DOMContentLoaded', function () {
 
+    /* =======================
+       Initialisation
+       ======================= */
     loadDashboardData();
     loadAppointments();
     loadCurrentDoctorHeader();
 
-    // Auto-refresh
+    // Actualisation automatique (toutes les 30s)
     setInterval(() => {
         loadDashboardData();
         loadAppointments();
     }, 30000);
 
-    // Profile dropdown
+    /* =======================
+       Menu profil
+       ======================= */
     const profileBtn = document.getElementById('profileBtn');
     const profileDropdown = document.getElementById('profileDropdown');
 
@@ -30,7 +36,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Navigation
+    /* =======================
+       Navigation
+       ======================= */
     document.getElementById('editProfileBtn')?.addEventListener('click', () => {
         window.location.href = '/doctor/profile';
     });
@@ -39,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.href = '/doctor/dashboard';
     });
 
-    // Logout
+    // Déconnexion
     document.getElementById('logoutBtn')?.addEventListener('click', async () => {
         try {
             await fetch('/api/session/logout', { method: 'GET' });
@@ -48,7 +56,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Delegated click handling
+    /* =======================
+       Gestion des clics (déléguée)
+       ======================= */
     document.addEventListener('click', function (e) {
         const confirmBtn = e.target.closest('.confirm-btn');
         const cancelBtn = e.target.closest('.cancel-btn');
@@ -73,13 +83,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Reschedule form submit
+    // Soumission du formulaire de reprogrammation
     document.getElementById('reschedule-form')?.addEventListener('submit', async function (e) {
         e.preventDefault();
         await rescheduleAppointment();
     });
 
-    // ========= HEADER / STATS =========
+    /* =======================
+       En-tête (infos médecin)
+       ======================= */
     async function loadCurrentDoctorHeader() {
         try {
             const res = await fetch('/api/doctor/profile');
@@ -88,16 +100,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (doctor?.firstName || doctor?.lastName) {
                 document.getElementById('welcomeMessage').textContent =
-                    `Welcome, Dr. ${doctor.firstName || ''} ${doctor.lastName || ''}`.trim();
+                    `Bienvenue, Dr. ${doctor.firstName || ''} ${doctor.lastName || ''}`.trim();
             }
             if (doctor?.speciality) {
-                document.getElementById('specialtyText').textContent = `Specialty: ${doctor.speciality}`;
+                document.getElementById('specialtyText').textContent = `Spécialité : ${doctor.speciality}`;
             }
         } catch (e) {
-            console.error('Error loading doctor profile header:', e);
+            console.error('Erreur lors du chargement du profil médecin :', e);
         }
     }
 
+    /* =======================
+       Statistiques
+       ======================= */
     async function loadDashboardData() {
         try {
             const response = await fetch('/api/doctor/stats');
@@ -108,13 +123,16 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('pendingAppointments').textContent = data.pendingAppointments || 0;
             document.getElementById('totalPatients').textContent = data.totalPatients || 0;
         } catch (error) {
-            console.error('Error loading dashboard stats:', error);
+            console.error('Erreur lors du chargement des statistiques :', error);
         }
     }
 
-    // ========= APPOINTMENTS =========
+    /* =======================
+       Rendez-vous
+       ======================= */
     const patientInfoCache = new Map();
 
+    // Récupère (et met en cache) les informations d’un patient
     async function getPatientInfo(patientId) {
         if (!patientId) return { name: 'Patient', phone: '' };
         if (patientInfoCache.has(patientId)) return patientInfoCache.get(patientId);
@@ -144,25 +162,27 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Charge la liste des rendez-vous
     async function loadAppointments() {
         try {
             const response = await fetch('/api/doctor/appointments');
-            if (!response.ok) throw new Error('Failed to fetch doctor appointments');
+            if (!response.ok) throw new Error('Impossible de récupérer les rendez-vous');
 
             const appointments = await response.json();
             await displayAppointments(appointments);
         } catch (error) {
-            console.error('Error loading appointments:', error);
+            console.error('Erreur lors du chargement des rendez-vous :', error);
             document.getElementById('appointmentsContainer').innerHTML =
-                '<div class="loading-message">Error loading appointments</div>';
+                '<div class="loading-message">Erreur lors du chargement des rendez-vous</div>';
         }
     }
 
+    // Affiche les rendez-vous sous forme de cartes
     async function displayAppointments(appointments) {
         const container = document.getElementById('appointmentsContainer');
 
         if (!appointments || appointments.length === 0) {
-            container.innerHTML = '<div class="loading-message">No appointments found.</div>';
+            container.innerHTML = '<div class="loading-message">Aucun rendez-vous trouvé.</div>';
             return;
         }
 
@@ -173,43 +193,42 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const status = (apt.status || 'UNKNOWN').toUpperCase();
             const patientInfo = await getPatientInfo(apt.patientId);
-
             const badge = statusBadge(status);
 
+            // Règles d’affichage des boutons selon le statut
             const canCancel = status !== 'CANCELLED' && status !== 'COMPLETED';
             const canConfirm = status === 'PENDING' || status === 'RESCHEDULED';
             const canReschedule = status === 'PENDING';
-
-            // ✅ NEW: only after accepted
             const canComplete = status === 'CONFIRMED' || status === 'RESCHEDULED' || status === 'SCHEDULED';
 
             const actionsHtml = (canConfirm || canReschedule || canComplete || canCancel) ? `
                 <div class="btn-group">
                     ${canConfirm ? `
                         <button class="btn btn-success btn-sm confirm-btn" data-id="${apt.id}">
-                            Confirm
+                            Confirmer
                         </button>` : ``}
                     ${canReschedule ? `
                         <button class="btn btn-warning btn-sm reschedule-btn" data-id="${apt.id}">
-                            Reschedule
+                            Reprogrammer
                         </button>` : ``}
                     ${canComplete ? `
                         <button class="btn btn-secondary btn-sm complete-btn" data-id="${apt.id}">
-                            Complete
+                            Terminer
                         </button>` : ``}
                     ${canCancel ? `
                         <button class="btn btn-danger btn-sm cancel-btn" data-id="${apt.id}">
-                            Cancel
+                            Annuler
                         </button>` : ``}
                 </div>
             ` : '';
 
+            // Message d’aide selon le statut
             const hint = status === 'PENDING'
-                ? `<div class="mt-2 text-muted small">This is a new request — please confirm, reschedule, or cancel.</div>`
+                ? `<div class="mt-2 text-muted small">Nouvelle demande : confirmer, reprogrammer ou annuler.</div>`
                 : status === 'RESCHEDULED'
-                    ? `<div class="mt-2 text-muted small">Rescheduled — you may confirm it now or mark it completed after visit.</div>`
+                    ? `<div class="mt-2 text-muted small">Reprogrammé : vous pouvez confirmer ou terminer après la visite.</div>`
                     : status === 'CONFIRMED'
-                        ? `<div class="mt-2 text-muted small">Confirmed — after the visit, mark it as completed.</div>`
+                        ? `<div class="mt-2 text-muted small">Confirmé : après la visite, marquez comme terminé.</div>`
                         : '';
 
             return `
@@ -222,8 +241,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                     ${patientInfo.phone ? `<div class="patient-phone">${escapeHtml(patientInfo.phone)}</div>` : ``}
                                 </div>
 
-                                <div class="mb-1 mt-2"><strong>Date:</strong> ${escapeHtml(dateStr)}</div>
-                                <div class="mb-1"><strong>Time:</strong> ${escapeHtml(timeStr)}</div>
+                                <div class="mb-1 mt-2"><strong>Date :</strong> ${escapeHtml(dateStr)}</div>
+                                <div class="mb-1"><strong>Heure :</strong> ${escapeHtml(timeStr)}</div>
                                 <div class="mb-2">
                                     <span class="badge ${badge.className}">${escapeHtml(badge.label)}</span>
                                 </div>
@@ -239,12 +258,14 @@ document.addEventListener('DOMContentLoaded', function () {
         container.innerHTML = cards.join('');
     }
 
+    // Convertit une date ISO en Date JS (retourne null si invalide)
     function parseDateTime(dateTimeStr) {
         if (!dateTimeStr) return null;
         const dt = new Date(dateTimeStr);
         return isNaN(dt.getTime()) ? null : dt;
     }
 
+    // Associe un badge (couleur + texte) au statut
     function statusBadge(status) {
         switch (status) {
             case 'PENDING': return { className: 'bg-warning text-dark', label: 'PENDING' };
@@ -257,10 +278,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // ========= ACTIONS =========
+    /* =======================
+       Actions (API)
+       ======================= */
     async function confirmAppointment(appointmentId) {
         if (!appointmentId) return;
-        if (!confirm('Confirm this appointment?')) return;
+        if (!confirm('Confirmer ce rendez-vous ?')) return;
 
         try {
             const response = await fetch(`/api/appointments/${encodeURIComponent(appointmentId)}/confirm`, {
@@ -270,21 +293,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const result = await response.json();
             if (result.success) {
-                showToast('Appointment confirmed', 'success');
+                showToast('Rendez-vous confirmé', 'success');
                 loadAppointments();
                 loadDashboardData();
             } else {
-                showToast(result.message || 'Failed to confirm appointment', 'danger');
+                showToast(result.message || 'Impossible de confirmer le rendez-vous', 'danger');
             }
         } catch (error) {
-            console.error('Error confirming appointment:', error);
-            showToast('Error confirming appointment', 'danger');
+            console.error('Erreur confirmation rendez-vous :', error);
+            showToast('Erreur lors de la confirmation', 'danger');
         }
     }
 
     async function completeAppointment(appointmentId) {
         if (!appointmentId) return;
-        if (!confirm('Mark this appointment as completed?')) return;
+        if (!confirm('Marquer ce rendez-vous comme terminé ?')) return;
 
         try {
             const response = await fetch(`/api/appointments/${encodeURIComponent(appointmentId)}/complete`, {
@@ -294,21 +317,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const result = await response.json();
             if (result.success) {
-                showToast('Appointment marked as completed', 'success');
+                showToast('Rendez-vous terminé', 'success');
                 loadAppointments();
                 loadDashboardData();
             } else {
-                showToast(result.message || 'Failed to complete appointment', 'danger');
+                showToast(result.message || 'Impossible de terminer le rendez-vous', 'danger');
             }
         } catch (error) {
-            console.error('Error completing appointment:', error);
-            showToast('Error completing appointment', 'danger');
+            console.error('Erreur fin rendez-vous :', error);
+            showToast('Erreur lors de la validation', 'danger');
         }
     }
 
     async function cancelAppointment(appointmentId) {
         if (!appointmentId) return;
-        if (!confirm('Are you sure you want to cancel this appointment?')) return;
+        if (!confirm('Voulez-vous vraiment annuler ce rendez-vous ?')) return;
 
         try {
             const response = await fetch(`/api/appointments/${encodeURIComponent(appointmentId)}/cancel`, {
@@ -318,18 +341,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const result = await response.json();
             if (result.success) {
-                showToast('Appointment cancelled', 'success');
+                showToast('Rendez-vous annulé', 'success');
                 loadAppointments();
                 loadDashboardData();
             } else {
-                showToast(result.message || 'Failed to cancel appointment', 'danger');
+                showToast(result.message || 'Impossible d’annuler le rendez-vous', 'danger');
             }
         } catch (error) {
-            console.error('Error cancelling appointment:', error);
-            showToast('Error cancelling appointment', 'danger');
+            console.error('Erreur annulation rendez-vous :', error);
+            showToast('Erreur lors de l’annulation', 'danger');
         }
     }
 
+    // Ouvre le modal Bootstrap avec une date/heure par défaut
     function openRescheduleModal(appointmentId) {
         document.getElementById('reschedule-appointment-id').value = appointmentId;
 
@@ -353,7 +377,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const newTime = document.getElementById('new-appointment-time').value;
 
         if (!newDate || !newTime) {
-            showToast('Please select both date and time', 'warning');
+            showToast('Veuillez choisir la date et l’heure', 'warning');
             return;
         }
 
@@ -366,20 +390,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const result = await response.json();
             if (result.success) {
-                showToast('Appointment rescheduled', 'success');
+                showToast('Rendez-vous reprogrammé', 'success');
                 bootstrap.Modal.getInstance(document.getElementById('rescheduleModal'))?.hide();
                 loadAppointments();
                 loadDashboardData();
             } else {
-                showToast(result.message || 'Failed to reschedule appointment', 'danger');
+                showToast(result.message || 'Impossible de reprogrammer le rendez-vous', 'danger');
             }
         } catch (error) {
-            console.error('Error rescheduling appointment:', error);
-            showToast('Error rescheduling appointment', 'danger');
+            console.error('Erreur reprogrammation rendez-vous :', error);
+            showToast('Erreur lors de la reprogrammation', 'danger');
         }
     }
 
-    // ========= TOAST + HELPERS =========
+    /* =======================
+       Toast + utilitaires
+       ======================= */
     function showToast(message, type = 'info') {
         let container = document.getElementById('toast-container');
         if (!container) {
@@ -407,6 +433,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Échappement HTML pour éviter l’injection lors de l’affichage
     function escapeHtml(str) {
         if (str === null || str === undefined) return '';
         return String(str)

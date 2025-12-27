@@ -18,20 +18,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Contrôleur central : pages (views) et API REST.
+ * Il orchestre les actions côté médecin, côté patient, et la gestion des
+ * rendez-vous.
+ */
 @Controller
 public class MediSyncController {
 
     @Autowired
     private CareLinkService careLinkService;
 
-    // ========== PAGE RENDERING ENDPOINTS ==========
+    // -------------------- VUES (PAGES) --------------------
 
+    /** Affiche le tableau de bord médecin. */
     @GetMapping("/doctor/dashboard")
     public String doctorDashboard(Model model, HttpSession session) {
         model.addAttribute("wilayas", careLinkService.getAllWilayas());
         return "doctordashboard";
     }
 
+    /** Affiche le profil médecin (avec listes de wilayas et spécialités). */
     @GetMapping("/doctor/profile")
     public String doctorProfile(Model model, HttpSession session) {
         model.addAttribute("wilayas", careLinkService.getAllWilayas());
@@ -39,44 +46,54 @@ public class MediSyncController {
         return "doctorprofile";
     }
 
+    /** Affiche le tableau de bord patient. */
     @GetMapping("/patient/dashboard")
     public String patientDashboard(Model model, HttpSession session) {
         model.addAttribute("wilayas", careLinkService.getAllWilayas());
         return "patientdashboard";
     }
 
+    /** Affiche le profil patient. */
     @GetMapping("/patient/profile")
     public String patientProfile(Model model, HttpSession session) {
         model.addAttribute("wilayas", careLinkService.getAllWilayas());
         return "patientprofile";
     }
 
+    /** Affiche la page de prise de rendez-vous. */
     @GetMapping("/appointment")
     public String appointmentPage(Model model, HttpSession session) {
         model.addAttribute("wilayas", careLinkService.getAllWilayas());
         return "appointment";
     }
 
-    // ========== API ENDPOINTS ==========
+    // -------------------- DONNÉES (API) --------------------
 
+    /** Retourne la liste des wilayas. */
     @GetMapping("/api/wilayas")
     @ResponseBody
     public List<String> getAllWilayas() {
         return careLinkService.getAllWilayas();
     }
 
+    /** Retourne les villes d’une wilaya donnée. */
     @GetMapping("/api/cities")
     @ResponseBody
     public List<String> getCitiesByWilaya(@RequestParam String wilaya) {
         return careLinkService.getCitiesByWilaya(wilaya);
     }
 
+    /** Retourne la liste des spécialités médicales. */
     @GetMapping("/api/specialties")
     @ResponseBody
     public List<String> getAllSpecialties() {
         return careLinkService.getAllSpecialties();
     }
 
+    /**
+     * Recherche des médecins avec des filtres optionnels
+     * (wilaya, ville, spécialité).
+     */
     @GetMapping("/api/doctors")
     @ResponseBody
     public List<Doctor> getDoctors(
@@ -87,8 +104,10 @@ public class MediSyncController {
         return careLinkService.searchDoctors(wilaya, city, specialty);
     }
 
-    // ✅ NEW (Strategy):
-    // /api/doctors/search-strategy?type=specialty&criteria=Cardiology
+    /**
+     * Recherche de médecins via une stratégie (pattern Strategy),
+     * selon un type et un critère.
+     */
     @GetMapping("/api/doctors/search-strategy")
     @ResponseBody
     public ResponseEntity<?> searchDoctorsByStrategy(
@@ -104,6 +123,7 @@ public class MediSyncController {
         }
     }
 
+    /** Retourne un médecin par son identifiant. */
     @GetMapping("/api/doctor/{id}")
     @ResponseBody
     public ResponseEntity<Doctor> getDoctor(@PathVariable String id) {
@@ -113,6 +133,10 @@ public class MediSyncController {
         return ResponseEntity.notFound().build();
     }
 
+    /**
+     * Retourne le médecin connecté (stocké en session).
+     * Accepte doctorId ou userId selon le flux de connexion.
+     */
     @GetMapping("/api/doctor/profile")
     @ResponseBody
     public ResponseEntity<Doctor> getCurrentDoctor(HttpSession session) {
@@ -129,6 +153,10 @@ public class MediSyncController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
+    /**
+     * Met à jour uniquement les champs autorisés du profil médecin
+     * (mise à jour “restreinte”).
+     */
     @PostMapping("/api/doctor/profile/update-restricted")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> updateRestrictedDoctorProfile(
@@ -154,6 +182,7 @@ public class MediSyncController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
 
+            // Champs simples (nettoyage avec trim)
             if (updates.containsKey("email")) {
                 String email = (String) updates.get("email");
                 if (email != null)
@@ -178,11 +207,13 @@ public class MediSyncController {
                     doctor.setCity(city.trim());
             }
 
+            // Lien de localisation (peut être vide)
             if (updates.containsKey("locationLink")) {
                 String link = (String) updates.get("locationLink");
                 doctor.setLocationLink(link != null ? link.trim() : "");
             }
 
+            // Mot de passe : seulement si non vide
             if (updates.containsKey("password")) {
                 String password = (String) updates.get("password");
                 if (password != null && !password.trim().isEmpty()) {
@@ -203,8 +234,9 @@ public class MediSyncController {
         }
     }
 
-    // ========= DASHBOARDS =========
+    // -------------------- TABLEAU DE BORD MÉDECIN --------------------
 
+    /** Statistiques du tableau de bord médecin. */
     @GetMapping("/api/doctor/stats")
     @ResponseBody
     public Map<String, Integer> getDoctorStats(HttpSession session) {
@@ -214,6 +246,7 @@ public class MediSyncController {
         return careLinkService.getDoctorDashboardStats(doctorId);
     }
 
+    /** Liste des rendez-vous du médecin connecté. */
     @GetMapping("/api/doctor/appointments")
     @ResponseBody
     public List<Appointment> getDoctorAppointments(HttpSession session) {
@@ -223,8 +256,9 @@ public class MediSyncController {
         return careLinkService.getDoctorAppointments(doctorId);
     }
 
-    // ========= PATIENT =========
+    // -------------------- PATIENT --------------------
 
+    /** Retourne un patient par identifiant. */
     @GetMapping("/api/patient/{id}")
     @ResponseBody
     public ResponseEntity<Patient> getPatient(@PathVariable String id) {
@@ -234,6 +268,10 @@ public class MediSyncController {
         return ResponseEntity.notFound().build();
     }
 
+    /**
+     * Retourne le patient connecté (stocké en session).
+     * Accepte patientId ou userId selon le flux de connexion.
+     */
     @GetMapping("/api/patient/profile")
     @ResponseBody
     public ResponseEntity<Patient> getCurrentPatient(HttpSession session) {
@@ -251,6 +289,10 @@ public class MediSyncController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
+    /**
+     * Met à jour uniquement les champs autorisés du profil patient
+     * (mise à jour “restreinte”).
+     */
     @PostMapping("/api/patient/profile/update-restricted")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> updateRestrictedPatientProfile(
@@ -275,6 +317,7 @@ public class MediSyncController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
 
+            // Mise à jour simple des champs (trim pour éviter les espaces)
             if (updates.containsKey("email"))
                 patient.setEmail(((String) updates.get("email")).trim());
             if (updates.containsKey("wilaya"))
@@ -297,6 +340,7 @@ public class MediSyncController {
         }
     }
 
+    /** Statistiques du tableau de bord patient. */
     @GetMapping("/api/patient/stats")
     @ResponseBody
     public Map<String, Integer> getPatientStats(HttpSession session) {
@@ -306,6 +350,10 @@ public class MediSyncController {
         return careLinkService.getPatientDashboardStats(patientId);
     }
 
+    /**
+     * Retourne les rendez-vous du patient avec des informations enrichies
+     * sur le médecin (nom, spécialité, téléphone).
+     */
     @GetMapping("/api/patient/appointments")
     @ResponseBody
     public List<AppointmentView> getPatientAppointments(HttpSession session) {
@@ -339,8 +387,12 @@ public class MediSyncController {
         }).collect(Collectors.toList());
     }
 
-    // ========= APPOINTMENTS =========
+    // -------------------- RENDEZ-VOUS --------------------
 
+    /**
+     * Crée un rendez-vous pour le patient connecté.
+     * Par défaut, le rendez-vous est en attente de validation du médecin.
+     */
     @PostMapping("/api/appointments/book")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> bookAppointment(
@@ -379,6 +431,10 @@ public class MediSyncController {
         }
     }
 
+    /**
+     * Annule un rendez-vous (patient ou médecin).
+     * Des règles empêchent l'annulation tant que la demande est "PENDING".
+     */
     @PostMapping("/api/appointments/{id}/cancel")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> cancelAppointment(@PathVariable String id, HttpSession session) {
@@ -420,6 +476,10 @@ public class MediSyncController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Reprogramme un rendez-vous (patient ou médecin).
+     * Si l'état est "PENDING", le patient doit attendre la réponse du médecin.
+     */
     @PostMapping("/api/appointments/{id}/reschedule")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> rescheduleAppointment(
@@ -469,6 +529,7 @@ public class MediSyncController {
         return ResponseEntity.ok(response);
     }
 
+    /** Confirme un rendez-vous (action réservée au médecin propriétaire). */
     @PostMapping("/api/appointments/{id}/confirm")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> confirmAppointment(@PathVariable String id, HttpSession session) {
@@ -503,6 +564,10 @@ public class MediSyncController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Marque un rendez-vous comme terminé (action réservée au médecin
+     * propriétaire).
+     */
     @PostMapping("/api/appointments/{id}/complete")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> completeAppointment(@PathVariable String id, HttpSession session) {
@@ -537,6 +602,7 @@ public class MediSyncController {
         return ResponseEntity.ok(response);
     }
 
+    /** Vérifie si un créneau (date/heure) est disponible pour un médecin. */
     @GetMapping("/api/appointments/available-slots")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> checkAvailableSlots(
@@ -549,6 +615,10 @@ public class MediSyncController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Vue simplifiée côté patient : rendez-vous + infos du médecin.
+     * (Classe interne utilisée pour sérialiser proprement la réponse JSON.)
+     */
     static class AppointmentView {
         public String id;
         public String doctorId;

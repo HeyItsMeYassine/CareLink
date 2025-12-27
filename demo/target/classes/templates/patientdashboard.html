@@ -1,34 +1,35 @@
 <!DOCTYPE html>
+<!-- Dashboard patient : statistiques + liste des rendez-vous + actions (nouveau / annuler / reprogrammer) via patientdashboard.js. -->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CareLink - Patient Dashboard</title>
 
+    <!-- Styles spécifiques du dashboard patient -->
     <link rel="stylesheet" th:href="@{/assets/css/patientdashboard.css}">
 
-    <!-- Bootstrap CSS for modals -->
+    <!-- Bootstrap (modals) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Bootstrap Icons (NEW) -->
+    <!-- Icônes Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
-        /* Toast container */
+        /* Conteneur des notifications toast */
         #toast-container {
             position: fixed;
             top: 20px;
             right: 20px;
             z-index: 1050;
         }
-        .toast {
-            min-width: 300px;
-        }
+        .toast { min-width: 300px; }
     </style>
 </head>
 
 <body>
 <header class="header">
+    <!-- Logo CareLink -->
     <div class="logo">
         <div class="logo-icon" aria-hidden="true">
             <i class="bi bi-heart-pulse-fill"></i>
@@ -37,22 +38,26 @@
     </div>
 
     <div class="header-controls">
-        <!-- Home icon (UPDATED: Bootstrap icon instead of SVG) -->
+        <!-- Bouton Home -->
         <button class="icon-btn" id="homeBtn" type="button" title="Home" aria-label="Home">
             <i class="bi bi-house-door"></i>
         </button>
 
+        <!-- Menu profil -->
         <div class="profile-container">
-            <button class="profile-btn" id="profileBtn" type="button" aria-haspopup="true" aria-expanded="false" title="Profile">
+            <button class="profile-btn" id="profileBtn" type="button"
+                    aria-haspopup="true" aria-expanded="false" title="Profile">
                 <i class="bi bi-person-gear profile-icon"></i>
             </button>
 
             <div class="profile-dropdown" id="profileDropdown">
+                <!-- Accès page profil -->
                 <button class="dropdown-item" id="editProfileBtn" type="button">
                     <i class="bi bi-pencil-square dropdown-icon"></i>
                     Edit Profile
                 </button>
 
+                <!-- Déconnexion -->
                 <button class="dropdown-item logout" id="logoutBtn" type="button">
                     <i class="bi bi-box-arrow-right dropdown-icon"></i>
                     Logout
@@ -63,9 +68,11 @@
 </header>
 
 <div class="container">
+    <!-- Message de bienvenue (rempli via JS) -->
     <h1 id="welcomeMessage">Welcome!</h1>
     <p class="subtitle">Manage your medical appointments and communicate with your healthcare providers</p>
 
+    <!-- Statistiques -->
     <div class="stats-grid">
         <div class="stat-card">
             <div class="stat-info">
@@ -88,25 +95,27 @@
         </div>
     </div>
 
+    <!-- Section rendez-vous -->
     <div class="section-header">
         <h2>My Appointments</h2>
 
-        <!-- UPDATED: avoid Bootstrap .btn-primary conflict -->
+        <!-- Bouton : nouveau rendez-vous -->
         <button class="btn-app" id="newAppointmentBtn" type="button">
             <i class="bi bi-plus-circle"></i>
             New appointment
         </button>
     </div>
 
+    <!-- Liste des rendez-vous (générée par JS) -->
     <div id="appointmentsContainer">
         <div class="loading-message">Loading appointments...</div>
     </div>
 </div>
 
-<!-- Toast Container for notifications -->
+<!-- Conteneur toast (notifications) -->
 <div id="toast-container"></div>
 
-<!-- Reschedule Appointment Modal -->
+<!-- Modal : reprogrammation -->
 <div class="modal fade" id="rescheduleModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -115,8 +124,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
+            <!-- Formulaire géré par patientdashboard.js -->
             <form id="reschedule-form">
                 <div class="modal-body">
+                    <!-- ID du rendez-vous sélectionné -->
                     <input type="hidden" id="reschedule-appointment-id">
 
                     <div class="mb-3">
@@ -129,6 +140,7 @@
                         <input type="time" class="form-control" id="new-appointment-time" required>
                     </div>
 
+                    <!-- Info : bloc affiché si l’action est interdite -->
                     <div class="alert alert-info mb-0" style="display:none;" id="pendingInfoBox">
                         This appointment is pending doctor response, so you cannot reschedule or cancel yet.
                     </div>
@@ -143,9 +155,8 @@
     </div>
 </div>
 
-<!-- Bootstrap JS -->
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Your JS -->
 <script th:src="@{/assets/js/patientdashboard.js}"></script>
 </body>
 </html>

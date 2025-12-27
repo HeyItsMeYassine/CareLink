@@ -1,4 +1,6 @@
-/* ========== RESET & BASE STYLES ========== */
+/* =========================
+   Reset & variables
+   ========================= */
 * {
     margin: 0;
     padding: 0;
@@ -31,7 +33,9 @@ body {
     color: var(--text);
 }
 
-/* ========== HEADER (matches dashboard) ========== */
+/* =========================
+   En-tête (même style que dashboard)
+   ========================= */
 .header {
     background: rgba(255,255,255,0.88);
     backdrop-filter: blur(10px);
@@ -80,7 +84,7 @@ body {
     gap: 0.75rem;
 }
 
-/* icon button like dashboard */
+/* Bouton icône réutilisable */
 .icon-btn{
     width: 44px;
     height: 44px;
@@ -102,7 +106,7 @@ body {
     transform: translateY(-1px);
 }
 
-/* (Old .back-btn kept for safety in case HTML still uses it) */
+/* Bouton retour (si utilisé dans l’HTML) */
 .back-btn {
     background: linear-gradient(135deg, var(--blue), var(--green));
     color: white;
@@ -124,7 +128,9 @@ body {
     box-shadow: 0 16px 26px rgba(30,136,229,0.22);
 }
 
-/* ========== CONTAINER ========== */
+/* =========================
+   Conteneur
+   ========================= */
 .container {
     max-width: 1100px;
     margin: 0 auto;
@@ -137,7 +143,9 @@ body {
     to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ========== PROFILE CARD ========== */
+/* =========================
+   Carte profil
+   ========================= */
 .profile-card {
     background: var(--card);
     padding: 2.25rem;
@@ -146,7 +154,9 @@ body {
     border: 1px solid var(--border);
 }
 
-/* ========== PROFILE HEADER ========== */
+/* =========================
+   En-tête profil (avatar + nom)
+   ========================= */
 .profile-header {
     text-align: center;
     margin-bottom: 2.2rem;
@@ -196,7 +206,9 @@ body {
     font-size: 1.05rem;
 }
 
-/* ========== PROFILE NOTICE ========== */
+/* =========================
+   Bandeau d’information
+   ========================= */
 .profile-notice {
     background: linear-gradient(135deg, rgba(30,136,229,0.90), rgba(34,197,94,0.90));
     color: white;
@@ -210,12 +222,16 @@ body {
     max-width: 520px;
 }
 
-/* ========== MESSAGE CONTAINER ========== */
+/* =========================
+   Zone messages
+   ========================= */
 .message-container {
     margin-bottom: 1.5rem;
 }
 
-/* ========== FORM SECTIONS ========== */
+/* =========================
+   Sections du formulaire
+   ========================= */
 .form-section {
     margin-bottom: 2.2rem;
     padding-bottom: 2.2rem;
@@ -239,6 +255,7 @@ body {
     padding-left: 12px;
 }
 
+/* Petite barre colorée à gauche du titre */
 .form-section h2::before {
     content: '';
     position: absolute;
@@ -249,7 +266,7 @@ body {
     background: linear-gradient(180deg, var(--blue), var(--green));
 }
 
-/* ========== INFO BADGE ========== */
+/* Badge informatif (ex: “readonly”) */
 .info-badge {
     background-color: rgba(30,136,229,0.12);
     color: var(--blue-dark);
@@ -261,17 +278,22 @@ body {
     vertical-align: middle;
 }
 
-/* ========== FORM GRID ========== */
+/* =========================
+   Grille du formulaire
+   ========================= */
 .form-grid {
     display: grid;
     gap: 1.25rem;
 }
 
+/* Deux colonnes adaptatives */
 .form-grid.two-col {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
-/* ========== FORM GROUPS ========== */
+/* =========================
+   Champs
+   ========================= */
 .form-group {
     display: flex;
     flex-direction: column;
@@ -284,19 +306,20 @@ body {
     font-size: 0.95rem;
 }
 
+/* Label “lecture seule” */
 .read-only-label {
     color: rgba(148, 163, 184, 0.95) !important;
     font-weight: 700 !important;
 }
 
-/* ========== FORM HELP TEXT ========== */
+/* Texte d’aide sous le champ */
 .form-help-text {
     font-size: 0.85rem;
     color: rgba(71, 85, 105, 0.75);
     margin-top: 0.25rem;
 }
 
-/* ========== INPUT STYLES ========== */
+/* Inputs & selects */
 .form-group input,
 .form-group select {
     padding: 0.85rem;
@@ -315,6 +338,7 @@ body {
     box-shadow: 0 0 0 3px rgba(30,136,229,0.12);
 }
 
+/* État invalide */
 .form-group input.is-invalid,
 .form-group select.is-invalid {
     border-color: #ef4444;
@@ -325,7 +349,7 @@ body {
     box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
 }
 
-/* ========== READ-ONLY FIELDS ========== */
+/* Champs non éditables */
 .read-only-field {
     background-color: #f8fafc !important;
     color: #64748b !important;
@@ -342,7 +366,9 @@ body {
     border-color: rgba(15,23,42,0.10);
 }
 
-/* ========== PASSWORD INPUT ========== */
+/* =========================
+   Champ mot de passe (bouton œil)
+   ========================= */
 .password-input {
     position: relative;
 }
@@ -370,7 +396,7 @@ body {
     border-color: rgba(30,136,229,0.22);
 }
 
-/* ========== INVALID FEEDBACK ========== */
+/* Message d’erreur */
 .invalid-feedback {
     color: #ef4444;
     font-size: 0.875rem;
@@ -379,7 +405,9 @@ body {
     min-height: 1.25rem;
 }
 
-/* ========== FORM ACTIONS ========== */
+/* =========================
+   Actions du formulaire
+   ========================= */
 .form-actions {
     display: flex;
     gap: 1rem;
@@ -389,7 +417,7 @@ body {
     justify-content: flex-end;
 }
 
-/* Keep bootstrap buttons but theme them */
+/* Styles des boutons Bootstrap adaptés au thème */
 .btn.btn-primary {
     background: linear-gradient(135deg, var(--blue), var(--green));
     border: none;
@@ -424,42 +452,29 @@ body {
     background: rgba(30,136,229,0.06);
 }
 
-/* ========== LOADING STATE (optional) ========== */
+/* État chargement */
 .loading {
     opacity: 0.6;
     pointer-events: none;
 }
 
-/* ========== HIDDEN INPUT ========== */
+/* Input caché */
 input[type="hidden"] {
     display: none;
 }
 
-/* ========== RESPONSIVE DESIGN ========== */
+/* =========================
+   Responsive
+   ========================= */
 @media (max-width: 768px) {
-    .header {
-        padding: 1rem;
-    }
+    .header { padding: 1rem; }
+    .container { padding: 1.25rem; }
+    .profile-card { padding: 1.5rem; }
 
-    .container {
-        padding: 1.25rem;
-    }
+    .form-grid.two-col { grid-template-columns: 1fr; }
 
-    .profile-card {
-        padding: 1.5rem;
-    }
-
-    .form-grid.two-col {
-        grid-template-columns: 1fr;
-    }
-
-    .form-actions {
-        flex-direction: column;
-    }
-
-    .form-actions .btn {
-        width: 100%;
-    }
+    .form-actions { flex-direction: column; }
+    .form-actions .btn { width: 100%; }
 
     .profile-avatar {
         width: 100px;
@@ -467,13 +482,8 @@ input[type="hidden"] {
         font-size: 2.5rem;
     }
 
-    .profile-header h1 {
-        font-size: 1.75rem;
-    }
-
-    .profile-header p {
-        font-size: 1rem;
-    }
+    .profile-header h1 { font-size: 1.75rem; }
+    .profile-header p { font-size: 1rem; }
 
     .profile-notice {
         max-width: 100%;
@@ -482,9 +492,7 @@ input[type="hidden"] {
 }
 
 @media (max-width: 480px) {
-    .profile-card {
-        padding: 1.25rem;
-    }
+    .profile-card { padding: 1.25rem; }
 
     .form-section {
         margin-bottom: 2rem;
@@ -492,7 +500,9 @@ input[type="hidden"] {
     }
 }
 
-/* ========== SCROLLBAR STYLING ========== */
+/* =========================
+   Barre de défilement
+   ========================= */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -512,7 +522,9 @@ input[type="hidden"] {
     background: linear-gradient(135deg, var(--blue-dark), var(--green-dark));
 }
 
-/* ========== SELECT ARROW STYLING ========== */
+/* =========================
+   Flèche des selects
+   ========================= */
 .form-group select {
     appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23475569'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
@@ -522,7 +534,9 @@ input[type="hidden"] {
     padding-right: 40px;
 }
 
-/* ========== DATE INPUT STYLING ========== */
+/* =========================
+   Input date (icône calendrier)
+   ========================= */
 input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
     opacity: 0.65;
@@ -533,7 +547,9 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     opacity: 1;
 }
 
-/* ========== TOAST CONTAINER ========== */
+/* =========================
+   Toasts
+   ========================= */
 .toast-container {
     position: fixed;
     top: 20px;
@@ -551,12 +567,16 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     max-width: 350px;
 }
 
-/* ========== GENDER DISPLAY FIELD ========== */
+/* =========================
+   Champ d’affichage du genre
+   ========================= */
 #genderDisplay {
     display: block !important;
 }
 
-/* ========== HOVER EFFECT FOR EDITABLE FIELDS ========== */
+/* =========================
+   Survol des champs éditables
+   ========================= */
 .form-control:not(.read-only-field):hover,
 .form-select:not(.read-only-field):hover {
     border-color: rgba(30,136,229,0.55);

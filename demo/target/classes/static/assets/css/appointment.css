@@ -1,4 +1,6 @@
-/* ========== RESET & BASE STYLES ========== */
+/* =========================
+   Base & variables
+   ========================= */
 * {
   margin: 0;
   padding: 0;
@@ -33,7 +35,9 @@ body {
   color: var(--text);
 }
 
-/* ========== HEADER (matches dashboard/profile) ========== */
+/* =========================
+   En-tête
+   ========================= */
 .header {
   background: rgba(255,255,255,0.88);
   backdrop-filter: blur(10px);
@@ -107,7 +111,7 @@ body {
   transform: translateY(-1px);
 }
 
-/* (Old .back-btn kept for safety if used somewhere) */
+/* Bouton “retour” (si utilisé par certaines pages) */
 .back-btn {
   padding: 0.55rem 1rem;
   background: transparent;
@@ -122,7 +126,9 @@ body {
   transform: translateY(-1px);
 }
 
-/* ========== MAIN ========== */
+/* =========================
+   Contenu principal
+   ========================= */
 main {
   max-width: 980px;
   margin: 0 auto;
@@ -155,7 +161,9 @@ main {
   line-height: 1.6;
 }
 
-/* ========== PROGRESS ========== */
+/* =========================
+   Barre de progression
+   ========================= */
 .progress-bar {
   margin-bottom: 1.75rem;
 }
@@ -218,7 +226,9 @@ main {
   color: var(--muted);
 }
 
-/* ========== CARD ========== */
+/* =========================
+   Carte (layout)
+   ========================= */
 .card {
   background: var(--card);
   border-radius: var(--radius);
@@ -249,7 +259,9 @@ main {
   padding: 1.75rem;
 }
 
-/* ========== FORM ========== */
+/* =========================
+   Formulaires
+   ========================= */
 .form-group {
   margin-bottom: 1.25rem;
 }
@@ -283,7 +295,9 @@ select:disabled {
   cursor: not-allowed;
 }
 
-/* ========== DOCTOR LIST ========== */
+/* =========================
+   Liste des médecins
+   ========================= */
 #doctors-list p {
   color: var(--muted);
 }
@@ -334,7 +348,7 @@ select:disabled {
   font-size: 0.9rem;
 }
 
-/* RADIO */
+/* Indicateur radio */
 .radio-circle {
   width: 26px;
   height: 26px;
@@ -363,7 +377,9 @@ select:disabled {
   display: block;
 }
 
-/* ========== CALENDAR ========== */
+/* =========================
+   Calendrier
+   ========================= */
 .calendar-container {
   display: flex;
   justify-content: center;
@@ -447,7 +463,9 @@ select:disabled {
   cursor: default;
 }
 
-/* ========== TIME SLOTS ========== */
+/* =========================
+   Créneaux horaires
+   ========================= */
 .time-slots {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -483,7 +501,9 @@ select:disabled {
   cursor: not-allowed;
 }
 
-/* ========== CONFIRMATION ========== */
+/* =========================
+   Récapitulatif (confirmation)
+   ========================= */
 .confirmation-box {
   background: #f8fafc;
   border-radius: 18px;
@@ -520,7 +540,9 @@ select:disabled {
   color: var(--blue-dark);
 }
 
-/* ========== BUTTONS ========== */
+/* =========================
+   Boutons
+   ========================= */
 .button-group {
   display: flex;
   justify-content: space-between;
@@ -566,7 +588,7 @@ button {
   transform: translateY(-1px);
 }
 
-/* UTIL */
+/* Utilitaires */
 .hidden { display: none; }
 
 .loading {
@@ -574,7 +596,9 @@ button {
   pointer-events: none;
 }
 
-/* ========== TOAST ========== */
+/* =========================
+   Notifications (toast)
+   ========================= */
 .toast-container{
   position: fixed;
   top: 18px;
@@ -618,7 +642,9 @@ button {
   font-weight: 950;
 }
 
-/* RESPONSIVE */
+/* =========================
+   Responsive
+   ========================= */
 @media (max-width: 768px) {
   .header-content { padding: 1rem; }
   main { padding: 1.5rem 1rem 3rem; }

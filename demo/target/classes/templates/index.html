@@ -1,19 +1,22 @@
 <!DOCTYPE html>
+<!-- Page d’accueil : présentation de CareLink + boutons Login/Register (navigation gérée par index.js). -->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CareLink - Book Appointments with Trusted Doctors</title>
 
+    <!-- Styles de la landing page -->
     <link rel="stylesheet" th:href="@{/assets/css/index.css}">
 
-    <!-- Bootstrap Icons (same as patientdashboard logo) -->
+    <!-- Icônes Bootstrap (logo + badges) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
 
-<!-- Header (free like patientdashboard) -->
+<!-- En-tête : logo + actions rapides -->
 <header class="header">
+    <!-- Logo : clic = retour accueil (géré aussi par index.js) -->
     <div class="logo" id="brandHome" role="button" aria-label="Go home">
         <div class="logo-icon" aria-hidden="true">
             <i class="bi bi-heart-pulse-fill"></i>
@@ -21,27 +24,34 @@
         <span>CareLink</span>
     </div>
 
+    <!-- Boutons de navigation -->
     <div class="header-actions">
-        <button class="btn-ghost" id="loginBtn" type="button" th:onclick="|window.location.href='@{/login}'|">
+        <button class="btn-ghost" id="loginBtn" type="button"
+                th:onclick="|window.location.href='@{/login}'|">
             Login
         </button>
 
-        <button class="btn-primary" id="registerBtn" type="button" th:onclick="|window.location.href='@{/register}'|">
+        <button class="btn-primary" id="registerBtn" type="button"
+                th:onclick="|window.location.href='@{/register}'|">
             Register
         </button>
     </div>
 </header>
 
+<!-- Section principale (hero) -->
 <main class="hero">
     <div class="container">
         <div class="hero-grid">
-            <!-- Left -->
+
+            <!-- Colonne gauche : texte + actions -->
             <div class="hero-left">
                 <h1 class="hero-title">Book your doctor appointment in minutes.</h1>
+
                 <p class="hero-subtitle">
                     Find trusted doctors, choose a date, and confirm your visit — simple and fast.
                 </p>
 
+                <!-- Boutons principaux -->
                 <div class="hero-buttons">
                     <button class="btn-primary btn-large" id="heroLoginBtn" type="button"
                             th:onclick="|window.location.href='@{/login}'|">
@@ -54,6 +64,7 @@
                     </button>
                 </div>
 
+                <!-- Petits avantages (badges) -->
                 <div class="hero-badges">
                     <div class="badge-pill"><i class="bi bi-shield-check"></i> Verified doctors</div>
                     <div class="badge-pill"><i class="bi bi-calendar2-check"></i> Quick booking</div>
@@ -61,7 +72,7 @@
                 </div>
             </div>
 
-            <!-- Right -->
+            <!-- Colonne droite : image -->
             <div class="hero-right">
                 <div class="image-wrap">
                     <img th:src="@{/assets/images/welcome.png}"
@@ -69,10 +80,12 @@
                          class="hero-image">
                 </div>
             </div>
+
         </div>
     </div>
 </main>
 
+<!-- Script : navigation des boutons -->
 <script th:src="@{/assets/js/index.js}"></script>
 </body>
 </html>

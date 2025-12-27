@@ -9,7 +9,6 @@ import com.carelink.demo.repository.CsvDataRepository;
 import com.carelink.demo.service.CareLinkService;
 import org.springframework.stereotype.Service;
 
-import jakarta.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -17,42 +16,25 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Implémentation du service principal CareLink.
+ * Elle centralise la logique métier : utilisateurs, recherches, rendez-vous et
+ * statistiques.
+ */
 @Service
 public class CareLinkServiceImpl implements CareLinkService {
 
+    /** Repository CSV (source principale des données). */
     private final CsvDataRepository csvDataRepository = CsvDataRepository.getInstance();
 
+    /**
+     * Données créées à l'exécution (inscriptions depuis l'application).
+     * Elles complètent les données CSV.
+     */
     private final List<Patient> registeredPatients = new ArrayList<>();
     private final List<Doctor> registeredDoctors = new ArrayList<>();
 
-    @PostConstruct
-    public void initTestUsers() {
-        Patient testPatient = new Patient();
-        testPatient.setId("P999");
-        testPatient.setFirstName("Test");
-        testPatient.setLastName("Patient");
-        testPatient.setEmail("test@test.com");
-        testPatient.setPasswordHash("test123");
-        testPatient.setPhone("555-9999");
-        testPatient.setSexe("M");
-        testPatient.setWilaya("Alger");
-        testPatient.setCity("Alger Centre");
-        registeredPatients.add(testPatient);
-
-        Doctor testDoctor = new Doctor();
-        testDoctor.setId("D999");
-        testDoctor.setFirstName("Test");
-        testDoctor.setLastName("Doctor");
-        testDoctor.setEmail("doctor@test.com");
-        testDoctor.setPasswordHash("test123");
-        testDoctor.setPhone("555-8888");
-        testDoctor.setSexe("M");
-        testDoctor.setWilaya("Alger");
-        testDoctor.setCity("Alger Centre");
-        testDoctor.setSpeciality("General Medicine");
-        testDoctor.setLocationLink("https://maps.google.com");
-        registeredDoctors.add(testDoctor);
-    }
+    // -------------------- Médecins --------------------
 
     @Override
     public List<Doctor> getAllDoctors() {
@@ -77,6 +59,9 @@ public class CareLinkServiceImpl implements CareLinkService {
                 .orElse(csvDataRepository.getDoctorByEmail(email));
     }
 
+    /**
+     * Recherche simple par wilaya/ville (filtres optionnels).
+     */
     @Override
     public List<Doctor> findDoctorsByLocation(String wilaya, String city) {
         List<Doctor> allDoctors = getAllDoctors();
@@ -86,6 +71,9 @@ public class CareLinkServiceImpl implements CareLinkService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Recherche simple par spécialité.
+     */
     @Override
     public List<Doctor> findDoctorsBySpecialty(String specialty) {
         List<Doctor> allDoctors = getAllDoctors();
@@ -94,6 +82,9 @@ public class CareLinkServiceImpl implements CareLinkService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Recherche multi-critères (wilaya, ville, spécialité).
+     */
     @Override
     public List<Doctor> searchDoctors(String wilaya, String city, String specialty) {
         List<Doctor> filteredDoctors = getAllDoctors();
@@ -119,6 +110,8 @@ public class CareLinkServiceImpl implements CareLinkService {
         return filteredDoctors;
     }
 
+    // -------------------- Patients --------------------
+
     @Override
     public List<Patient> getAllPatients() {
         List<Patient> allPatients = new ArrayList<>(csvDataRepository.getAllPatients());
@@ -141,6 +134,8 @@ public class CareLinkServiceImpl implements CareLinkService {
                 .findFirst()
                 .orElse(csvDataRepository.getPatientByEmail(email));
     }
+
+    // -------------------- Géographie / Spécialités --------------------
 
     @Override
     public List<String> getAllWilayas() {
@@ -167,6 +162,8 @@ public class CareLinkServiceImpl implements CareLinkService {
         return csvDataRepository.isValidSpecialty(specialtyName);
     }
 
+    // -------------------- Rendez-vous --------------------
+
     @Override
     public List<Appointment> getAllAppointments() {
         return csvDataRepository.getAllAppointments();
@@ -187,6 +184,9 @@ public class CareLinkServiceImpl implements CareLinkService {
         return csvDataRepository.getAppointmentsByDoctorId(doctorId);
     }
 
+    /**
+     * Crée un rendez-vous au statut PENDING (en attente de validation du médecin).
+     */
     @Override
     public Appointment bookAppointment(String patientId, String doctorId, String date, String time) {
         if (patientId == null || doctorId == null || date == null || time == null) {
@@ -219,11 +219,15 @@ public class CareLinkServiceImpl implements CareLinkService {
         appointment.setStatus(Appointment.Status.PENDING);
         appointment.setNotes("Waiting for doctor response");
 
+        // Réserve le créneau dans la disponibilité du médecin
         doctor.bookSlot(time);
 
         return csvDataRepository.createAppointment(appointment);
     }
 
+    /**
+     * Reprogramme un rendez-vous si le nouveau créneau est disponible.
+     */
     @Override
     public boolean rescheduleAppointment(String appointmentId, String newDate, String newTime) {
         try {
@@ -262,6 +266,8 @@ public class CareLinkServiceImpl implements CareLinkService {
         return csvDataRepository.completeAppointment(appointmentId);
     }
 
+    // -------------------- Authentification / Inscription --------------------
+
     @Override
     public Doctor authenticateDoctor(String email, String password) {
         Optional<Doctor> registeredDoctor = registeredDoctors.stream()
@@ -288,6 +294,9 @@ public class CareLinkServiceImpl implements CareLinkService {
                 : null;
     }
 
+    /**
+     * Inscrit un médecin en vérifiant l'unicité de l'email.
+     */
     @Override
     public Doctor registerDoctor(Doctor doctor) {
         boolean emailExists = registeredDoctors.stream()
@@ -305,6 +314,9 @@ public class CareLinkServiceImpl implements CareLinkService {
         return doctor;
     }
 
+    /**
+     * Inscrit un patient en vérifiant l'unicité de l'email.
+     */
     @Override
     public Patient registerPatient(Patient patient) {
         boolean emailExists = registeredPatients.stream()
@@ -321,6 +333,8 @@ public class CareLinkServiceImpl implements CareLinkService {
         registeredPatients.add(patient);
         return patient;
     }
+
+    // -------------------- Mise à jour de profil --------------------
 
     @Override
     public boolean updateDoctorProfile(Doctor doctor) {
@@ -339,6 +353,7 @@ public class CareLinkServiceImpl implements CareLinkService {
             foundDoctor.setCity(doctor.getCity());
             foundDoctor.setSpeciality(doctor.getSpeciality());
             foundDoctor.setLocationLink(doctor.getLocationLink());
+
             if (doctor.getPasswordHash() != null && !doctor.getPasswordHash().isEmpty()) {
                 foundDoctor.setPasswordHash(doctor.getPasswordHash());
             }
@@ -368,6 +383,7 @@ public class CareLinkServiceImpl implements CareLinkService {
             foundPatient.setSexe(patient.getSexe());
             foundPatient.setWilaya(patient.getWilaya());
             foundPatient.setCity(patient.getCity());
+
             if (patient.getPasswordHash() != null && !patient.getPasswordHash().isEmpty()) {
                 foundPatient.setPasswordHash(patient.getPasswordHash());
             }
@@ -381,6 +397,8 @@ public class CareLinkServiceImpl implements CareLinkService {
         }
         return false;
     }
+
+    // -------------------- Disponibilités --------------------
 
     @Override
     public boolean validateDoctorCredentials(String email, String password) {
@@ -400,6 +418,9 @@ public class CareLinkServiceImpl implements CareLinkService {
         return csvDataRepository.validatePatientCredentials(email, password);
     }
 
+    /**
+     * Vérifie la disponibilité d'un créneau pour un médecin.
+     */
     @Override
     public boolean isTimeSlotAvailable(String doctorId, String date, String time) {
         try {
@@ -416,13 +437,15 @@ public class CareLinkServiceImpl implements CareLinkService {
         }
     }
 
+    // -------------------- Statistiques (dashboards) --------------------
+
     @Override
     public Map<String, Integer> getDoctorDashboardStats(String doctorId) {
         Map<String, Integer> stats = new HashMap<>();
-
         List<Appointment> allAppointments = getDoctorAppointments(doctorId);
 
         LocalDate today = LocalDate.now();
+
         long todayCount = allAppointments.stream()
                 .filter(a -> a.getDateTime().toLocalDate().equals(today))
                 .filter(a -> a.getStatus() == Appointment.Status.CONFIRMED
@@ -449,10 +472,10 @@ public class CareLinkServiceImpl implements CareLinkService {
     @Override
     public Map<String, Integer> getPatientDashboardStats(String patientId) {
         Map<String, Integer> stats = new HashMap<>();
-
         List<Appointment> allAppointments = getPatientAppointments(patientId);
 
         LocalDateTime now = LocalDateTime.now();
+
         long upcomingCount = allAppointments.stream()
                 .filter(a -> a.getDateTime().isAfter(now))
                 .filter(a -> a.getStatus() == Appointment.Status.PENDING
@@ -495,17 +518,23 @@ public class CareLinkServiceImpl implements CareLinkService {
                 .collect(Collectors.toList());
     }
 
+    // -------------------- Recherche (Strategy) --------------------
+
+    /**
+     * Recherche de médecins selon une stratégie (spécialité, localisation,
+     * disponibilité).
+     */
     @Override
     public List<Doctor> searchDoctorsByStrategy(String searchType, String criteria) {
         if (criteria == null || criteria.trim().isEmpty()) {
             return getAllDoctors();
         }
 
-        DoctorSearchContext context = new DoctorSearchContext();
-
         if (searchType == null) {
             throw new IllegalArgumentException("Search type is required");
         }
+
+        DoctorSearchContext context = new DoctorSearchContext();
 
         switch (searchType.toLowerCase()) {
             case "specialty":

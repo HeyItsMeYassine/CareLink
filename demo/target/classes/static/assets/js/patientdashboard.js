@@ -1,18 +1,19 @@
-// patientdashboard.js (UPDATED)
-// - Blue/White/Green UI friendly
-// - Uses Bootstrap Icons in generated buttons
-// - Fixes "Unknown Doctor" by fetching doctor info when API doesn't return it
-//   (uses /api/doctor/{id} and caches results)
+// static/assets/js/patientdashboard.js
+// Tableau de bord patient : vérification session, stats, liste des rendez-vous, actions (annuler / reprogrammer) et notifications.
 
 document.addEventListener('DOMContentLoaded', function () {
-    console.log('Patient dashboard loaded');
 
+    /* =======================
+       Démarrage
+       ======================= */
     checkUserSession();
 
     loadPatientDashboard();
     loadCurrentUser();
 
-    // Profile dropdown
+    /* =======================
+       Menu profil
+       ======================= */
     const profileBtn = document.getElementById('profileBtn');
     const profileDropdown = document.getElementById('profileDropdown');
 
@@ -28,7 +29,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Navigation
+    /* =======================
+       Navigation
+       ======================= */
     document.getElementById('editProfileBtn')?.addEventListener('click', () => {
         window.location.href = '/patient/profile';
     });
@@ -45,35 +48,41 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.href = '/appointment';
     });
 
-    // Handle appointment actions (Cancel / Reschedule)
+    /* =======================
+       Actions sur rendez-vous
+       ======================= */
     document.addEventListener('click', function (e) {
         const btn = e.target.closest('button');
         if (!btn) return;
 
+        // Annulation
         if (btn.classList.contains('cancel-btn')) {
             const appointmentId = btn.dataset.id;
             const status = (btn.dataset.status || '').toUpperCase();
 
+            // Règle : on ne peut pas annuler si c'est encore en attente
             if (status === 'PENDING') {
-                showToast('You must wait for the doctor response before cancelling.', 'warning');
+                showToast('Veuillez attendre la réponse du médecin avant d’annuler.', 'warning');
                 return;
             }
             cancelAppointment(appointmentId);
         }
 
+        // Reprogrammation
         if (btn.classList.contains('reschedule-btn')) {
             const appointmentId = btn.dataset.id;
             const status = (btn.dataset.status || '').toUpperCase();
 
+            // Règle : on ne peut pas reprogrammer si c'est encore en attente
             if (status === 'PENDING') {
-                showToast('You must wait for the doctor response before rescheduling.', 'warning');
+                showToast('Veuillez attendre la réponse du médecin avant de reprogrammer.', 'warning');
                 return;
             }
             openRescheduleModal(appointmentId);
         }
     });
 
-    // Handle reschedule form submission
+    // Soumission du formulaire de reprogrammation
     const rescheduleForm = document.getElementById('reschedule-form');
     if (rescheduleForm) {
         rescheduleForm.addEventListener('submit', async function (e) {
@@ -82,20 +91,23 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Auto-refresh appointments every 30 seconds
+    // Actualisation automatique (toutes les 30s)
     setInterval(() => {
         loadAppointments();
     }, 30000);
 });
 
-// ========== USER SESSION FUNCTIONS ==========
-
+/* =======================
+   Session utilisateur
+   ======================= */
 async function checkUserSession() {
     try {
         const response = await fetch('/api/session/current');
+
         if (response.ok) {
             const user = await response.json();
 
+            // Redirection si l’utilisateur n’est pas un patient
             if (user.userType !== 'patient') {
                 if (user.userType === 'doctor') {
                     window.location.href = '/doctor/dashboard';
@@ -107,7 +119,7 @@ async function checkUserSession() {
             window.location.href = '/login';
         }
     } catch (error) {
-        console.error('Error checking session:', error);
+        console.error('Erreur vérification session :', error);
         window.location.href = '/login';
     }
 }
@@ -115,14 +127,14 @@ async function checkUserSession() {
 async function loadCurrentUser() {
     try {
         const response = await fetch('/api/session/current');
-        if (response.ok) {
-            const user = await response.json();
-            if (user.userType === 'patient' && user.name) {
-                document.getElementById('welcomeMessage').textContent = `Welcome, ${user.name}!`;
-            }
+        if (!response.ok) return;
+
+        const user = await response.json();
+        if (user.userType === 'patient' && user.name) {
+            document.getElementById('welcomeMessage').textContent = `Bienvenue, ${user.name} !`;
         }
     } catch (error) {
-        console.error('Error loading current user:', error);
+        console.error('Erreur chargement utilisateur :', error);
     }
 }
 
@@ -131,13 +143,14 @@ async function logout() {
         await fetch('/api/session/logout');
         window.location.href = '/login';
     } catch (error) {
-        console.error('Logout error:', error);
+        console.error('Erreur logout :', error);
         window.location.href = '/login';
     }
 }
 
-// ========== DASHBOARD DATA FUNCTIONS ==========
-
+/* =======================
+   Données dashboard
+   ======================= */
 async function loadPatientDashboard() {
     await Promise.all([
         loadPatientStats(),
@@ -148,18 +161,18 @@ async function loadPatientDashboard() {
 async function loadPatientStats() {
     try {
         const response = await fetch('/api/patient/stats');
-        if (response.ok) {
-            const data = await response.json();
+        if (!response.ok) return;
 
-            if (data.upcomingAppointments !== undefined) {
-                document.getElementById('upcomingCount').textContent = data.upcomingAppointments;
-            }
-            if (data.completedAppointments !== undefined) {
-                document.getElementById('completedCount').textContent = data.completedAppointments;
-            }
+        const data = await response.json();
+
+        if (data.upcomingAppointments !== undefined) {
+            document.getElementById('upcomingCount').textContent = data.upcomingAppointments;
+        }
+        if (data.completedAppointments !== undefined) {
+            document.getElementById('completedCount').textContent = data.completedAppointments;
         }
     } catch (error) {
-        console.error('Error loading patient stats:', error);
+        console.error('Erreur chargement stats patient :', error);
     }
 }
 
@@ -169,13 +182,14 @@ async function loadAppointments() {
         const appointments = await response.json();
         await displayAppointments(appointments);
     } catch (error) {
-        console.error('Error loading appointments:', error);
-        showToast('Failed to load appointments', 'danger');
+        console.error('Erreur chargement rendez-vous :', error);
+        showToast('Impossible de charger les rendez-vous', 'danger');
     }
 }
 
-// ========== DOCTOR INFO LOOKUP (Fix Unknown Doctor) ==========
-
+/* =======================
+   Infos médecin (cache)
+   ======================= */
 const doctorCache = new Map(); // doctorId -> { name, speciality, phone }
 
 async function getDoctorInfoById(doctorId) {
@@ -188,11 +202,12 @@ async function getDoctorInfoById(doctorId) {
             doctorCache.set(doctorId, null);
             return null;
         }
-        const d = await res.json();
 
+        const d = await res.json();
         const name = `${d.firstName || ''} ${d.lastName || ''}`.trim();
+
         const info = {
-            name: name || 'Unknown Doctor',
+            name: name || 'Médecin inconnu',
             speciality: d.speciality || '',
             phone: d.phone || ''
         };
@@ -200,24 +215,25 @@ async function getDoctorInfoById(doctorId) {
         doctorCache.set(doctorId, info);
         return info;
     } catch (e) {
-        console.error('Error loading doctor info:', e);
+        console.error('Erreur chargement infos médecin :', e);
         doctorCache.set(doctorId, null);
         return null;
     }
 }
 
-// ========== UI RENDERING ==========
-
+/* =======================
+   Affichage (UI)
+   ======================= */
 async function displayAppointments(appointments) {
     const container = document.getElementById('appointmentsContainer');
 
     if (!appointments || appointments.length === 0) {
         container.innerHTML = `
             <div class="no-appointments">
-                <p>You don't have any appointments scheduled.</p>
+                <p>Vous n’avez aucun rendez-vous.</p>
                 <button class="btn-app" onclick="window.location.href='/appointment'">
                     <i class="bi bi-plus-circle"></i>
-                    Book Your First Appointment
+                    Prendre un premier rendez-vous
                 </button>
             </div>
         `;
@@ -227,13 +243,13 @@ async function displayAppointments(appointments) {
     const cards = await Promise.all(appointments.map(async (appointment) => {
         const status = (appointment.status || 'PENDING').toUpperCase();
 
-        // Parse date/time robustly
+        // Lecture robuste de la date/heure (selon les champs disponibles)
         const raw = appointment.dateTime || appointment.dateTimeString || appointment.date;
         const dt = raw ? new Date(raw) : null;
         const dateStr = dt ? dt.toLocaleDateString() : (appointment.date || '—');
         const timeStr = dt ? dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : (appointment.time || '—');
 
-        // Doctor info (support multiple possible keys)
+        // Infos médecin (selon différentes clés possibles)
         let doctorName =
             appointment.doctorName ||
             appointment.doctorFullName ||
@@ -253,9 +269,13 @@ async function displayAppointments(appointments) {
             appointment.phone ||
             '';
 
-        // If API didn't return doctor info, fetch it using doctorId
+        // Si l’API ne renvoie pas les infos, on les récupère via doctorId
         const doctorId = appointment.doctorId || appointment.doctorID;
-        if ((!doctorName || doctorName.toLowerCase().includes('unknown')) || (!doctorSpeciality && !doctorPhone)) {
+        const missingDoctorInfo =
+            (!doctorName || doctorName.toLowerCase().includes('unknown')) ||
+            (!doctorSpeciality && !doctorPhone);
+
+        if (missingDoctorInfo) {
             const info = await getDoctorInfoById(doctorId);
             if (info) {
                 doctorName = doctorName || info.name;
@@ -264,7 +284,7 @@ async function displayAppointments(appointments) {
             }
         }
 
-        doctorName = doctorName || 'Unknown Doctor';
+        doctorName = doctorName || 'Médecin inconnu';
 
         const statusClass = getStatusClass(status);
         const canPatientModify = canPatientModifyAppointment(status);
@@ -283,10 +303,10 @@ async function displayAppointments(appointments) {
 
                             <div class="appointment-details mt-2">
                                 <div class="mb-1">
-                                    <strong><i class="bi bi-calendar-event"></i> Date:</strong> ${escapeHtml(dateStr)}
+                                    <strong><i class="bi bi-calendar-event"></i> Date :</strong> ${escapeHtml(dateStr)}
                                 </div>
                                 <div class="mb-1">
-                                    <strong><i class="bi bi-clock"></i> Time:</strong> ${escapeHtml(timeStr)}
+                                    <strong><i class="bi bi-clock"></i> Heure :</strong> ${escapeHtml(timeStr)}
                                 </div>
 
                                 <div class="mt-2">
@@ -295,7 +315,7 @@ async function displayAppointments(appointments) {
 
                                 ${status === 'PENDING' ? `
                                     <div class="appointment-waiting">
-                                        <i class="bi bi-hourglass-split"></i> Waiting for doctor response...
+                                        <i class="bi bi-hourglass-split"></i> En attente de réponse du médecin...
                                     </div>
                                 ` : ''}
                             </div>
@@ -306,12 +326,12 @@ async function displayAppointments(appointments) {
                                 <button class="btn btn-outline-warning btn-sm reschedule-btn"
                                         data-id="${escapeHtml(appointment.id)}"
                                         data-status="${escapeHtml(status)}">
-                                    <i class="bi bi-arrow-repeat"></i> Reschedule
+                                    <i class="bi bi-arrow-repeat"></i> Reprogrammer
                                 </button>
                                 <button class="btn btn-outline-danger btn-sm cancel-btn"
                                         data-id="${escapeHtml(appointment.id)}"
                                         data-status="${escapeHtml(status)}">
-                                    <i class="bi bi-x-circle"></i> Cancel
+                                    <i class="bi bi-x-circle"></i> Annuler
                                 </button>
                             </div>
                         ` : ''}
@@ -324,10 +344,11 @@ async function displayAppointments(appointments) {
     container.innerHTML = cards.join('');
 }
 
-// ========== APPOINTMENT ACTIONS ==========
-
+/* =======================
+   Actions rendez-vous
+   ======================= */
 async function cancelAppointment(appointmentId) {
-    if (!confirm('Are you sure you want to cancel this appointment?')) return;
+    if (!confirm('Voulez-vous vraiment annuler ce rendez-vous ?')) return;
 
     try {
         const response = await fetch(`/api/appointments/${encodeURIComponent(appointmentId)}/cancel`, {
@@ -338,15 +359,15 @@ async function cancelAppointment(appointmentId) {
         const result = await response.json();
 
         if (result.success) {
-            showToast('Appointment cancelled successfully', 'success');
+            showToast('Rendez-vous annulé', 'success');
             loadPatientStats();
             loadAppointments();
         } else {
-            showToast(result.message || 'Failed to cancel appointment', 'danger');
+            showToast(result.message || 'Impossible d’annuler le rendez-vous', 'danger');
         }
     } catch (error) {
-        console.error('Error cancelling appointment:', error);
-        showToast('Error cancelling appointment', 'danger');
+        console.error('Erreur annulation :', error);
+        showToast('Erreur lors de l’annulation', 'danger');
     }
 }
 
@@ -376,7 +397,7 @@ async function rescheduleAppointment() {
     const newTime = document.getElementById('new-appointment-time').value;
 
     if (!newDate || !newTime) {
-        showToast('Please select both date and time', 'warning');
+        showToast('Veuillez choisir la date et l’heure', 'warning');
         return;
     }
 
@@ -390,7 +411,7 @@ async function rescheduleAppointment() {
         const result = await response.json();
 
         if (result.success) {
-            showToast('Appointment rescheduled successfully', 'success');
+            showToast('Rendez-vous reprogrammé', 'success');
 
             const modal = bootstrap.Modal.getInstance(document.getElementById('rescheduleModal'));
             if (modal) modal.hide();
@@ -398,16 +419,17 @@ async function rescheduleAppointment() {
             loadPatientStats();
             loadAppointments();
         } else {
-            showToast(result.message || 'Failed to reschedule appointment', 'danger');
+            showToast(result.message || 'Impossible de reprogrammer le rendez-vous', 'danger');
         }
     } catch (error) {
-        console.error('Error rescheduling appointment:', error);
-        showToast('Error rescheduling appointment', 'danger');
+        console.error('Erreur reprogrammation :', error);
+        showToast('Erreur lors de la reprogrammation', 'danger');
     }
 }
 
-// ========== RULES HELPERS ==========
-
+/* =======================
+   Règles / helpers
+   ======================= */
 function canPatientModifyAppointment(status) {
     const s = (status || '').toUpperCase();
 
@@ -424,25 +446,19 @@ function getStatusClass(status) {
     if (!status) return 'bg-secondary';
 
     switch (status.toUpperCase()) {
-        case 'PENDING':
-            return 'bg-warning text-dark';
-        case 'CONFIRMED':
-            return 'bg-success';
-        case 'SCHEDULED':
-            return 'bg-primary';
-        case 'RESCHEDULED':
-            return 'bg-info text-dark';
-        case 'COMPLETED':
-            return 'bg-success';
-        case 'CANCELLED':
-            return 'bg-danger';
-        default:
-            return 'bg-secondary';
+        case 'PENDING': return 'bg-warning text-dark';
+        case 'CONFIRMED': return 'bg-success';
+        case 'SCHEDULED': return 'bg-primary';
+        case 'RESCHEDULED': return 'bg-info text-dark';
+        case 'COMPLETED': return 'bg-success';
+        case 'CANCELLED': return 'bg-danger';
+        default: return 'bg-secondary';
     }
 }
 
-// ========== TOAST ==========
-
+/* =======================
+   Toast Bootstrap
+   ======================= */
 function showToast(message, type = 'info') {
     let container = document.getElementById('toast-container');
     if (!container) {
@@ -473,13 +489,15 @@ function showToast(message, type = 'info') {
     });
 }
 
-// Safe HTML output in cards
+/* =======================
+   Sécurité HTML
+   ======================= */
 function escapeHtml(str) {
     return String(str ?? '').replace(/[&<>"']/g, (m) => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
     }[m]));
 }
 
-// globals if needed
+/* Fonctions accessibles si besoin depuis le HTML */
 window.cancelAppointment = cancelAppointment;
 window.openRescheduleModal = openRescheduleModal;

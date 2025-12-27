@@ -228,7 +228,6 @@ body{
 }
 
 .form-group{ display:flex; flex-direction: column; gap: 6px; }
-
 .form-group.full{ grid-column: 1 / -1; }
 
 label{

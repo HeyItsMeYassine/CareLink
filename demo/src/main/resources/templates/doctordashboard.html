@@ -1,19 +1,22 @@
 <!DOCTYPE html>
+<!-- Dashboard médecin : statistiques + liste des rendez-vous (confirmer / reprogrammer / annuler / terminer). -->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CareLink - Doctor Dashboard</title>
 
+    <!-- Styles spécifiques du dashboard médecin -->
     <link rel="stylesheet" th:href="@{/assets/css/doctordashboard.css}" />
 
-    <!-- Bootstrap CSS for modals + toasts -->
+    <!-- Bootstrap (modals + toasts) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-    <!-- Bootstrap Icons (match patientdashboard) -->
+    <!-- Bootstrap Icons (icônes cohérentes avec le dashboard patient) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
 
     <style>
+        /* Position fixe des toasts */
         #toast-container {
             position: fixed;
             top: 20px;
@@ -26,7 +29,7 @@
 
 <body>
 <header class="header">
-    <!-- ✅ SAME LOGO AS PATIENT DASHBOARD -->
+    <!-- Logo : redirige vers la page d’accueil -->
     <div class="logo" role="button" aria-label="Go home" onclick="window.location.href='/'">
         <div class="logo-icon" aria-hidden="true">
             <i class="bi bi-heart-pulse-fill"></i>
@@ -35,23 +38,26 @@
     </div>
 
     <div class="header-controls">
-        <!-- ✅ Home icon button (same as patientdashboard) -->
+        <!-- Bouton Home -->
         <button class="icon-btn" id="homeBtn" type="button" title="Home" aria-label="Home">
             <i class="bi bi-house-door"></i>
         </button>
 
+        <!-- Menu profil -->
         <div class="profile-container">
-            <!-- ✅ Profile gear icon (same pattern) -->
-            <button class="profile-btn" id="profileBtn" type="button" aria-haspopup="true" aria-expanded="false" title="Profile">
+            <button class="profile-btn" id="profileBtn" type="button"
+                    aria-haspopup="true" aria-expanded="false" title="Profile">
                 <i class="bi bi-person-gear profile-icon"></i>
             </button>
 
             <div class="profile-dropdown" id="profileDropdown">
+                <!-- Accès au profil médecin -->
                 <button class="dropdown-item" id="editProfileBtn" type="button">
                     <i class="bi bi-pencil-square dropdown-icon"></i>
                     Edit Profile
                 </button>
 
+                <!-- Déconnexion -->
                 <button class="dropdown-item logout" id="logoutBtn" type="button">
                     <i class="bi bi-box-arrow-right dropdown-icon"></i>
                     Logout
@@ -62,9 +68,11 @@
 </header>
 
 <main class="container">
+    <!-- En-tête dynamique (rempli via JS) -->
     <h1 id="welcomeMessage">Welcome!</h1>
     <p class="subtitle" id="specialtyText">Manage your appointments and availability</p>
 
+    <!-- Statistiques -->
     <section class="stats-grid" aria-label="Statistics">
         <div class="stat-card">
             <div class="stat-info">
@@ -97,18 +105,21 @@
         </div>
     </section>
 
+    <!-- Liste des rendez-vous -->
     <div class="section-header">
         <h2>Appointment Requests</h2>
     </div>
 
+    <!-- Conteneur rempli dynamiquement via doctordashboard.js -->
     <div id="appointmentsContainer">
         <div class="loading-message">Loading appointments...</div>
     </div>
 </main>
 
+<!-- Zone des toasts (notifications Bootstrap) -->
 <div id="toast-container"></div>
 
-<!-- Reschedule Modal -->
+<!-- Modal : reprogrammation -->
 <div class="modal fade" id="rescheduleModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -117,8 +128,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
+            <!-- Formulaire géré par JS -->
             <form id="reschedule-form">
                 <div class="modal-body">
+                    <!-- ID du rendez-vous (injecté par JS) -->
                     <input type="hidden" id="reschedule-appointment-id" />
 
                     <div class="mb-3">
@@ -131,6 +144,7 @@
                         <input type="time" class="form-control" id="new-appointment-time" required />
                     </div>
 
+                    <!-- Petit rappel de la règle métier -->
                     <div class="small text-muted">
                         Tip: Rescheduling will update the appointment to <b>RESCHEDULED</b>.
                     </div>
@@ -145,8 +159,10 @@
     </div>
 </div>
 
-<!-- Bootstrap JS -->
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Script principal : chargement stats + gestion actions rendez-vous -->
 <script th:src="@{/assets/js/doctordashboard.js}"></script>
 </body>
 </html>

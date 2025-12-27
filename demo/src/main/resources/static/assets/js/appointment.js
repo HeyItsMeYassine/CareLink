@@ -1,17 +1,18 @@
-// static/assets/js/appointment.js (FIXED)
-// - Prevents crashes if any HTML id/class is missing after styling edits
-// - Shows clear console + toast error listing missing elements
-// - Keeps your original logic the same
+// static/assets/js/appointment.js
+// Gestion du processus de prise de rendez-vous (4 étapes) côté patient.
 
 document.addEventListener('DOMContentLoaded', () => {
+  /* =======================
+     Références DOM
+     ======================= */
   const el = {
-    // steps
+    // Étapes
     step1: document.getElementById('step-1'),
     step2: document.getElementById('step-2'),
     step3: document.getElementById('step-3'),
     step4: document.getElementById('step-4'),
 
-    // progress
+    // Barre de progression
     c1: document.getElementById('step-1-circle'),
     c2: document.getElementById('step-2-circle'),
     c3: document.getElementById('step-3-circle'),
@@ -20,38 +21,38 @@ document.addEventListener('DOMContentLoaded', () => {
     l2: document.getElementById('line-2'),
     l3: document.getElementById('line-3'),
 
-    // header text
+    // Texte de l’en-tête
     cardTitle: document.getElementById('card-title'),
     cardDesc: document.getElementById('card-description'),
 
-    // step 1
+    // Étape 1
     wilaya: document.getElementById('wilaya-select'),
     specialty: document.getElementById('specialty-select'),
     next1: document.getElementById('next-1'),
 
-    // step 2
+    // Étape 2
     cityFilter: document.getElementById('city-filter-select'),
     doctorsList: document.getElementById('doctors-list'),
     back2: document.getElementById('back-2'),
     next2: document.getElementById('next-2'),
 
-    // step 3
+    // Étape 3
     calendar: document.getElementById('calendar'),
     timeGroup: document.getElementById('time-group'),
     timeSlots: document.getElementById('time-slots'),
     back3: document.getElementById('back-3'),
     next3: document.getElementById('next-3'),
 
-    // step 4
+    // Étape 4
     confirmation: document.getElementById('confirmation-details'),
     back4: document.getElementById('back-4'),
     confirmBtn: document.getElementById('confirm-appointment'),
 
-    // toast container (optional)
+    // Conteneur des notifications (optionnel)
     toastContainer: document.getElementById('toast-container'),
   };
 
-  // ---- Guard: verify required elements exist ----
+  /* Vérification : si des éléments indispensables manquent, on stoppe pour éviter une erreur */
   const required = [
     ['step-1', el.step1],
     ['step-2', el.step2],
@@ -92,18 +93,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const missing = required.filter(([, node]) => !node).map(([id]) => id);
 
   if (missing.length) {
-    console.error('[appointment.js] Missing required elements (IDs):', missing);
-    // try toast, fallback alert
-    toast(`Appointment UI is missing elements: ${missing.join(', ')}`, 'error');
-    return; // stop to avoid crashing
+    console.error('[appointment.js] Éléments manquants (IDs) :', missing);
+    toast(`Interface incomplète : ${missing.join(', ')}`, 'error');
+    return;
   }
 
+  /* =======================
+     État de l’assistant
+     ======================= */
   const state = {
     currentStep: 1,
     wilaya: '',
     specialty: '',
-    cityFilter: '', // optional filter ("" => all cities)
-    doctor: null,   // selected doctor object
+    cityFilter: '', // filtre optionnel (vide = toutes les villes)
+    doctor: null,   // médecin sélectionné
     date: '',
     time: '',
     calendarMonth: new Date().getMonth(),
@@ -112,6 +115,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   init();
 
+  /* =======================
+     Initialisation
+     ======================= */
   async function init() {
     setStep(1);
     await loadWilayas();
@@ -120,59 +126,64 @@ document.addEventListener('DOMContentLoaded', () => {
     renderCalendar(state.calendarYear, state.calendarMonth);
   }
 
+  /* =======================
+     Événements utilisateur
+     ======================= */
   function wireEvents() {
-    // Step 1: Wilaya
+    // Étape 1 : sélection de la wilaya
     el.wilaya.addEventListener('change', async () => {
       state.wilaya = el.wilaya.value;
       state.cityFilter = '';
 
-      el.cityFilter.innerHTML = '<option value="">All cities</option>';
+      el.cityFilter.innerHTML = '<option value="">Toutes les villes</option>';
       el.cityFilter.disabled = true;
 
-      // reset doctor selection
+      // Réinitialiser la sélection du médecin
       state.doctor = null;
       el.next2.disabled = true;
 
-      // update "Next"
+      // Activer/désactiver "Suivant"
       el.next1.disabled = !(state.wilaya && state.specialty);
 
-      // load cities for step2 filter (optional)
+      // Charger les villes pour le filtre (optionnel)
       if (state.wilaya) {
         await loadCitiesForFilter(state.wilaya);
       }
     });
 
-    // Step 1: Specialty
+    // Étape 1 : sélection de la spécialité
     el.specialty.addEventListener('change', () => {
       state.specialty = el.specialty.value;
       el.next1.disabled = !(state.wilaya && state.specialty);
     });
 
-    // Go Step2
+    // Aller à l'étape 2
     el.next1.addEventListener('click', async () => {
       if (!(state.wilaya && state.specialty)) return;
       await loadDoctors();
       setStep(2);
     });
 
-    // Step 2: City filter (optional)
+    // Étape 2 : filtre par ville (optionnel)
     el.cityFilter.addEventListener('change', async () => {
       state.cityFilter = el.cityFilter.value || '';
       await loadDoctors();
     });
 
-    // Step 2 navigation
+    // Navigation étape 2
     el.back2.addEventListener('click', () => setStep(1));
 
     el.next2.addEventListener('click', () => {
       if (!state.doctor) return;
 
+      // Réinitialiser date/heure
       state.date = '';
       state.time = '';
       el.timeGroup.classList.add('hidden');
       el.timeSlots.innerHTML = '';
       el.next3.disabled = true;
 
+      // Revenir au mois courant
       const now = new Date();
       state.calendarMonth = now.getMonth();
       state.calendarYear = now.getFullYear();
@@ -181,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
       setStep(3);
     });
 
-    // Step 3
+    // Navigation étape 3
     el.back3.addEventListener('click', () => setStep(2));
     el.next3.addEventListener('click', () => {
       if (!state.date || !state.time) return;
@@ -189,41 +200,46 @@ document.addEventListener('DOMContentLoaded', () => {
       setStep(4);
     });
 
-    // Step 4
+    // Navigation étape 4
     el.back4.addEventListener('click', () => setStep(3));
     el.confirmBtn.addEventListener('click', confirmAppointment);
   }
 
-  // ---------- Step UI ----------
+  /* =======================
+     Gestion des étapes (UI)
+     ======================= */
   function setStep(step) {
     state.currentStep = step;
 
+    // Afficher uniquement l’étape courante
     [el.step1, el.step2, el.step3, el.step4].forEach(s => s.classList.add('hidden'));
     if (step === 1) el.step1.classList.remove('hidden');
     if (step === 2) el.step2.classList.remove('hidden');
     if (step === 3) el.step3.classList.remove('hidden');
     if (step === 4) el.step4.classList.remove('hidden');
 
+    // Mettre à jour le titre/description
     if (step === 1) {
-      el.cardTitle.textContent = 'Select Filters';
-      el.cardDesc.textContent = 'Choose wilaya and specialty to find doctors';
+      el.cardTitle.textContent = 'Sélection des filtres';
+      el.cardDesc.textContent = 'Choisissez la wilaya et la spécialité.';
     }
     if (step === 2) {
-      el.cardTitle.textContent = 'Choose a Doctor';
-      el.cardDesc.textContent = 'Optionally filter by city, then select a doctor';
+      el.cardTitle.textContent = 'Choix du médecin';
+      el.cardDesc.textContent = 'Filtrez par ville (optionnel) puis sélectionnez un médecin.';
     }
     if (step === 3) {
-      el.cardTitle.textContent = 'Pick Date & Time';
-      el.cardDesc.textContent = 'Choose the date then select an available time slot';
+      el.cardTitle.textContent = 'Date et heure';
+      el.cardDesc.textContent = 'Choisissez une date puis un créneau horaire.';
     }
     if (step === 4) {
-      el.cardTitle.textContent = 'Confirm Appointment';
-      el.cardDesc.textContent = 'Review details before confirming';
+      el.cardTitle.textContent = 'Confirmation';
+      el.cardDesc.textContent = 'Vérifiez les informations avant validation.';
     }
 
     setProgress(step);
   }
 
+  // Met à jour l’état visuel des cercles/lignes
   function setProgress(step) {
     const circles = [el.c1, el.c2, el.c3, el.c4];
     const lines = [el.l1, el.l2, el.l3];
@@ -241,14 +257,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ---------- Data Loading ----------
+  /* =======================
+     Chargement des données
+     ======================= */
   async function loadWilayas() {
     try {
       const r = await fetch('/api/wilayas');
       if (!r.ok) throw new Error(`Wilayas API failed: ${r.status}`);
       const wilayas = await r.json();
 
-      el.wilaya.innerHTML = '<option value="">Select a wilaya</option>';
+      el.wilaya.innerHTML = '<option value="">Sélectionner une wilaya</option>';
       (wilayas || []).forEach(w => {
         const o = document.createElement('option');
         o.value = w;
@@ -257,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     } catch (e) {
       console.error(e);
-      toast('Failed to load wilayas', 'error');
+      toast('Impossible de charger les wilayas', 'error');
     }
   }
 
@@ -267,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!r.ok) throw new Error(`Specialties API failed: ${r.status}`);
       const specialties = await r.json();
 
-      el.specialty.innerHTML = '<option value="">Select a specialty</option>';
+      el.specialty.innerHTML = '<option value="">Sélectionner une spécialité</option>';
       (specialties || []).forEach(s => {
         const o = document.createElement('option');
         o.value = s;
@@ -277,7 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
       el.specialty.disabled = false;
     } catch (e) {
       console.error(e);
-      toast('Failed to load specialties', 'error');
+      toast('Impossible de charger les spécialités', 'error');
     }
   }
 
@@ -287,7 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!r.ok) throw new Error(`Cities API failed: ${r.status}`);
       const cities = await r.json();
 
-      el.cityFilter.innerHTML = '<option value="">All cities</option>';
+      el.cityFilter.innerHTML = '<option value="">Toutes les villes</option>';
       (cities || []).forEach(c => {
         const o = document.createElement('option');
         o.value = c;
@@ -300,14 +318,14 @@ document.addEventListener('DOMContentLoaded', () => {
       state.cityFilter = '';
     } catch (e) {
       console.error(e);
-      // still allow flow without city filter
-      el.cityFilter.innerHTML = '<option value="">All cities</option>';
+      // On laisse le flux continuer même si le filtre villes échoue
+      el.cityFilter.innerHTML = '<option value="">Toutes les villes</option>';
       el.cityFilter.disabled = false;
     }
   }
 
   async function loadDoctors() {
-    el.doctorsList.innerHTML = '<p style="color:#6b7280">Loading doctors...</p>';
+    el.doctorsList.innerHTML = '<p style="color:#6b7280">Chargement des médecins...</p>';
     el.next2.disabled = true;
     state.doctor = null;
 
@@ -315,21 +333,24 @@ document.addEventListener('DOMContentLoaded', () => {
       const params = new URLSearchParams();
       if (state.wilaya) params.append('wilaya', state.wilaya);
       if (state.specialty) params.append('specialty', state.specialty);
-      if (state.cityFilter) params.append('city', state.cityFilter); // optional
+      if (state.cityFilter) params.append('city', state.cityFilter);
 
       const r = await fetch(`/api/doctors?${params.toString()}`);
       if (!r.ok) throw new Error(`Doctors API failed: ${r.status}`);
       let doctors = await r.json();
 
+      // Filtrer les comptes de test
       doctors = (doctors || []).filter(d => !isTestDoctor(d));
 
       if (!doctors || doctors.length === 0) {
-        el.doctorsList.innerHTML = '<p style="color:#6b7280">No doctors found for these filters.</p>';
+        el.doctorsList.innerHTML = '<p style="color:#6b7280">Aucun médecin trouvé.</p>';
         return;
       }
 
+      // Générer la liste des cartes
       el.doctorsList.innerHTML = doctors.map(d => doctorCardHTML(d)).join('');
 
+      // Gestion de la sélection d’un médecin
       document.querySelectorAll('.doctor-card').forEach(card => {
         card.addEventListener('click', () => {
           document.querySelectorAll('.doctor-card').forEach(c => c.classList.remove('selected'));
@@ -343,11 +364,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     } catch (e) {
       console.error(e);
-      el.doctorsList.innerHTML = '<p style="color:#ef4444">Error loading doctors.</p>';
-      toast('Failed to load doctors', 'error');
+      el.doctorsList.innerHTML = '<p style="color:#ef4444">Erreur lors du chargement.</p>';
+      toast('Impossible de charger les médecins', 'error');
     }
   }
 
+  // Génère le HTML d’une carte médecin
   function doctorCardHTML(doctor) {
     const speciality = doctor.speciality || doctor.specialty || '';
     const phone = doctor.phone || '';
@@ -377,6 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
+  // Détecte des données de test (à ne pas afficher)
   function isTestDoctor(d) {
     const first = String(d?.firstName || '').toLowerCase();
     const last = String(d?.lastName || '').toLowerCase();
@@ -394,7 +417,9 @@ document.addEventListener('DOMContentLoaded', () => {
     );
   }
 
-  // ---------- Calendar & Time ----------
+  /* =======================
+     Calendrier & créneaux
+     ======================= */
   function renderCalendar(year, month) {
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
@@ -404,9 +429,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const header = `
       <div class="calendar-header">
-        <button class="calendar-nav" id="cal-prev" aria-label="Previous month">‹</button>
+        <button class="calendar-nav" id="cal-prev" aria-label="Mois précédent">‹</button>
         <div>${escapeHTML(monthName)}</div>
-        <button class="calendar-nav" id="cal-next" aria-label="Next month">›</button>
+        <button class="calendar-nav" id="cal-next" aria-label="Mois suivant">›</button>
       </div>
     `;
 
@@ -415,6 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let daysHtml = '';
 
+    // Cases vides au début (alignement du calendrier)
     for (let i = 0; i < startWeekday; i++) {
       daysHtml += `<div class="calendar-day empty"></div>`;
     }
@@ -422,6 +448,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
+    // Jours du mois
     for (let day = 1; day <= lastDay.getDate(); day++) {
       const dayObj = new Date(year, month, day);
       dayObj.setHours(0, 0, 0, 0);
@@ -429,9 +456,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const iso = toISODate(dayObj);
       const isPast = dayObj < today;
 
-      // 0 Sun ... 5 Fri ... 6 Sat
+      // Bloquer vendredi + samedi
       const weekday = dayObj.getDay();
-      const isWeekendBlocked = (weekday === 5 || weekday === 6); // Friday + Saturday
+      const isWeekendBlocked = (weekday === 5 || weekday === 6);
 
       const isSelected = state.date === iso;
 
@@ -452,6 +479,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `;
 
+    // Navigation mois précédent
     const prevBtn = document.getElementById('cal-prev');
     const nextBtn = document.getElementById('cal-next');
 
@@ -459,19 +487,29 @@ document.addEventListener('DOMContentLoaded', () => {
       const now = new Date();
       const curFirst = new Date(state.calendarYear, state.calendarMonth, 1);
       const nowFirst = new Date(now.getFullYear(), now.getMonth(), 1);
+
+      // Empêche de revenir avant le mois courant
       if (curFirst <= nowFirst) return;
 
       state.calendarMonth -= 1;
-      if (state.calendarMonth < 0) { state.calendarMonth = 11; state.calendarYear -= 1; }
+      if (state.calendarMonth < 0) {
+        state.calendarMonth = 11;
+        state.calendarYear -= 1;
+      }
       renderCalendar(state.calendarYear, state.calendarMonth);
     });
 
+    // Navigation mois suivant
     nextBtn.addEventListener('click', () => {
       state.calendarMonth += 1;
-      if (state.calendarMonth > 11) { state.calendarMonth = 0; state.calendarYear += 1; }
+      if (state.calendarMonth > 11) {
+        state.calendarMonth = 0;
+        state.calendarYear += 1;
+      }
       renderCalendar(state.calendarYear, state.calendarMonth);
     });
 
+    // Sélection d’un jour
     el.calendar.querySelectorAll('.calendar-day').forEach(dayEl => {
       if (dayEl.classList.contains('disabled') || dayEl.classList.contains('empty')) return;
 
@@ -489,15 +527,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function renderTimeSlots(date) {
     el.timeGroup.classList.remove('hidden');
-    el.timeSlots.innerHTML = '<div style="color:#6b7280">Loading available times...</div>';
+    el.timeSlots.innerHTML = '<div style="color:#6b7280">Chargement des créneaux...</div>';
 
-    // Hourly slots from 08:00 to 15:00
-    const slots = [
-      '08:00','09:00','10:00','11:00',
-      '12:00','13:00','14:00','15:00'
-    ];
+    // Créneaux horaires (08:00 → 15:00)
+    const slots = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00'];
 
-    // All hours available (no API checks)
+    // Tous disponibles (pas de vérification API ici)
     const availability = {};
     slots.forEach(t => availability[t] = true);
 
@@ -507,6 +542,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return `<div class="${cls}" data-time="${t}">${t}</div>`;
     }).join('');
 
+    // Sélection d’un créneau
     el.timeSlots.querySelectorAll('.time-slot').forEach(slotEl => {
       if (slotEl.classList.contains('disabled')) return;
 
@@ -519,13 +555,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ---------- Confirmation + Submit ----------
+  /* =======================
+     Confirmation & envoi
+     ======================= */
   function renderConfirmation() {
     const d = state.doctor || {};
-    const cityDisplay = state.cityFilter ? state.cityFilter : 'All cities';
+    const cityDisplay = state.cityFilter ? state.cityFilter : 'Toutes les villes';
 
     el.confirmation.innerHTML = `
-      <h3>Appointment Details</h3>
+      <h3>Détails du rendez-vous</h3>
 
       <div class="confirmation-item">
         <div class="confirmation-label">Wilaya</div>
@@ -533,17 +571,17 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
 
       <div class="confirmation-item">
-        <div class="confirmation-label">Specialty</div>
+        <div class="confirmation-label">Spécialité</div>
         <div class="confirmation-value specialty-value">${escapeHTML(state.specialty)}</div>
       </div>
 
       <div class="confirmation-item">
-        <div class="confirmation-label">City Filter</div>
+        <div class="confirmation-label">Filtre ville</div>
         <div class="confirmation-value">${escapeHTML(cityDisplay)}</div>
       </div>
 
       <div class="confirmation-item">
-        <div class="confirmation-label">Doctor</div>
+        <div class="confirmation-label">Médecin</div>
         <div class="confirmation-value">Dr. ${escapeHTML(d.firstName || '')} ${escapeHTML(d.lastName || '')}</div>
       </div>
 
@@ -553,20 +591,21 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
 
       <div class="confirmation-item">
-        <div class="confirmation-label">Time</div>
+        <div class="confirmation-label">Heure</div>
         <div class="confirmation-value">${escapeHTML(state.time)}</div>
       </div>
     `;
   }
 
   async function confirmAppointment() {
+    // Vérification minimale avant envoi
     if (!state.doctor?.id || !state.date || !state.time) {
-      toast('Missing appointment details', 'error');
+      toast('Informations du rendez-vous incomplètes', 'error');
       return;
     }
 
     el.confirmBtn.disabled = true;
-    el.confirmBtn.textContent = 'Booking...';
+    el.confirmBtn.textContent = 'Validation...';
 
     try {
       const r = await fetch('/api/appointments/book', {
@@ -582,21 +621,23 @@ document.addEventListener('DOMContentLoaded', () => {
       const result = await r.json();
 
       if (r.ok && result.success) {
-        toast(result.message || 'Appointment created ✅', 'success');
+        toast(result.message || 'Rendez-vous créé ✅', 'success');
         setTimeout(() => window.location.href = '/patient/dashboard', 900);
       } else {
-        toast(result.message || 'Booking failed', 'error');
+        toast(result.message || 'Échec de la réservation', 'error');
       }
     } catch (e) {
       console.error(e);
-      toast('Network error while booking', 'error');
+      toast('Erreur réseau lors de la réservation', 'error');
     } finally {
       el.confirmBtn.disabled = false;
-      el.confirmBtn.textContent = 'Confirm Appointment';
+      el.confirmBtn.textContent = 'Confirmer le rendez-vous';
     }
   }
 
-  // ---------- Helpers ----------
+  /* =======================
+     Fonctions utilitaires
+     ======================= */
   function toISODate(dateObj) {
     const y = dateObj.getFullYear();
     const m = String(dateObj.getMonth() + 1).padStart(2, '0');
@@ -604,12 +645,14 @@ document.addEventListener('DOMContentLoaded', () => {
     return `${y}-${m}-${d}`;
   }
 
+  // Protection contre l’injection HTML lors de l’affichage des données
   function escapeHTML(str) {
     return String(str ?? '').replace(/[&<>"']/g, (m) => ({
       '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
     }[m]));
   }
 
+  // Crée le conteneur de toast s’il n’existe pas
   function ensureToastContainer() {
     let container = document.getElementById('toast-container');
     if (!container) {
@@ -621,6 +664,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return container;
   }
 
+  // Affiche une notification temporaire
   function toast(message, type = 'info') {
     const container = ensureToastContainer();
     if (!container) return alert(message);
@@ -629,7 +673,7 @@ document.addEventListener('DOMContentLoaded', () => {
     t.className = `toast ${type}`;
     t.innerHTML = `
       <div style="font-weight:800; flex:1;">${escapeHTML(message)}</div>
-      <button aria-label="Close">×</button>
+      <button aria-label="Fermer">×</button>
     `;
 
     t.querySelector('button').addEventListener('click', () => t.remove());

@@ -1,11 +1,17 @@
 // static/assets/js/register.js
+// Page d’inscription : bascule patient/médecin, chargement wilayas/villes/spécialités, validation des champs et envoi des formulaires.
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Initial data
+
+  /* =======================
+     Données initiales
+     ======================= */
   loadWilayas();
   loadSpecialties();
 
-  // Elements
+  /* =======================
+     Références DOM
+     ======================= */
   const tabs = Array.from(document.querySelectorAll('.tab'));
   const forms = Array.from(document.querySelectorAll('.form-section'));
 
@@ -18,20 +24,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const doctorSpinner = document.getElementById('doctor-spinner');
   const patientSpinner = document.getElementById('patient-spinner');
 
-  // Tab switching
+  /* =======================
+     Changement d’onglet
+     ======================= */
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       const type = tab.getAttribute('data-type'); // doctor | patient
       if (!type) return;
 
+      // Onglet actif
       tabs.forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
 
+      // Formulaire actif
       forms.forEach(f => f.classList.remove('active'));
       const activeForm = document.getElementById(`${type}-form`);
       if (activeForm) activeForm.classList.add('active');
 
-      // Illustrations
+      // Illustration active
       if (doctorIllustration && patientIllustration) {
         const isDoctor = type === 'doctor';
         doctorIllustration.style.display = isDoctor ? 'block' : 'none';
@@ -44,25 +54,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Wilaya -> City for both
+  /* =======================
+     Wilaya -> villes (2 formulaires)
+     ======================= */
   ['doctor', 'patient'].forEach(type => {
     const wilayaSelect = document.getElementById(`${type}-wilaya`);
     const citySelect = document.getElementById(`${type}-city`);
-
     if (!wilayaSelect || !citySelect) return;
 
     wilayaSelect.addEventListener('change', () => {
       const wilaya = wilayaSelect.value;
+
       if (!wilaya) {
         citySelect.disabled = true;
-        citySelect.innerHTML = '<option value="">Select a Wilaya first</option>';
+        citySelect.innerHTML = '<option value="">Sélectionnez d’abord une wilaya</option>';
         return;
       }
+
       loadCities(wilaya, type);
     });
   });
 
-  // Submit handlers
+  /* =======================
+     Envoi des formulaires
+     ======================= */
   doctorForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     await handleDoctorRegistration();
@@ -73,9 +88,9 @@ document.addEventListener('DOMContentLoaded', () => {
     await handlePatientRegistration();
   });
 
-  // ---------------------------
-  // Data loaders
-  // ---------------------------
+  /* =======================
+     Chargements API
+     ======================= */
   async function loadWilayas() {
     try {
       const response = await fetch('/api/wilayas');
@@ -86,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const citySelect = document.getElementById(`${type}-city`);
         if (!select) return;
 
-        select.innerHTML = '<option value="">Select Wilaya</option>';
+        select.innerHTML = '<option value="">Sélectionner une wilaya</option>';
         (wilayas || []).forEach(w => {
           const opt = document.createElement('option');
           opt.value = w;
@@ -94,14 +109,14 @@ document.addEventListener('DOMContentLoaded', () => {
           select.appendChild(opt);
         });
 
-        // Reset city select
+        // Réinitialiser la ville
         if (citySelect) {
           citySelect.disabled = true;
-          citySelect.innerHTML = '<option value="">Select a Wilaya first</option>';
+          citySelect.innerHTML = '<option value="">Sélectionnez d’abord une wilaya</option>';
         }
       });
     } catch (err) {
-      showMessage('Failed to load wilayas. Please refresh the page.', 'error');
+      showMessage('Impossible de charger les wilayas. Actualisez la page.', 'error');
     }
   }
 
@@ -113,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const select = document.getElementById('doctor-specialty');
       if (!select) return;
 
-      select.innerHTML = '<option value="">Select Specialty</option>';
+      select.innerHTML = '<option value="">Sélectionner une spécialité</option>';
       (specialties || []).forEach(s => {
         const opt = document.createElement('option');
         opt.value = s;
@@ -121,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         select.appendChild(opt);
       });
     } catch (err) {
-      showMessage('Failed to load specialties. Please refresh the page.', 'error');
+      showMessage('Impossible de charger les spécialités. Actualisez la page.', 'error');
     }
   }
 
@@ -131,13 +146,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       citySelect.disabled = true;
-      citySelect.innerHTML = '<option value="">Loading cities...</option>';
+      citySelect.innerHTML = '<option value="">Chargement des villes...</option>';
 
       const response = await fetch(`/api/cities?wilaya=${encodeURIComponent(wilaya)}`);
       const cities = await response.json();
 
       citySelect.disabled = false;
-      citySelect.innerHTML = '<option value="">Select City</option>';
+      citySelect.innerHTML = '<option value="">Sélectionner une ville</option>';
       (cities || []).forEach(c => {
         const opt = document.createElement('option');
         opt.value = c;
@@ -146,13 +161,13 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     } catch (err) {
       citySelect.disabled = false;
-      citySelect.innerHTML = '<option value="">Error loading cities</option>';
+      citySelect.innerHTML = '<option value="">Erreur de chargement</option>';
     }
   }
 
-  // ---------------------------
-  // Submit: Doctor
-  // ---------------------------
+  /* =======================
+     Inscription médecin
+     ======================= */
   async function handleDoctorRegistration() {
     clearMessages();
     clearErrors('doctor');
@@ -184,21 +199,21 @@ document.addEventListener('DOMContentLoaded', () => {
       const result = await safeJson(response);
 
       if (response.ok && result?.success) {
-        showMessage('Doctor registration successful! Redirecting to login...', 'success');
+        showMessage('Inscription médecin réussie ! Redirection vers la connexion...', 'success');
         setTimeout(() => window.location.href = '/login', 1200);
       } else {
-        showMessage(result?.message || 'Registration failed', 'error');
+        showMessage(result?.message || 'Échec de l’inscription', 'error');
       }
     } catch (err) {
-      showMessage('Registration failed. Please try again later.', 'error');
+      showMessage('Inscription impossible. Réessayez plus tard.', 'error');
     } finally {
       setLoading('doctor', false);
     }
   }
 
-  // ---------------------------
-  // Submit: Patient
-  // ---------------------------
+  /* =======================
+     Inscription patient
+     ======================= */
   async function handlePatientRegistration() {
     clearMessages();
     clearErrors('patient');
@@ -228,41 +243,41 @@ document.addEventListener('DOMContentLoaded', () => {
       const result = await safeJson(response);
 
       if (response.ok && result?.success) {
-        showMessage('Patient registration successful! Redirecting to login...', 'success');
+        showMessage('Inscription patient réussie ! Redirection vers la connexion...', 'success');
         setTimeout(() => window.location.href = '/login', 1200);
       } else {
-        showMessage(result?.message || 'Registration failed', 'error');
+        showMessage(result?.message || 'Échec de l’inscription', 'error');
       }
     } catch (err) {
-      showMessage('Registration failed. Please try again later.', 'error');
+      showMessage('Inscription impossible. Réessayez plus tard.', 'error');
     } finally {
       setLoading('patient', false);
     }
   }
 
-  // ---------------------------
-  // Validation
-  // ---------------------------
+  /* =======================
+     Validation
+     ======================= */
   function validateDoctorForm(d) {
     let ok = true;
 
-    if (!d.email) ok = fieldError('doctor-email-error', 'Email is required') && ok;
-    else if (!isValidEmail(d.email)) ok = fieldError('doctor-email-error', 'Please enter a valid email') && ok;
+    if (!d.email) ok = fieldError('doctor-email-error', 'Email requis') && ok;
+    else if (!isValidEmail(d.email)) ok = fieldError('doctor-email-error', 'Email invalide') && ok;
 
-    if (!d.password) ok = fieldError('doctor-password-error', 'Password is required') && ok;
-    else if (d.password.length < 6) ok = fieldError('doctor-password-error', 'Password must be at least 6 characters') && ok;
+    if (!d.password) ok = fieldError('doctor-password-error', 'Mot de passe requis') && ok;
+    else if (d.password.length < 6) ok = fieldError('doctor-password-error', 'Minimum 6 caractères') && ok;
 
-    if (!d.firstName) ok = fieldError('doctor-fname-error', 'First name is required') && ok;
-    if (!d.lastName) ok = fieldError('doctor-lname-error', 'Last name is required') && ok;
+    if (!d.firstName) ok = fieldError('doctor-fname-error', 'Prénom requis') && ok;
+    if (!d.lastName) ok = fieldError('doctor-lname-error', 'Nom requis') && ok;
 
-    if (!d.sex) ok = fieldError('doctor-sex-error', 'Sex is required') && ok;
+    if (!d.sex) ok = fieldError('doctor-sex-error', 'Sexe requis') && ok;
 
-    if (!d.phone) ok = fieldError('doctor-phone-error', 'Phone number is required') && ok;
+    if (!d.phone) ok = fieldError('doctor-phone-error', 'Téléphone requis') && ok;
 
-    if (!d.wilaya) ok = fieldError('doctor-wilaya-error', 'Wilaya is required') && ok;
-    if (!d.city) ok = fieldError('doctor-city-error', 'City is required') && ok;
+    if (!d.wilaya) ok = fieldError('doctor-wilaya-error', 'Wilaya requise') && ok;
+    if (!d.city) ok = fieldError('doctor-city-error', 'Ville requise') && ok;
 
-    if (!d.specialty) ok = fieldError('doctor-specialty-error', 'Specialty is required') && ok;
+    if (!d.specialty) ok = fieldError('doctor-specialty-error', 'Spécialité requise') && ok;
 
     return ok;
   }
@@ -270,28 +285,28 @@ document.addEventListener('DOMContentLoaded', () => {
   function validatePatientForm(p) {
     let ok = true;
 
-    if (!p.email) ok = fieldError('patient-email-error', 'Email is required') && ok;
-    else if (!isValidEmail(p.email)) ok = fieldError('patient-email-error', 'Please enter a valid email') && ok;
+    if (!p.email) ok = fieldError('patient-email-error', 'Email requis') && ok;
+    else if (!isValidEmail(p.email)) ok = fieldError('patient-email-error', 'Email invalide') && ok;
 
-    if (!p.password) ok = fieldError('patient-password-error', 'Password is required') && ok;
-    else if (p.password.length < 6) ok = fieldError('patient-password-error', 'Password must be at least 6 characters') && ok;
+    if (!p.password) ok = fieldError('patient-password-error', 'Mot de passe requis') && ok;
+    else if (p.password.length < 6) ok = fieldError('patient-password-error', 'Minimum 6 caractères') && ok;
 
-    if (!p.firstName) ok = fieldError('patient-fname-error', 'First name is required') && ok;
-    if (!p.lastName) ok = fieldError('patient-lname-error', 'Last name is required') && ok;
+    if (!p.firstName) ok = fieldError('patient-fname-error', 'Prénom requis') && ok;
+    if (!p.lastName) ok = fieldError('patient-lname-error', 'Nom requis') && ok;
 
-    if (!p.sex) ok = fieldError('patient-sex-error', 'Sex is required') && ok;
+    if (!p.sex) ok = fieldError('patient-sex-error', 'Sexe requis') && ok;
 
-    if (!p.phone) ok = fieldError('patient-phone-error', 'Phone number is required') && ok;
+    if (!p.phone) ok = fieldError('patient-phone-error', 'Téléphone requis') && ok;
 
-    if (!p.wilaya) ok = fieldError('patient-wilaya-error', 'Wilaya is required') && ok;
-    if (!p.city) ok = fieldError('patient-city-error', 'City is required') && ok;
+    if (!p.wilaya) ok = fieldError('patient-wilaya-error', 'Wilaya requise') && ok;
+    if (!p.city) ok = fieldError('patient-city-error', 'Ville requise') && ok;
 
     return ok;
   }
 
-  // ---------------------------
-  // UI helpers
-  // ---------------------------
+  /* =======================
+     Helpers UI
+     ======================= */
   function showMessage(message, type) {
     const box = document.getElementById('message-container');
     if (!box) return alert(message);
@@ -300,7 +315,6 @@ document.addEventListener('DOMContentLoaded', () => {
     box.style.display = 'block';
     box.className = type === 'success' ? 'alert alert-success' : 'alert alert-danger';
 
-    // Auto hide
     setTimeout(() => {
       if (box) box.style.display = 'none';
     }, 4500);
@@ -344,9 +358,9 @@ document.addEventListener('DOMContentLoaded', () => {
     form.classList.toggle('loading', on);
   }
 
-  // ---------------------------
-  // Small utilities
-  // ---------------------------
+  /* =======================
+     Utilitaires
+     ======================= */
   function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }

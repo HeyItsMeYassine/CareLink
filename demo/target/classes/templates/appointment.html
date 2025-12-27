@@ -1,27 +1,33 @@
 <!DOCTYPE html>
+<!-- Page de prise de rendez-vous (patient) : formulaire multi-étapes (filtres → médecin → date/heure → confirmation). -->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Book Appointment - CareLink</title>
 
+  <!-- Styles spécifiques de la page -->
   <link rel="stylesheet" th:href="@{/assets/css/appointment.css}">
   <link rel="icon" th:href="@{/assets/images/doctor.png}" type="image/png">
 
-  <!-- Bootstrap Icons (nice, consistent icons) -->
+  <!-- Icônes Bootstrap (utilisées dans les boutons et la barre de progression) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
 <body>
 <header class="header">
   <div class="header-content">
+    <!-- Logo : retour rapide au dashboard patient -->
     <div class="logo" onclick="window.location.href='/patient/dashboard'">
       <div class="logo-icon" aria-hidden="true"><i class="bi bi-heart-pulse-fill"></i></div>
       <span class="logo-text">CareLink</span>
     </div>
 
     <div class="header-controls">
-      <button class="icon-btn" th:onclick="|window.location.href='@{/patient/dashboard}'|" type="button" aria-label="Back" title="Back">
+      <!-- Bouton retour -->
+      <button class="icon-btn"
+              th:onclick="|window.location.href='@{/patient/dashboard}'|"
+              type="button" aria-label="Back" title="Back">
         <i class="bi bi-arrow-left"></i>
       </button>
     </div>
@@ -29,11 +35,13 @@
 </header>
 
 <main>
+  <!-- Titre + description -->
   <div class="page-header">
     <h1 class="page-title">Book New Appointment</h1>
     <p class="page-description">Follow the steps to schedule your medical appointment</p>
   </div>
 
+  <!-- Barre de progression (4 étapes) -->
   <div class="progress-bar">
     <div class="progress-steps">
       <div class="progress-step">
@@ -53,6 +61,7 @@
       </div>
     </div>
 
+    <!-- Libellés des étapes -->
     <div class="progress-labels">
       <span>Filters</span>
       <span>Doctor</span>
@@ -61,15 +70,17 @@
     </div>
   </div>
 
+  <!-- Carte principale (contenu dynamique géré par appointment.js) -->
   <div class="card">
     <div class="card-header">
+      <!-- Titre/description mis à jour à chaque étape via JS -->
       <h2 class="card-title" id="card-title">Select Filters</h2>
       <p class="card-description" id="card-description">Choose wilaya and specialty to find doctors</p>
     </div>
 
     <div class="card-content">
 
-      <!-- Step 1 -->
+      <!-- Étape 1 : choix wilaya + spécialité -->
       <div id="step-1">
         <div class="form-group">
           <label for="wilaya-select">Wilaya</label>
@@ -85,6 +96,7 @@
           </select>
         </div>
 
+        <!-- Navigation étape 1 -->
         <div class="button-group">
           <div></div>
           <button class="btn-primary" id="next-1" disabled>
@@ -93,7 +105,7 @@
         </div>
       </div>
 
-      <!-- Step 2 -->
+      <!-- Étape 2 : liste des médecins + filtre ville optionnel -->
       <div id="step-2" class="hidden">
         <div class="form-group">
           <label for="city-filter-select">City (optional)</label>
@@ -102,8 +114,10 @@
           </select>
         </div>
 
+        <!-- Contenu généré par JS : cartes médecins -->
         <div id="doctors-list"></div>
 
+        <!-- Navigation étape 2 -->
         <div class="button-group">
           <button class="btn-secondary" id="back-2">
             <i class="bi bi-arrow-left me-1"></i> Back
@@ -114,20 +128,23 @@
         </div>
       </div>
 
-      <!-- Step 3 -->
+      <!-- Étape 3 : calendrier + créneaux horaires -->
       <div id="step-3" class="hidden">
         <div class="form-group">
           <label>Select Date</label>
           <div class="calendar-container">
+            <!-- Calendrier généré par JS -->
             <div class="calendar" id="calendar"></div>
           </div>
         </div>
 
+        <!-- Créneaux horaires (affichés après sélection d’une date) -->
         <div class="form-group hidden" id="time-group">
           <label>Select Time</label>
           <div class="time-slots" id="time-slots"></div>
         </div>
 
+        <!-- Navigation étape 3 -->
         <div class="button-group">
           <button class="btn-secondary" id="back-3">
             <i class="bi bi-arrow-left me-1"></i> Back
@@ -138,10 +155,12 @@
         </div>
       </div>
 
-      <!-- Step 4 -->
+      <!-- Étape 4 : récapitulatif + confirmation -->
       <div id="step-4" class="hidden">
+        <!-- Résumé généré par JS -->
         <div class="confirmation-box" id="confirmation-details"></div>
 
+        <!-- Navigation étape 4 -->
         <div class="button-group">
           <button class="btn-secondary" id="back-4">
             <i class="bi bi-arrow-left me-1"></i> Back
@@ -156,9 +175,10 @@
   </div>
 </main>
 
-<!-- Toast container -->
+<!-- Zone des notifications toast (gérée par appointment.js) -->
 <div id="toast-container" class="toast-container"></div>
 
+<!-- Script principal : logique multi-étapes + appels API -->
 <script th:src="@{/assets/js/appointment.js}"></script>
 </body>
 </html>
