@@ -54,11 +54,11 @@ public class Doctor {
     }
 
     /**
-     * Définit les créneaux par défaut : de 08:00 à 16:30 (pas de 30 minutes).
+     * Définit les créneaux par défaut : de 08:00 à 15:00 (pas de 30 minutes).
      */
     private void initDefaultSlots() {
         availableSlots.clear();
-        for (int hour = 8; hour <= 16; hour++) {
+        for (int hour = 8; hour <= 15; hour++) {
             availableSlots.add(String.format("%02d:00", hour));
             availableSlots.add(String.format("%02d:30", hour));
         }
@@ -224,3 +224,4 @@ public class Doctor {
                 " (" + speciality + ") - " + city + ", " + wilaya;
     }
 }
+
